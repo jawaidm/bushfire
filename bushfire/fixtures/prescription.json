@@ -1,0 +1,816 @@
+[
+{
+    "pk": 1,
+    "model": "bushfire.prescription",
+    "fields": {
+        "burn_id": "PIL_001"
+    }
+},
+{
+    "pk": 2,
+    "model": "bushfire.prescription",
+    "fields": {
+        "burn_id": "PIL_002"
+    }
+},
+{
+    "pk": 3,
+    "model": "bushfire.prescription",
+    "fields": {
+        "burn_id": "PIL_003"
+    }
+},
+{
+    "pk": 4,
+    "model": "bushfire.prescription",
+    "fields": {
+        "burn_id": "PIL_004"
+    }
+},
+{
+    "pk": 5,
+    "model": "bushfire.prescription",
+    "fields": {
+        "burn_id": "PIL_005"
+    }
+},
+
+{
+    "pk": 1,
+    "model": "bushfire.region",
+    "fields": {
+        "name": "Goldfields"
+    }
+},
+{
+    "pk": 2,
+    "model": "bushfire.region",
+    "fields": {
+        "name": "Kimberley"
+    }
+},
+{
+    "pk": 3,
+    "model": "bushfire.region",
+    "fields": {
+        "name": "Midwest"
+    }
+},
+{
+    "pk": 4,
+    "model": "bushfire.region",
+    "fields": {
+        "name": "Pilbara"
+    }
+},
+{
+    "pk": 5,
+    "model": "bushfire.region",
+    "fields": {
+        "name": "South Coast"
+    }
+},
+{
+    "pk": 6,
+    "model": "bushfire.region",
+    "fields": {
+        "name": "South West"
+    }
+},
+{
+    "pk": 7,
+    "model": "bushfire.region",
+    "fields": {
+        "name": "Swan"
+    }
+},
+{
+    "pk": 8,
+    "model": "bushfire.region",
+    "fields": {
+        "name": "Warren"
+    }
+},
+{
+    "pk": 9,
+    "model": "bushfire.region",
+    "fields": {
+        "name": "Wheatbelt"
+    }
+},
+{
+    "pk": 1,
+    "model": "bushfire.district",
+    "fields": {
+        "archive_date": null,
+        "region": 1,
+        "code": "KAL",
+        "name": "Kalgoorlie"
+    }
+},
+{
+    "pk": 2,
+    "model": "bushfire.district",
+    "fields": {
+        "archive_date": null,
+        "region": 2,
+        "code": "EKM",
+        "name": "East Kimberley"
+    }
+},
+{
+    "pk": 3,
+    "model": "bushfire.district",
+    "fields": {
+        "archive_date": null,
+        "region": 2,
+        "code": "WKM",
+        "name": "West Kimberley"
+    }
+},
+{
+    "pk": 4,
+    "model": "bushfire.district",
+    "fields": {
+        "archive_date": null,
+        "region": 3,
+        "code": "GER",
+        "name": "Geraldton"
+    }
+},
+{
+    "pk": 5,
+    "model": "bushfire.district",
+    "fields": {
+        "archive_date": null,
+        "region": 3,
+        "code": "MOR",
+        "name": "Moora"
+    }
+},
+{
+    "pk": 6,
+    "model": "bushfire.district",
+    "fields": {
+        "archive_date": null,
+        "region": 3,
+        "code": "SHB",
+        "name": "Shark Bay"
+    }
+},
+{
+    "pk": 7,
+    "model": "bushfire.district",
+    "fields": {
+        "archive_date": null,
+        "region": 4,
+        "code": "EXM",
+        "name": "Exmouth"
+    }
+},
+{
+    "pk": 8,
+    "model": "bushfire.district",
+    "fields": {
+        "archive_date": null,
+        "region": 4,
+        "code": "PIL",
+        "name": "Pilbara"
+    }
+},
+{
+    "pk": 9,
+    "model": "bushfire.district",
+    "fields": {
+        "archive_date": null,
+        "region": 5,
+        "code": "ALB",
+        "name": "Albany"
+    }
+},
+{
+    "pk": 10,
+    "model": "bushfire.district",
+    "fields": {
+        "archive_date": null,
+        "region": 5,
+        "code": "ESP",
+        "name": "Esperance"
+    }
+},
+{
+    "pk": 11,
+    "model": "bushfire.district",
+    "fields": {
+        "archive_date": null,
+        "region": 6,
+        "code": "BWD",
+        "name": "Blackwood"
+    }
+},
+{
+    "pk": 12,
+    "model": "bushfire.district",
+    "fields": {
+        "archive_date": null,
+        "region": 6,
+        "code": "WTN",
+        "name": "Wellington"
+    }
+},
+{
+    "pk": 13,
+    "model": "bushfire.district",
+    "fields": {
+        "archive_date": null,
+        "region": 7,
+        "code": "PHS",
+        "name": "Perth Hills"
+    }
+},
+{
+    "pk": 14,
+    "model": "bushfire.district",
+    "fields": {
+        "archive_date": null,
+        "region": 7,
+        "code": "SWC",
+        "name": "Swan Coastal"
+    }
+},
+{
+    "pk": 15,
+    "model": "bushfire.district",
+    "fields": {
+        "archive_date": null,
+        "region": 8,
+        "code": "DON",
+        "name": "Donnelly"
+    }
+},
+{
+    "pk": 16,
+    "model": "bushfire.district",
+    "fields": {
+        "archive_date": null,
+        "region": 8,
+        "code": "FRK",
+        "name": "Frankland"
+    }
+},
+{
+    "pk": 17,
+    "model": "bushfire.district",
+    "fields": {
+        "archive_date": null,
+        "region": 9,
+        "code": "CWB",
+        "name": "Central Wheatbelt"
+    }
+},
+{
+    "pk": 18,
+    "model": "bushfire.district",
+    "fields": {
+        "archive_date": "2015-08-06",
+        "region": 9,
+        "code": "GSN",
+        "name": "Great Southern"
+    }
+},
+{
+    "pk": 19,
+    "model": "bushfire.district",
+    "fields": {
+        "archive_date": null,
+        "region": 9,
+        "code": "SWB",
+        "name": "Southern Wheatbelt"
+    }
+},
+{
+    "pk": 1,
+    "model": "bushfire.tenure",
+    "fields": {
+        "name": "5(1)(g) Reserve"
+    }
+},
+{
+    "pk": 2,
+    "model": "bushfire.tenure",
+    "fields": {
+        "name": "5(1)(h) Reserve"
+    }
+},
+{
+    "pk": 3,
+    "model": "bushfire.tenure",
+    "fields": {
+        "name": "CALM Exec Body"
+    }
+},
+{
+    "pk": 4,
+    "model": "bushfire.tenure",
+    "fields": {
+        "name": "CALM Exec Body Freehold"
+    }
+},
+{
+    "pk": 5,
+    "model": "bushfire.tenure",
+    "fields": {
+        "name": "Conservation Park"
+    }
+},
+{
+    "pk": 6,
+    "model": "bushfire.tenure",
+    "fields": {
+        "name": "Crown Freehold - Dept Interest"
+    }
+},
+{
+    "pk": 7,
+    "model": "bushfire.tenure",
+    "fields": {
+        "name": "Former Leasehold"
+    }
+},
+{
+    "pk": 8,
+    "model": "bushfire.tenure",
+    "fields": {
+        "name": "Marine Management Area"
+    }
+},
+{
+    "pk": 9,
+    "model": "bushfire.tenure",
+    "fields": {
+        "name": "Marine Nature Reserve"
+    }
+},
+{
+    "pk": 10,
+    "model": "bushfire.tenure",
+    "fields": {
+        "name": "Marine Park"
+    }
+},
+{
+    "pk": 11,
+    "model": "bushfire.tenure",
+    "fields": {
+        "name": "Miscellaneous Reserve"
+    }
+},
+{
+    "pk": 12,
+    "model": "bushfire.tenure",
+    "fields": {
+        "name": "National Park"
+    }
+},
+{
+    "pk": 13,
+    "model": "bushfire.tenure",
+    "fields": {
+        "name": "Nature Reserve"
+    }
+},
+{
+    "pk": 14,
+    "model": "bushfire.tenure",
+    "fields": {
+        "name": "State Forest"
+    }
+},
+{
+    "pk": 15,
+    "model": "bushfire.tenure",
+    "fields": {
+        "name": "Timber Reserve"
+    }
+},
+{
+    "pk": 16,
+    "model": "bushfire.tenure",
+    "fields": {
+        "name": "Unallocated Crown Land"
+    }
+},
+{
+    "pk": 17,
+    "model": "bushfire.tenure",
+    "fields": {
+        "name": "Unmanaged Reserve"
+    }
+},
+{
+    "pk": 18,
+    "model": "bushfire.tenure",
+    "fields": {
+        "name": "Regional Park"
+    }
+},
+{
+    "pk": 19,
+    "model": "bushfire.tenure",
+    "fields": {
+        "name": "Private Property"
+    }
+},
+{
+    "pk": 20,
+    "model": "bushfire.tenure",
+    "fields": {
+        "name": "Other"
+    }
+},
+{
+    "pk": 29,
+    "model": "bushfire.fueltype",
+    "fields": {
+        "name": "Forest Northern Jarrah"
+    }
+},
+{
+    "pk": 30,
+    "model": "bushfire.fueltype",
+    "fields": {
+        "name": "Forest Southern Jarrah"
+    }
+},
+{
+    "pk": 31,
+    "model": "bushfire.fueltype",
+    "fields": {
+        "name": "Forest Mixed Karri"
+    }
+},
+{
+    "pk": 32,
+    "model": "bushfire.fueltype",
+    "fields": {
+        "name": "Forest Karri 4&5"
+    }
+},
+{
+    "pk": 33,
+    "model": "bushfire.fueltype",
+    "fields": {
+        "name": "Woodland Wandoo"
+    }
+},
+{
+    "pk": 34,
+    "model": "bushfire.fueltype",
+    "fields": {
+        "name": "Forest Tuart"
+    }
+},
+{
+    "pk": 36,
+    "model": "bushfire.fueltype",
+    "fields": {
+        "name": "Forest Tingle"
+    }
+},
+{
+    "pk": 38,
+    "model": "bushfire.fueltype",
+    "fields": {
+        "name": "Plantation Conifer radiata needle bed"
+    }
+},
+{
+    "pk": 39,
+    "model": "bushfire.fueltype",
+    "fields": {
+        "name": "Plantation Conifer pinaster needle bed"
+    }
+},
+{
+    "pk": 40,
+    "model": "bushfire.fueltype",
+    "fields": {
+        "name": "Plantation Conifer other"
+    }
+},
+{
+    "pk": 41,
+    "model": "bushfire.fueltype",
+    "fields": {
+        "name": "Woodland Banksia"
+    }
+},
+{
+    "pk": 42,
+    "model": "bushfire.fueltype",
+    "fields": {
+        "name": "Woodland Other Eucalypt"
+    }
+},
+{
+    "pk": 43,
+    "model": "bushfire.fueltype",
+    "fields": {
+        "name": "Heath Southern Forest"
+    }
+},
+{
+    "pk": 45,
+    "model": "bushfire.fueltype",
+    "fields": {
+        "name": "Grassland Southern"
+    }
+},
+{
+    "pk": 46,
+    "model": "bushfire.fueltype",
+    "fields": {
+        "name": "Shrubland Acacia"
+    }
+},
+{
+    "pk": 48,
+    "model": "bushfire.fueltype",
+    "fields": {
+        "name": "Woodland Tropical"
+    }
+},
+{
+    "pk": 49,
+    "model": "bushfire.fueltype",
+    "fields": {
+        "name": "Woodland Pindan"
+    }
+},
+{
+    "pk": 50,
+    "model": "bushfire.fueltype",
+    "fields": {
+        "name": "Heath Mallee"
+    }
+},
+{
+    "pk": 51,
+    "model": "bushfire.fueltype",
+    "fields": {
+        "name": "Heath Kwongan"
+    }
+},
+{
+    "pk": 52,
+    "model": "bushfire.fueltype",
+    "fields": {
+        "name": "Grassland Hummock"
+    }
+},
+{
+    "pk": 53,
+    "model": "bushfire.fueltype",
+    "fields": {
+        "name": "Shrubland Other"
+    }
+},
+{
+    "pk": 55,
+    "model": "bushfire.fueltype",
+    "fields": {
+        "name": "Forest Other"
+    }
+},
+{
+    "pk": 57,
+    "model": "bushfire.fueltype",
+    "fields": {
+        "name": "Grassland Northern"
+    }
+},
+{
+    "pk": 58,
+    "model": "bushfire.fueltype",
+    "fields": {
+        "name": "Heath Tropical Sandstone"
+    }
+},
+{
+    "pk": 59,
+    "model": "bushfire.fueltype",
+    "fields": {
+        "name": "Heath Sandplain"
+    }
+},
+{
+    "pk": 60,
+    "model": "bushfire.fueltype",
+    "fields": {
+        "name": "Heath South Coast"
+    }
+},
+{
+    "pk": 61,
+    "model": "bushfire.fueltype",
+    "fields": {
+        "name": "Forest Karri 1&2"
+    }
+},
+{
+    "pk": 62,
+    "model": "bushfire.fueltype",
+    "fields": {
+        "name": "Forest Karri 3&6"
+    }
+},
+{
+    "pk": 63,
+    "model": "bushfire.fueltype",
+    "fields": {
+        "name": "Forest Karri Regeneration"
+    }
+},
+{
+    "pk": 64,
+    "model": "bushfire.fueltype",
+    "fields": {
+        "name": "Forest Jarrah regeneration"
+    }
+},
+{
+    "pk": 65,
+    "model": "bushfire.fueltype",
+    "fields": {
+        "name": "Forest Mine site Rehabilitation"
+    }
+},
+{
+    "pk": 66,
+    "model": "bushfire.fueltype",
+    "fields": {
+        "name": "Forest Tropical Open"
+    }
+},
+{
+    "pk": 67,
+    "model": "bushfire.fueltype",
+    "fields": {
+        "name": "Plantation Conifer radiata green tops"
+    }
+},
+{
+    "pk": 68,
+    "model": "bushfire.fueltype",
+    "fields": {
+        "name": "Plantation Conifer pinaster green tops"
+    }
+},
+{
+    "pk": 69,
+    "model": "bushfire.fueltype",
+    "fields": {
+        "name": "Plantation Conifer radiata grey tops"
+    }
+},
+{
+    "pk": 70,
+    "model": "bushfire.fueltype",
+    "fields": {
+        "name": "Plantation Conifer pinaster grey tops"
+    }
+},
+{
+    "pk": 71,
+    "model": "bushfire.fueltype",
+    "fields": {
+        "name": "Plantation Conifer radiata red tops"
+    }
+},
+{
+    "pk": 72,
+    "model": "bushfire.fueltype",
+    "fields": {
+        "name": "Plantation Conifer pinaster red tops"
+    }
+},
+{
+    "pk": 73,
+    "model": "bushfire.fueltype",
+    "fields": {
+        "name": "Plantation Conifer radiata thinned"
+    }
+},
+{
+    "pk": 74,
+    "model": "bushfire.fueltype",
+    "fields": {
+        "name": "Plantation Conifer pinaster thinned"
+    }
+},
+{
+    "pk": 75,
+    "model": "bushfire.fueltype",
+    "fields": {
+        "name": "Plantation Conifer radiata un-thinned"
+    }
+},
+{
+    "pk": 76,
+    "model": "bushfire.fueltype",
+    "fields": {
+        "name": "Plantation Conifer pinaster un-thinned"
+    }
+},
+{
+    "pk": 77,
+    "model": "bushfire.fueltype",
+    "fields": {
+        "name": "Plantation Conifer slash"
+    }
+},
+{
+    "pk": 78,
+    "model": "bushfire.fueltype",
+    "fields": {
+        "name": "Plantation Eucalypt thinned"
+    }
+},
+{
+    "pk": 79,
+    "model": "bushfire.fueltype",
+    "fields": {
+        "name": "Plantation Eucalypt un-thinned"
+    }
+},
+{
+    "pk": 80,
+    "model": "bushfire.fueltype",
+    "fields": {
+        "name": "Plantation Eucalypt slash"
+    }
+},
+{
+    "pk": 81,
+    "model": "bushfire.fueltype",
+    "fields": {
+        "name": "Modified Fuels Heaped conifer"
+    }
+},
+{
+    "pk": 82,
+    "model": "bushfire.fueltype",
+    "fields": {
+        "name": "Modified Fuels Heaped eucalypt"
+    }
+},
+{
+    "pk": 83,
+    "model": "bushfire.fueltype",
+    "fields": {
+        "name": "Modified Fuels Windrow conifer"
+    }
+},
+{
+    "pk": 84,
+    "model": "bushfire.fueltype",
+    "fields": {
+        "name": "Modified Fuels Windrow eucalypt"
+    }
+},
+{
+    "pk": 85,
+    "model": "bushfire.fueltype",
+    "fields": {
+        "name": "Modified Fuels Slash conifer"
+    }
+},
+{
+    "pk": 86,
+    "model": "bushfire.fueltype",
+    "fields": {
+        "name": "Modified Fuels Slash eucalypt"
+    }
+},
+{
+    "pk": 87,
+    "model": "bushfire.fueltype",
+    "fields": {
+        "name": "Modified Fuels Chopper rolled"
+    }
+},
+{
+    "pk": 88,
+    "model": "bushfire.fueltype",
+    "fields": {
+        "name": "Modified Fuels Scrub rolled/chained"
+    }
+},
+{
+    "pk": 89,
+    "model": "bushfire.fueltype",
+    "fields": {
+        "name": "Modified Fuels Slashing/mowing"
+    }
+}
+]
