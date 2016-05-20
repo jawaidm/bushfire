@@ -50,22 +50,6 @@
 },
 {
     "pk": 1,
-    "model": "bushfire.detail",
-    "fields": {
-        "tenure": 1,
-        "fuel_type": 30,
-        "area": 1.0,
-        "first_attack": 1,
-        "other_agency": null,
-        "cause": 1 ,
-        "known_possible": 1,
-        "other_cause": "ABC",
-        "investigation_required": "True"
-    }
-},
-
-{
-    "pk": 1,
     "model": "bushfire.comment",
     "fields": {
         "creator": ["wilsonc"],
@@ -118,14 +102,30 @@
         "location": 1,
         "origin": 1,
         "effect": 1,
-        "first_attack": 1,
-        "details": 1
+        "first_attack": 1
 
+    }
+},
+
+{
+    "pk": 1,
+    "model": "bushfire.detail",
+    "fields": {
+        "tenure": 1,
+        "fuel_type": 30,
+        "area": 1.0,
+        "first_attack": 1,
+        "other_agency": null,
+        "cause": 1 ,
+        "known_possible": 1,
+        "other_cause": "ABC",
+        "investigation_required": "True",
+        "bushfire": 1
     }
 }
 
-]
 
+]
 
 
 

@@ -6,7 +6,7 @@ from django.utils import timezone
 from django.contrib.auth.models import User
 from django.utils.encoding import python_2_unicode_compatible
 from django.core.validators import MaxValueValidator, MinValueValidator
-from smart_selects.db_fields import ChainedForeignKey
+#from smart_selects.db_fields import ChainedForeignKey
 from bushfire.base import Audit
 
 import sys
@@ -103,19 +103,19 @@ class Bushfire(Audit):
     job_code = models.CharField(verbose_name="Job Code", max_length=10)
 
     #authorised_by = models.ForeignKey('Authorisation', verbose_name="Authorising Officer", blank=True, null=True)
-    reporting = models.ForeignKey('Reporter', verbose_name="Reporting and  Cause")
+    #reporting = models.ForeignKey('Reporter', verbose_name="Reporting and  Cause")
 
     potential_fire_level = models.PositiveSmallIntegerField(choices=FIRE_LEVEL_CHOICES)
 
     # TABS
 
     # Point of Origin
-    location = models.ForeignKey('Location')
-    origin = models.ForeignKey('Origin')
+    #location = models.ForeignKey('Location')
+    #origin = models.ForeignKey('Origin')
 
     # Effects/Agencies
-    effect = models.ForeignKey('Effect')
-    first_attack = models.ForeignKey('FirstAttackAgency')
+    #effect = models.ForeignKey('Effect')
+    #first_attack = models.ForeignKey('FirstAttackAgency')
     #   Response goes with this section
 
     # Effects/Agencies
@@ -136,7 +136,7 @@ class Bushfire(Audit):
     #   FinalComment goes with this section
 
     # Details (Initial)
-    details = models.ForeignKey('Detail')
+    #details = models.ForeignKey('Detail')
 
     # Comments (Initial)
     #comments = models.ForeignKey('Comment')
@@ -318,6 +318,7 @@ class Location(models.Model):
     lot_no = models.CharField(verbose_name="Lot Number", max_length=10)
     street = models.CharField(max_length=50)
     town = models.CharField(max_length=50)
+    bushfire = models.ForeignKey(Bushfire, related_name='location')
 
     def __str__(self):
         return self.direction.name
@@ -351,6 +352,7 @@ class Origin(models.Model):
     fd_number = models.PositiveSmallIntegerField(verbose_name="FD Number", null=True, blank=True)
     fd_tenths = models.CharField(verbose_name="FD Tenths", max_length=2, null=True, blank=True)
 
+    bushfire = models.ForeignKey(Bushfire, related_name='origin')
 
     def __str__(self):
         return self.get_coord_type_display()
@@ -368,6 +370,7 @@ class Effect(models.Model):
     arrival_area = models.DecimalField(verbose_name="Fire Area at Arrival (ha)", max_digits=12, decimal_places=1, validators=[MinValueValidator(0)])
     fire_level = models.PositiveSmallIntegerField(choices=FIRE_LEVEL_CHOICES)
     rating = models.ForeignKey(PriorityRating, null=True, blank=True, verbose_name="Area Priority Rating")
+    bushfire = models.ForeignKey(Bushfire, related_name='effect')
 
 
 
@@ -400,6 +403,7 @@ class FirstAttackAgency(models.Model):
     hazard_mgt = models.ForeignKey(Agency, verbose_name="Hazard Management Agency", null=True, blank=True, related_name='hazard_mgt')
     initial_control = models.ForeignKey(Agency, verbose_name="Initial Controlling Agency", null=True, blank=True, related_name='initial_control')
     final_control = models.ForeignKey(Agency, verbose_name="Final Controlling Agency", null=True, blank=True, related_name='final_control')
+    bushfire = models.ForeignKey(Bushfire, related_name='first_attack')
 
     def __str__(self):
         l = []
@@ -588,6 +592,7 @@ class Detail(models.Model):
     known_possible = models.PositiveSmallIntegerField(choices=CAUSE_CHOICES, verbose_name="Known/Possible")
     other_cause = models.CharField(max_length=25)
     investigation_required = models.BooleanField(default=False)
+    bushfire = models.OneToOneField(Bushfire)
 
     def clean_first_attack(self):
         if self.first_attack == 'Other' and not self.other:
@@ -647,6 +652,7 @@ class Reporter(models.Model):
     #prescription = models.ForeignKey(Prescription, verbose_name="ePFP (if cause is Escape)", related_name='prescribed_burn', null=True, blank=True)
     prescription = models.ForeignKey(Prescription, verbose_name="Prescription Burn ID", null=True, blank=True)
     offence_no = models.TextField(verbose_name="Offence No.")
+    bushfire = models.ForeignKey(Bushfire, related_name='reporting')
 
     def __str__(self):
         return self.offence_no
@@ -666,7 +672,7 @@ class Authorisation(Audit):
 
     def __str__(self):
         #import ipdb; ipdb.set_trace()
-        return self.name.get_full_name()
+        return '{} {}'.format(self.name.get_full_name(), self.date)
 
 
 
