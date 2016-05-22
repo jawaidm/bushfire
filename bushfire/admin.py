@@ -12,28 +12,42 @@ from merged_inlines.admin import MergedInlineAdmin
 #
 
 
-class OriginInline(admin.TabularInline):
+class OriginInline(admin.StackedInline):
     model = Origin
     suit_classes = 'suit-tab suit-tab-origin'
-    extra = 0
+#    fields = (('lat_decimal', 'lat_degrees', 'lat_minutes'), ('lon_decimal', 'lon_degrees', 'lon_minutes'),)
+    fieldsets = [
+        (None, {'fields': [('coord_type', 'fire_not_found')]}),
+        ('Lat/Long', {'fields': [('lat_decimal', 'lat_degrees', 'lat_minutes'), ('lon_decimal', 'lon_degrees', 'lon_minutes')]}),
+        ('MGA', {'fields': [('mga_zone', 'mga_easting', 'mga_northing')]}),
+        ('FD Grid', {'fields': [('fd_letter', 'fd_number', 'fd_tenths')], 'classes': ['collapse',]}),
+    ]
+    #max_num = 0
+    #extra = 0
+    verbose_name = "Origin"
+    verbose_name_plural = "Origins"
 
 
 class DetailInline(admin.StackedInline):
     model = Detail
     suit_classes = 'suit-tab suit-tab-detail'
-    #fields = ('tenure', 'fuel_type', 'area')
+    fieldsets = [
+        ('Tenure and Vegetation Affected', {'fields': [('tenure', 'fuel_type', 'area')]}),
+        ('Forces', {'fields': [('first_attack', 'other_agency'), ('dec', 'lga_bfb', 'fesa', 'ses', 'police', 'other_force')]}),
+        ('Miscellaneous', {'fields': [('cause', 'known_possible', 'other_cause', 'investigation_req')]}),
+    ]
 
-#    fieldsets = [
-        #(None,               {'fields': ['tenure', 'fuel_type']}),
-        #('Date information', {'fields': ['area']}),
-#    ]
     def has_delete_permission(self, request, obj=None):
         return False
 
-class CommentInline(admin.TabularInline):
+class CommentInline(admin.StackedInline):
     model = Comment
     suit_classes = 'suit-tab suit-tab-ini_comment'
-    extra = 0
+    fieldsets = [
+        ('Miscellaneous', {'fields': [('fuel'), ('ros'), ('flame_height'), ('assistance_required'),
+        ('containment_time', 'fire_contained'), ('ops_point'), ('communications'), ('weather'), ('field_officer')]}),
+    ]
+    #extra = 0
 
 
 
@@ -53,6 +67,7 @@ class ActivityInline(admin.TabularInline):
     suit_classes = 'suit-tab suit-tab-activities'
     model = Activity
     extra = 0
+    verbose_name_plural = "Activities"
 
 
 class AuthorisationInline(admin.TabularInline):
@@ -62,10 +77,11 @@ class AuthorisationInline(admin.TabularInline):
 
     fields = ('name', 'auth_type', 'date')
 
-class LocationInline(admin.TabularInline):
+class LocationInline(admin.StackedInline):
     suit_classes = 'suit-tab suit-tab-location'
     model = Location
-    extra = 0
+    fields = (('distance', 'direction', 'place'), ('lot_no', 'street', 'town'),)
+    #extra = 0
 
 
 class EffectInline(admin.TabularInline):
@@ -138,7 +154,7 @@ class MyModelAdmin(MergedInlineAdmin):
     inlines = [OriginInline,LocationInline]
 
 
-class BushfireAdmin(admin.ModelAdmin):
+class _BushfireAdmin(admin.ModelAdmin):
     model = Bushfire
     list_display = ['district', 'incident_no', 'season', 'job_code', 'name', 'potential_fire_level', 'get_tenure'] #, 'authorised_by', 'get_auth_date']
     _fields = ('district', 'incident_no', 'season', 'job_code', 'name', 'potential_fire_level')
@@ -150,7 +166,7 @@ class BushfireAdmin(admin.ModelAdmin):
         }),
         (None, {
             'classes': ('suit-tab', 'suit-tab-general',),
-            'fields': ('district', 'season')
+            'fields': ('district', 'get_district')
         }),
 
         (None, {
@@ -171,7 +187,7 @@ class BushfireAdmin(admin.ModelAdmin):
     ]
 
     suit_form_tabs = (
-        #('general', 'General'),
+        ('general', 'General'),
         ('origin', 'Point of Origin'),
         #('detail', 'Detail'),
         #('comment', 'Comment'),
@@ -207,39 +223,39 @@ class BushfireAdmin(admin.ModelAdmin):
     get_district.short_description = 'District'
 
 
-class _BushfireAdmin(TabbedModelAdmin):
+class BushfireAdmin(TabbedModelAdmin):
     model = Bushfire
     list_display = ['district', 'incident_no', 'season', 'job_code', 'name', 'potential_fire_level' ]
 
     tab_overview = (
-        (None, {'fields': ('district', 'incident_no', 'season', 'job_code', 'name', 'potential_fire_level')}),
+        (None, {'fields': (('region', 'district'), ('incident_no', 'season', 'job_code'), ('name', 'potential_fire_level'))}),
         ActivityInline,
-    )
-    tab_album = (
-        (None, {
-            'fields': ('district', 'name', 'incident_no', 'season')
-        }),
-
-        FinalCommentInline,
+        AuthorisationInline,
     )
 
-    tab_extra = (
-        (None, {
-            'fields': ('district', 'name', 'incident_no', 'season')
-        }),
-
-        PrivateDamageInline,
+    tab_origin = (
+        OriginInline,
+        LocationInline,
     )
 
-    tab_resources = (
+    tab_detail = (
+        DetailInline,
+    )
+
+    tab_comment = (
+        CommentInline,
+    )
+
+    tab_damage = (
         PrivateDamageInline,
         FinalCommentInline
     )
 
     tabs = [
         ('Overview', tab_overview),
-        ('Albums', tab_album),
-        ('Extra', tab_resources)
+        ('Point of Origin', tab_origin),
+        ('Detail', tab_detail),
+        ('Comment', tab_comment),
     ]
 
     def get_auth_date(self, obj):
