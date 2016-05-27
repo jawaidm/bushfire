@@ -9,6 +9,7 @@ psycopg2
 https://static.dpaw.wa.gov.au/static/py/dpaw-utils/dist/dpaw-utils-0.3a4.tar.gz
 django-auth-ldap==1.2.0
 django-model-utils==2.0.3
+django-debug-toolbar
 
 python-dateutil
 python-magic==0.4.10

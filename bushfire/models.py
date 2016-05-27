@@ -338,6 +338,16 @@ class PrivateDamageType(models.Model):
     def __str__(self):
         return self.name
 
+@python_2_unicode_compatible
+class InitialActivityType(models.Model):
+    name = models.CharField(max_length=25, verbose_name="Activity Type")
+
+    class Meta:
+        ordering = ['name']
+
+    def __str__(self):
+        return self.name
+
 
 @python_2_unicode_compatible
 class ActivityType(models.Model):
@@ -604,7 +614,7 @@ class PrivateDamage(models.Model):
 Final Comments
 """
 @python_2_unicode_compatible
-class FinalComment(Audit):
+class Comment(Audit):
     comment = models.TextField()
     bushfire = models.ForeignKey(Bushfire, related_name='final_comments')
 
@@ -656,7 +666,7 @@ Initial Comments
 """
 
 @python_2_unicode_compatible
-class Comment(Audit):
+class InitialComment(Audit):
     fuel = models.CharField(max_length=50)
     ros = models.CharField(verbose_name="Rate of Spread", max_length=50)
     flame_height = models.DecimalField(max_digits=12, decimal_places=2, validators=[MinValueValidator(0)])
@@ -676,6 +686,23 @@ class Comment(Audit):
 """
 Main Area
 """
+@python_2_unicode_compatible
+class InitialActivity(models.Model):
+    #activity = models.PositiveSmallIntegerField(choices=ACTIVITY_CHOICES)
+    activity = models.ForeignKey(InitialActivityType)
+    date = models.DateTimeField(default=timezone.now)
+    bushfire = models.ForeignKey(Bushfire, related_name='initial_activities')
+
+    class Meta:
+        ordering = ['activity']
+
+    def __str__(self):
+        return self.activity.name
+
+    class Meta:
+        unique_together = ('bushfire', 'activity',)
+
+
 @python_2_unicode_compatible
 class Activity(models.Model):
     #activity = models.PositiveSmallIntegerField(choices=ACTIVITY_CHOICES)

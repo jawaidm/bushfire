@@ -1,6 +1,6 @@
 from django.contrib import admin
-from bushfire.models import (Bushfire, Comment, FinalComment, PrivateDamage, PublicDamage,
-        Activity, Authorisation, Origin, Detail, Location, Effect, Response,
+from bushfire.models import (Bushfire, InitialComment, Comment, PrivateDamage, PublicDamage,
+        InitialActivity, Activity, Authorisation, Origin, Detail, Location, Effect, Response,
         FirstAttackAgency, AreaBurnt, GroundForces, AerialForces, FireBehaviour,
         AttendingOrganisation, Legal, Reporter)
 from tabbed_admin import TabbedModelAdmin
@@ -40,8 +40,8 @@ class DetailInline(admin.StackedInline):
     def has_delete_permission(self, request, obj=None):
         return False
 
-class CommentInline(admin.StackedInline):
-    model = Comment
+class InitialCommentInline(admin.StackedInline):
+    model = InitialComment
     suit_classes = 'suit-tab suit-tab-ini_comment'
     fieldsets = [
         ('Miscellaneous', {'fields': [('fuel'), ('ros'), ('flame_height'), ('assistance_required'),
@@ -61,6 +61,13 @@ class PublicDamageInline(admin.TabularInline):
     model = PublicDamage
     suit_classes = 'suit-tab suit-tab-pub_damage'
     extra = 0
+
+
+class InitialActivityInline(admin.TabularInline):
+    suit_classes = 'suit-tab suit-tab-activities'
+    model = Activity
+    extra = 0
+    verbose_name_plural = "Activities"
 
 
 class ActivityInline(admin.TabularInline):
@@ -144,9 +151,9 @@ class ReporterInline(admin.TabularInline):
     extra = 0
 
 
-class FinalCommentInline(admin.TabularInline):
+class CommentInline(admin.TabularInline):
     suit_classes = 'suit-tab suit-tab-fin_comment'
-    model = FinalComment
+    model = Comment
     extra = 0
 
 
@@ -223,7 +230,43 @@ class _BushfireAdmin(admin.ModelAdmin):
     get_district.short_description = 'District'
 
 
-class BushfireAdmin(TabbedModelAdmin):
+class InitialBushfireAdmin(TabbedModelAdmin):
+    model = Bushfire
+    list_display = ['district', 'incident_no', 'season', 'job_code', 'name', 'potential_fire_level' ]
+
+    tab_overview = (
+        (None, {'fields': (('region', 'district'), ('incident_no', 'season', 'job_code'), ('name', 'potential_fire_level'))}),
+        InitialActivityInline,
+        AuthorisationInline,
+    )
+
+    tab_origin = (
+        OriginInline,
+        LocationInline,
+    )
+
+    tab_detail = (
+        DetailInline,
+    )
+
+    tab_comment = (
+        InitialCommentInline,
+    )
+
+    tabs = [
+        ('Overview', tab_overview),
+        ('Point of Origin', tab_origin),
+        ('Detail', tab_detail),
+        ('Comment', tab_comment),
+    ]
+
+    def get_auth_date(self, obj):
+        return obj.authorised_by.date
+    get_auth_date.admin_order_field  = 'authorised_by'  #Allows column order sorting
+    get_auth_date.short_description = 'Date'
+
+
+class FinalBushfireAdmin(TabbedModelAdmin):
     model = Bushfire
     list_display = ['district', 'incident_no', 'season', 'job_code', 'name', 'potential_fire_level' ]
 
@@ -248,7 +291,7 @@ class BushfireAdmin(TabbedModelAdmin):
 
     tab_damage = (
         PrivateDamageInline,
-        FinalCommentInline
+        PublicDamageInline,
     )
 
     tabs = [
@@ -263,6 +306,8 @@ class BushfireAdmin(TabbedModelAdmin):
     get_auth_date.admin_order_field  = 'authorised_by'  #Allows column order sorting
     get_auth_date.short_description = 'Date'
 
-admin.site.register(Bushfire, BushfireAdmin)
+
+admin.site.register(Bushfire, InitialBushfireAdmin)
+#admin.site.register(Bushfire, FinalBushfireAdmin)
 #admin.site.register(PrivateDamage, PrivateDamageAdmin)
 

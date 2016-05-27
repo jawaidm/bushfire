@@ -27,7 +27,20 @@ DEBUG = True
 
 TEMPLATE_DEBUG = True
 
-ALLOWED_HOSTS = []
+#ALLOWED_HOSTS = []
+INTERNAL_IPS = ['127.0.0.1', '::1']
+#if not DEBUG:
+    ## Localhost, UAT and Production hosts
+    #ALLOWED_HOSTS = [
+        #'localhost',
+        #'127.0.0.1',
+#    ]
+
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+]
+
 
 
 # Application definition
@@ -45,6 +58,7 @@ INSTALLED_APPS = (
 
     'django_extensions',
     'bushfire',
+    'debug_toolbar',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -118,4 +132,23 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
+
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+#    'compressor.finders.CompressorFinder',
+)
+
+TEMPLATE_DIRS = (
+    os.path.join(BASE_DIR, 'templates'),
+)
+
+TEMPLATE_LOADERS = (
+    ('django.template.loaders.cached.Loader', (
+     'django.template.loaders.filesystem.Loader',
+     'django.template.loaders.app_directories.Loader',
+    )),
+)
+
