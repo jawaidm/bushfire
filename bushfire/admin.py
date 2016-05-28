@@ -1,5 +1,5 @@
 from django.contrib import admin
-from bushfire.models import (Bushfire, InitialComment, Comment, PrivateDamage, PublicDamage,
+from bushfire.models import (InitialBushfire, FinalBushfire, InitialComment, Comment, PrivateDamage, PublicDamage,
         InitialActivity, Activity, Authorisation, Origin, Detail, Location, Effect, Response,
         FirstAttackAgency, AreaBurnt, GroundForces, AerialForces, FireBehaviour,
         AttendingOrganisation, Legal, Reporter)
@@ -17,10 +17,12 @@ class OriginInline(admin.StackedInline):
     suit_classes = 'suit-tab suit-tab-origin'
 #    fields = (('lat_decimal', 'lat_degrees', 'lat_minutes'), ('lon_decimal', 'lon_degrees', 'lon_minutes'),)
     fieldsets = [
+        (None, {'fields': [('auth_type')]}),
         (None, {'fields': [('coord_type', 'fire_not_found')]}),
         ('Lat/Long', {'fields': [('lat_decimal', 'lat_degrees', 'lat_minutes'), ('lon_decimal', 'lon_degrees', 'lon_minutes')]}),
         ('MGA', {'fields': [('mga_zone', 'mga_easting', 'mga_northing')]}),
-        ('FD Grid', {'fields': [('fd_letter', 'fd_number', 'fd_tenths')], 'classes': ['collapse',]}),
+        #('FD Grid', {'fields': [('fd_letter', 'fd_number', 'fd_tenths')], 'classes': ['collapse',]}),
+        ('FD Grid', {'fields': [('fd_letter', 'fd_number', 'fd_tenths')]}),
     ]
     #max_num = 0
     #extra = 0
@@ -32,6 +34,7 @@ class DetailInline(admin.StackedInline):
     model = Detail
     suit_classes = 'suit-tab suit-tab-detail'
     fieldsets = [
+        (None, {'fields': [('auth_type')]}),
         ('Tenure and Vegetation Affected', {'fields': [('tenure', 'fuel_type', 'area')]}),
         ('Forces', {'fields': [('first_attack', 'other_agency'), ('dec', 'lga_bfb', 'fesa', 'ses', 'police', 'other_force')]}),
         ('Miscellaneous', {'fields': [('cause', 'known_possible', 'other_cause', 'investigation_req')]}),
@@ -65,7 +68,7 @@ class PublicDamageInline(admin.TabularInline):
 
 class InitialActivityInline(admin.TabularInline):
     suit_classes = 'suit-tab suit-tab-activities'
-    model = Activity
+    model = InitialActivity
     extra = 0
     verbose_name_plural = "Activities"
 
@@ -87,7 +90,7 @@ class AuthorisationInline(admin.TabularInline):
 class LocationInline(admin.StackedInline):
     suit_classes = 'suit-tab suit-tab-location'
     model = Location
-    fields = (('distance', 'direction', 'place'), ('lot_no', 'street', 'town'),)
+    fields = (('auth_type'), ('distance', 'direction', 'place'), ('lot_no', 'street', 'town'),)
     #extra = 0
 
 
@@ -162,7 +165,7 @@ class MyModelAdmin(MergedInlineAdmin):
 
 
 class _BushfireAdmin(admin.ModelAdmin):
-    model = Bushfire
+    model = InitialBushfire
     list_display = ['district', 'incident_no', 'season', 'job_code', 'name', 'potential_fire_level', 'get_tenure'] #, 'authorised_by', 'get_auth_date']
     _fields = ('district', 'incident_no', 'season', 'job_code', 'name', 'potential_fire_level')
 
@@ -231,7 +234,7 @@ class _BushfireAdmin(admin.ModelAdmin):
 
 
 class InitialBushfireAdmin(TabbedModelAdmin):
-    model = Bushfire
+    model = InitialBushfire
     list_display = ['district', 'incident_no', 'season', 'job_code', 'name', 'potential_fire_level' ]
 
     tab_overview = (
@@ -267,7 +270,7 @@ class InitialBushfireAdmin(TabbedModelAdmin):
 
 
 class FinalBushfireAdmin(TabbedModelAdmin):
-    model = Bushfire
+    model = FinalBushfire
     list_display = ['district', 'incident_no', 'season', 'job_code', 'name', 'potential_fire_level' ]
 
     tab_overview = (
@@ -307,7 +310,7 @@ class FinalBushfireAdmin(TabbedModelAdmin):
     get_auth_date.short_description = 'Date'
 
 
-admin.site.register(Bushfire, InitialBushfireAdmin)
-#admin.site.register(Bushfire, FinalBushfireAdmin)
+admin.site.register(InitialBushfire, InitialBushfireAdmin)
+#admin.site.register(FinalBushfire, FinalBushfireAdmin)
 #admin.site.register(PrivateDamage, PrivateDamageAdmin)
 

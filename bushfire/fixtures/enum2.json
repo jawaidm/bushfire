@@ -905,7 +905,7 @@
     "fields": {
         "name": "FIRE CONTROLLED"
     }
-}
+},
 {
     "pk": 7,
     "model": "bushfire.activitytype",

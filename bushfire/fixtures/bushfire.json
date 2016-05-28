@@ -14,6 +14,7 @@
     "pk": 1,
     "model": "bushfire.origin",
     "fields": {
+        "auth_type": 1,
         "coord_type": 2,
         "lat_decimal": 1.0,
         "lat_degrees": 1.0,
@@ -27,6 +28,7 @@
     "pk": 1,
     "model": "bushfire.location",
     "fields": {
+        "auth_type": 1,
         "distance": 1.0,
         "direction": 1,
         "place": "Kensington",
@@ -84,7 +86,7 @@
 
 {
     "pk": 1,
-    "model": "bushfire.bushfire",
+    "model": "bushfire.initialbushfire",
     "fields": {
         "creator": ["wilsonc"],
         "modifier": ["wilsonc"],
@@ -111,6 +113,7 @@
     "pk": 1,
     "model": "bushfire.detail",
     "fields": {
+        "auth_type": 1,
         "tenure": 1,
         "fuel_type": 30,
         "area": 1.0,
