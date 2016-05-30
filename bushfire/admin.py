@@ -4,7 +4,6 @@ from bushfire.models import (InitialBushfire, FinalBushfire, InitialComment, Com
         FirstAttackAgency, AreaBurnt, GroundForces, AerialForces, FireBehaviour,
         AttendingOrganisation, Legal, Reporter)
 from tabbed_admin import TabbedModelAdmin
-from merged_inlines.admin import MergedInlineAdmin
 
 
 #class CommentInline(admin.TabularInline):
@@ -158,10 +157,6 @@ class CommentInline(admin.TabularInline):
     suit_classes = 'suit-tab suit-tab-fin_comment'
     model = Comment
     extra = 0
-
-
-class MyModelAdmin(MergedInlineAdmin):
-    inlines = [OriginInline,LocationInline]
 
 
 class _BushfireAdmin(admin.ModelAdmin):

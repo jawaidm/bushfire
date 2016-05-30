@@ -90,6 +90,7 @@ class Migration(migrations.Migration):
                 ('modified', models.DateTimeField(auto_now=True)),
                 ('date', models.DateTimeField(default=django.utils.timezone.now)),
                 ('auth_type', models.PositiveSmallIntegerField(choices=[(1, b'Initial'), (2, b'Final')])),
+                ('creator', models.ForeignKey(related_name='bushfire_authorisation_created', editable=False, to=settings.AUTH_USER_MODEL)),
             ],
             options={
                 'abstract': False,
@@ -136,6 +137,7 @@ class Migration(migrations.Migration):
                 ('known_possible', models.PositiveSmallIntegerField(verbose_name=b'Known/Possible', choices=[(1, b'Known'), (2, b'Possible')])),
                 ('other_cause', models.CharField(max_length=25, verbose_name=b'Other')),
                 ('investigation_req', models.BooleanField(default=False, verbose_name=b"Invest'n Required")),
+                ('cause', models.ForeignKey(to='bushfire.Cause')),
             ],
             options={
             },
@@ -343,7 +345,7 @@ class Migration(migrations.Migration):
                 ('ops_point', models.CharField(max_length=50, verbose_name=b'OPS Point (grid ref)')),
                 ('communications', models.CharField(max_length=50)),
                 ('weather', models.CharField(max_length=50)),
-                ('bushfire', models.OneToOneField(related_name='comments', to='bushfire.FinalBushfire')),
+                ('bushfire', models.OneToOneField(related_name='initial_comments', to='bushfire.InitialBushfire')),
                 ('creator', models.ForeignKey(related_name='bushfire_initialcomment_created', editable=False, to=settings.AUTH_USER_MODEL)),
                 ('field_officer', models.ForeignKey(verbose_name=b'Field Officer', to=settings.AUTH_USER_MODEL)),
                 ('modifier', models.ForeignKey(related_name='bushfire_initialcomment_modified', editable=False, to=settings.AUTH_USER_MODEL)),
@@ -399,8 +401,9 @@ class Migration(migrations.Migration):
                 ('lot_no', models.CharField(max_length=10, verbose_name=b'Lot Number')),
                 ('street', models.CharField(max_length=25)),
                 ('town', models.CharField(max_length=25)),
-                ('bushfire', models.OneToOneField(related_name='location', to='bushfire.FinalBushfire')),
                 ('direction', models.ForeignKey(verbose_name=b'Direction', to='bushfire.Direction')),
+                ('final_bushfire', models.OneToOneField(related_name='final_location', to='bushfire.FinalBushfire')),
+                ('initial_bushfire', models.OneToOneField(related_name='initial_location', to='bushfire.InitialBushfire')),
             ],
             options={
             },
@@ -436,7 +439,8 @@ class Migration(migrations.Migration):
                 ('fd_letter', models.CharField(max_length=2, null=True, verbose_name=b'FD Letter', blank=True)),
                 ('fd_number', models.PositiveSmallIntegerField(null=True, verbose_name=b'FD Number', blank=True)),
                 ('fd_tenths', models.CharField(max_length=2, null=True, verbose_name=b'FD Tenths', blank=True)),
-                ('bushfire', models.OneToOneField(related_name='origin', to='bushfire.FinalBushfire')),
+                ('final_bushfire', models.OneToOneField(related_name='final_origin', to='bushfire.FinalBushfire')),
+                ('initial_bushfire', models.OneToOneField(related_name='initial_origin', to='bushfire.InitialBushfire')),
             ],
             options={
             },
@@ -691,14 +695,8 @@ class Migration(migrations.Migration):
         ),
         migrations.AddField(
             model_name='detail',
-            name='bushfire',
-            field=models.OneToOneField(to='bushfire.FinalBushfire'),
-            preserve_default=True,
-        ),
-        migrations.AddField(
-            model_name='detail',
-            name='cause',
-            field=models.ForeignKey(to='bushfire.Cause'),
+            name='final_bushfire',
+            field=models.OneToOneField(related_name='final_detail', to='bushfire.FinalBushfire'),
             preserve_default=True,
         ),
         migrations.AddField(
@@ -711,6 +709,12 @@ class Migration(migrations.Migration):
             model_name='detail',
             name='fuel_type',
             field=models.ForeignKey(to='bushfire.FuelType'),
+            preserve_default=True,
+        ),
+        migrations.AddField(
+            model_name='detail',
+            name='initial_bushfire',
+            field=models.OneToOneField(related_name='initial_detail', to='bushfire.InitialBushfire'),
             preserve_default=True,
         ),
         migrations.AddField(
@@ -739,14 +743,14 @@ class Migration(migrations.Migration):
         ),
         migrations.AddField(
             model_name='authorisation',
-            name='bushfire',
-            field=models.ForeignKey(related_name='authorisation', to='bushfire.InitialBushfire'),
+            name='final_bushfire',
+            field=models.OneToOneField(related_name='final_authorisation', to='bushfire.FinalBushfire'),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='authorisation',
-            name='creator',
-            field=models.ForeignKey(related_name='bushfire_authorisation_created', editable=False, to=settings.AUTH_USER_MODEL),
+            name='initial_bushfire',
+            field=models.OneToOneField(related_name='initial_authorisation', to='bushfire.InitialBushfire'),
             preserve_default=True,
         ),
         migrations.AddField(

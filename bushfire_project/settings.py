@@ -47,7 +47,7 @@ ALLOWED_HOSTS = [
 
 INSTALLED_APPS = (
     'tabbed_admin',
-    'merged_inlines',
+    #'merged_inlines',
     #'suit',
     'django.contrib.admin',
     'django.contrib.auth',
