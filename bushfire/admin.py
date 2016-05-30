@@ -1,6 +1,7 @@
 from django.contrib import admin
-from bushfire.models import (InitialBushfire, FinalBushfire, InitialComment, Comment, PrivateDamage, PublicDamage,
-        InitialActivity, Activity, Authorisation, Origin, Detail, Location, Effect, Response,
+from bushfire.models import (InitialBushfire, Bushfire, InitialComment, Comment, PrivateDamage, PublicDamage,
+        InitialActivity, Activity, InitialAuthorisation, Authorisation, InitialOrigin, Origin,
+        InitialDetail, Detail, InitialLocation, Location, Effect, Response,
         FirstAttackAgency, AreaBurnt, GroundForces, AerialForces, FireBehaviour,
         AttendingOrganisation, Legal, Reporter)
 from tabbed_admin import TabbedModelAdmin
@@ -11,12 +12,11 @@ from tabbed_admin import TabbedModelAdmin
 #
 
 
-class OriginInline(admin.StackedInline):
-    model = Origin
+class InitialOriginInline(admin.StackedInline):
+    model = InitialOrigin
     suit_classes = 'suit-tab suit-tab-origin'
 #    fields = (('lat_decimal', 'lat_degrees', 'lat_minutes'), ('lon_decimal', 'lon_degrees', 'lon_minutes'),)
     fieldsets = [
-        (None, {'fields': [('auth_type')]}),
         (None, {'fields': [('coord_type', 'fire_not_found')]}),
         ('Lat/Long', {'fields': [('lat_decimal', 'lat_degrees', 'lat_minutes'), ('lon_decimal', 'lon_degrees', 'lon_minutes')]}),
         ('MGA', {'fields': [('mga_zone', 'mga_easting', 'mga_northing')]}),
@@ -29,11 +29,27 @@ class OriginInline(admin.StackedInline):
     verbose_name_plural = "Origins"
 
 
-class DetailInline(admin.StackedInline):
-    model = Detail
+class OriginInline(admin.StackedInline):
+    model = Origin
+    suit_classes = 'suit-tab suit-tab-origin'
+#    fields = (('lat_decimal', 'lat_degrees', 'lat_minutes'), ('lon_decimal', 'lon_degrees', 'lon_minutes'),)
+    fieldsets = [
+        (None, {'fields': [('coord_type', 'fire_not_found')]}),
+        ('Lat/Long', {'fields': [('lat_decimal', 'lat_degrees', 'lat_minutes'), ('lon_decimal', 'lon_degrees', 'lon_minutes')]}),
+        ('MGA', {'fields': [('mga_zone', 'mga_easting', 'mga_northing')]}),
+        #('FD Grid', {'fields': [('fd_letter', 'fd_number', 'fd_tenths')], 'classes': ['collapse',]}),
+        ('FD Grid', {'fields': [('fd_letter', 'fd_number', 'fd_tenths')]}),
+    ]
+    #max_num = 0
+    #extra = 0
+    verbose_name = "Origin"
+    verbose_name_plural = "Origins"
+
+
+class InitialDetailInline(admin.StackedInline):
+    model = InitialDetail
     suit_classes = 'suit-tab suit-tab-detail'
     fieldsets = [
-        (None, {'fields': [('auth_type')]}),
         ('Tenure and Vegetation Affected', {'fields': [('tenure', 'fuel_type', 'area')]}),
         ('Forces', {'fields': [('first_attack', 'other_agency'), ('dec', 'lga_bfb', 'fesa', 'ses', 'police', 'other_force')]}),
         ('Miscellaneous', {'fields': [('cause', 'known_possible', 'other_cause', 'investigation_req')]}),
@@ -41,6 +57,20 @@ class DetailInline(admin.StackedInline):
 
     def has_delete_permission(self, request, obj=None):
         return False
+
+
+class DetailInline(admin.StackedInline):
+    model = Detail
+    suit_classes = 'suit-tab suit-tab-detail'
+    fieldsets = [
+        ('Tenure and Vegetation Affected', {'fields': [('tenure', 'fuel_type', 'area')]}),
+        ('Forces', {'fields': [('first_attack', 'other_agency'), ('dec', 'lga_bfb', 'fesa', 'ses', 'police', 'other_force')]}),
+        ('Miscellaneous', {'fields': [('cause', 'known_possible', 'other_cause', 'investigation_req')]}),
+    ]
+
+    def has_delete_permission(self, request, obj=None):
+        return False
+
 
 class InitialCommentInline(admin.StackedInline):
     model = InitialComment
@@ -79,17 +109,33 @@ class ActivityInline(admin.TabularInline):
     verbose_name_plural = "Activities"
 
 
+class InitialAuthorisationInline(admin.TabularInline):
+    model = InitialAuthorisation
+    suit_classes = 'suit-tab suit-tab-auth'
+    extra = 0
+
+    fields = ('name', 'date')
+
+
 class AuthorisationInline(admin.TabularInline):
     model = Authorisation
     suit_classes = 'suit-tab suit-tab-auth'
     extra = 0
 
-    fields = ('name', 'auth_type', 'date')
+    fields = ('name', 'date')
+
+
+class InitialLocationInline(admin.StackedInline):
+    suit_classes = 'suit-tab suit-tab-location'
+    model = InitialLocation
+    fields = (('distance', 'direction', 'place'), ('lot_no', 'street', 'town'),)
+    #extra = 0
+
 
 class LocationInline(admin.StackedInline):
     suit_classes = 'suit-tab suit-tab-location'
     model = Location
-    fields = (('auth_type'), ('distance', 'direction', 'place'), ('lot_no', 'street', 'town'),)
+    fields = (('distance', 'direction', 'place'), ('lot_no', 'street', 'town'),)
     #extra = 0
 
 
@@ -235,16 +281,16 @@ class InitialBushfireAdmin(TabbedModelAdmin):
     tab_overview = (
         (None, {'fields': (('region', 'district'), ('incident_no', 'season', 'job_code'), ('name', 'potential_fire_level'))}),
         InitialActivityInline,
-        AuthorisationInline,
+        InitialAuthorisationInline,
     )
 
     tab_origin = (
-        OriginInline,
-        LocationInline,
+        InitialOriginInline,
+        InitialLocationInline,
     )
 
     tab_detail = (
-        DetailInline,
+        InitialDetailInline,
     )
 
     tab_comment = (
@@ -264,8 +310,8 @@ class InitialBushfireAdmin(TabbedModelAdmin):
     get_auth_date.short_description = 'Date'
 
 
-class FinalBushfireAdmin(TabbedModelAdmin):
-    model = FinalBushfire
+class BushfireAdmin(TabbedModelAdmin):
+    model = Bushfire
     list_display = ['district', 'incident_no', 'season', 'job_code', 'name', 'potential_fire_level' ]
 
     tab_overview = (
