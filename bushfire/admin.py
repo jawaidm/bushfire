@@ -86,35 +86,54 @@ class InitialCommentInline(admin.StackedInline):
 class PrivateDamageInline(admin.TabularInline):
     model = PrivateDamage
     suit_classes = 'suit-tab suit-tab-pri_damage'
-    extra = 0
+    extra = 1
+    verbose_name_plural = 'Private Damage'
+
+    def has_delete_permission(self, request, obj=None):
+        return False
 
 
 class PublicDamageInline(admin.TabularInline):
     model = PublicDamage
     suit_classes = 'suit-tab suit-tab-pub_damage'
-    extra = 0
+    extra = 1
+    verbose_name_plural = 'Public Damage'
+
+    def has_delete_permission(self, request, obj=None):
+        return False
 
 
 class InitialActivityInline(admin.TabularInline):
     suit_classes = 'suit-tab suit-tab-activities'
     model = InitialActivity
-    extra = 0
+    extra = 1
+    max_num = 5
     verbose_name_plural = "Activities"
+
+    def has_delete_permission(self, request, obj=None):
+        return False
 
 
 class ActivityInline(admin.TabularInline):
     suit_classes = 'suit-tab suit-tab-activities'
     model = Activity
-    extra = 0
+    extra = 1
+    max_num = 7
     verbose_name_plural = "Activities"
+
+    def has_delete_permission(self, request, obj=None):
+        return False
 
 
 class InitialAuthorisationInline(admin.TabularInline):
     model = InitialAuthorisation
     suit_classes = 'suit-tab suit-tab-auth'
-    extra = 0
+    #extra = 0
 
     fields = ('name', 'date')
+
+    def has_delete_permission(self, request, obj=None):
+        return False
 
 
 class AuthorisationInline(admin.TabularInline):
@@ -142,7 +161,7 @@ class LocationInline(admin.StackedInline):
 class EffectInline(admin.TabularInline):
     suit_classes = 'suit-tab suit-tab-effect'
     model = Effect
-    extra = 0
+    #extra = 0
 
 
 class ResponseInline(admin.TabularInline):
@@ -154,49 +173,83 @@ class ResponseInline(admin.TabularInline):
 class FirstAttackAgencyInline(admin.TabularInline):
     suit_classes = 'suit-tab suit-tab-first_attack_agency'
     model = FirstAttackAgency
-    extra = 0
+    #extra = 0
+
+    verbose_name_plural = 'First Attack Agencies'
+
+    def has_delete_permission(self, request, obj=None):
+        return False
 
 
 class AreaBurntInline(admin.TabularInline):
     suit_classes = 'suit-tab suit-tab-area_burnt'
     model = AreaBurnt
-    extra = 0
+    extra = 1
+    verbose_name_plural = 'Areas Burnt'
+
+    def has_delete_permission(self, request, obj=None):
+        return False
 
 
 class GroundForcesInline(admin.TabularInline):
     suit_classes = 'suit-tab suit-tab-ground_forces'
     model = GroundForces
-    extra = 0
+    extra = 1
+    max_num = 3
+    verbose_name_plural = 'Ground Forces'
+
+    def has_delete_permission(self, request, obj=None):
+        return False
 
 
 class AerialForcesInline(admin.TabularInline):
     suit_classes = 'suit-tab suit-tab-aerial_forces'
     model = AerialForces
-    extra = 0
+    extra = 1
+    max_num = 2
+    verbose_name_plural = 'Aerial Forces'
+
+    def has_delete_permission(self, request, obj=None):
+        return False
 
 
 class FireBehaviourInline(admin.TabularInline):
     suit_classes = 'suit-tab suit-tab-fire_behaviour'
     model = FireBehaviour
-    extra = 0
+    extra = 1
+    verbose_name_plural = 'Fire Behaviour'
+
+    def has_delete_permission(self, request, obj=None):
+        return False
 
 
 class AttendingOrganisationInline(admin.TabularInline):
     suit_classes = 'suit-tab suit-tab-attending_org'
     model = AttendingOrganisation
-    extra = 0
+    extra = 1
+    verbose_name_plural = 'Attending Organisations'
+
+    def has_delete_permission(self, request, obj=None):
+        return False
 
 
 class LegalInline(admin.TabularInline):
     suit_classes = 'suit-tab suit-tab-legal'
     model = Legal
-    extra = 0
+    extra = 1
+    verbose_name_plural = 'Legal'
+
+    def has_delete_permission(self, request, obj=None):
+        return False
 
 
 class ReporterInline(admin.TabularInline):
     suit_classes = 'suit-tab suit-tab-reporter'
     model = Reporter
-    extra = 0
+    #extra = 0
+
+    def has_delete_permission(self, request, obj=None):
+        return False
 
 
 class CommentInline(admin.TabularInline):
@@ -318,6 +371,7 @@ class BushfireAdmin(TabbedModelAdmin):
         (None, {'fields': (('region', 'district'), ('incident_no', 'season', 'job_code'), ('name', 'potential_fire_level'))}),
         ActivityInline,
         AuthorisationInline,
+        ReporterInline,
     )
 
     tab_origin = (
@@ -329,19 +383,40 @@ class BushfireAdmin(TabbedModelAdmin):
         DetailInline,
     )
 
-    tab_comment = (
-        CommentInline,
+    tab_effect = (
+        EffectInline,
+        FirstAttackAgencyInline,
     )
 
-    tab_damage = (
+    tab_areaburnt = (
+        AreaBurntInline,
+        GroundForcesInline,
+        AerialForcesInline,
+    )
+
+    tab_attendance = (
+        AttendingOrganisationInline,
+        FireBehaviourInline,
+    )
+
+    tab_legal = (
+        LegalInline,
         PrivateDamageInline,
         PublicDamageInline,
+    )
+
+    tab_comment = (
+        CommentInline,
     )
 
     tabs = [
         ('Overview', tab_overview),
         ('Point of Origin', tab_origin),
         ('Detail', tab_detail),
+        ('Effects/Agencies', tab_effect),
+        ('Areas Burnt/Forces', tab_areaburnt),
+        ('Attendance/Behaviour', tab_attendance),
+        ('Damages/Legal', tab_legal),
         ('Comment', tab_comment),
     ]
 
@@ -352,6 +427,6 @@ class BushfireAdmin(TabbedModelAdmin):
 
 
 admin.site.register(InitialBushfire, InitialBushfireAdmin)
-#admin.site.register(FinalBushfire, FinalBushfireAdmin)
+admin.site.register(Bushfire, BushfireAdmin)
 #admin.site.register(PrivateDamage, PrivateDamageAdmin)
 

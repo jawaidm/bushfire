@@ -162,10 +162,10 @@ class BushfireBase(Audit):
 #        District, chained_field="region", chained_model_field="region",
 #        show_all=False, auto_choose=True)
 
-    name = models.CharField(max_length=100, verbose_name="Name/Description")
+    name = models.CharField(max_length=100, verbose_name="Fire Name")
     incident_no = models.CharField(verbose_name="Incident No.", max_length=10)
     season = models.CharField(max_length=9)
-    dfes_incident_no = models.CharField(verbose_name="DFES Incident No.", max_length=10)
+    fesa_incident_no = models.CharField(verbose_name="FESA Incident No.", max_length=10)
     job_code = models.CharField(verbose_name="Job Code", max_length=10)
 
     #authorised_by = models.ForeignKey('Authorisation', verbose_name="Authorising Officer", blank=True, null=True)
@@ -244,6 +244,15 @@ class BushfireBase(Audit):
 
     # Comments (Initial)
     #comments = models.ForeignKey('Comment')
+
+    def __str__(self):
+        return self.name
+
+
+@python_2_unicode_compatible
+class InitialBushfire(BushfireBase):
+    pass
+    #name = models.CharField(max_length=100, verbose_name="Name/Description")
 
     def __str__(self):
         return self.name
@@ -436,7 +445,7 @@ class InitialLocation(models.Model):
     distance = models.DecimalField(
         verbose_name="Distance (km)", max_digits=6, decimal_places=1,
         validators=[MinValueValidator(0)])
-    direction = models.ForeignKey(Direction, verbose_name="Direction")
+    direction = models.OneToOneField(Direction, verbose_name="Direction")
     place = models.CharField(max_length=25)
     lot_no = models.CharField(verbose_name="Lot Number", max_length=10)
     street = models.CharField(max_length=25)
@@ -492,7 +501,7 @@ class Location(models.Model):
     lot_no = models.CharField(verbose_name="Lot Number", max_length=10)
     street = models.CharField(max_length=25)
     town = models.CharField(max_length=25)
-    bushfire = models.ForeignKey(Bushfire, related_name='location')
+    bushfire = models.OneToOneField(Bushfire, related_name='location')
 
     def __str__(self):
         return self.direction.name
@@ -527,7 +536,7 @@ class Origin(models.Model):
     fd_number = models.PositiveSmallIntegerField(verbose_name="FD Number", null=True, blank=True)
     fd_tenths = models.CharField(verbose_name="FD Tenths", max_length=2, null=True, blank=True)
 
-    bushfire = models.ForeignKey(Bushfire, related_name='origin')
+    bushfire = models.OneToOneField(Bushfire, related_name='origin')
 
 
     def __str__(self):
@@ -538,8 +547,8 @@ class Origin(models.Model):
 Effects/Agencies
 """
 class Effect(models.Model):
-    bushfire = models.ForeignKey(Bushfire, related_name='effect')
-
+    effect = models.ForeignKey(FrbEffect, verbose_name='FRB Effect')
+    bushfire = models.OneToOneField(Bushfire, related_name='effects')
 
 
 @python_2_unicode_compatible
@@ -571,7 +580,7 @@ class FirstAttackAgency(models.Model):
     hazard_mgt = models.ForeignKey(Agency, verbose_name="Hazard Management Agency", null=True, blank=True, related_name='hazard_mgt')
     initial_control = models.ForeignKey(Agency, verbose_name="Initial Controlling Agency", null=True, blank=True, related_name='initial_control')
     final_control = models.ForeignKey(Agency, verbose_name="Final Controlling Agency", null=True, blank=True, related_name='final_control')
-    bushfire = models.ForeignKey(Bushfire, related_name='first_attack')
+    bushfire = models.OneToOneField(Bushfire, related_name='first_attack')
 
     def __str__(self):
         l = []
@@ -591,11 +600,11 @@ Area Burnt/Forces
 """
 @python_2_unicode_compatible
 class AreaBurnt(models.Model):
-    bushfire = models.ForeignKey(Bushfire, related_name='areas_burnt')
     tenure = models.ForeignKey(Tenure, related_name='tenures')
     fuel_type = models.ForeignKey(FuelType, related_name='fuel_types') # vegetation_type was renamed to fuel_type in PBS
     area = models.DecimalField(verbose_name="Area (ha)", max_digits=12, decimal_places=2, validators=[MinValueValidator(0)])
     origin = models.BooleanField(verbose_name="Point of Origin", default=False)
+    bushfire = models.ForeignKey(Bushfire, related_name='areas_burnt')
 
     def __str__(self):
         return 'Tenure: {}, Fuel Type: {}, Area: {}, Origin: {}'.format(
@@ -614,10 +623,10 @@ class GroundForces(models.Model):
     )
 
     name = models.PositiveSmallIntegerField(choices=GF_AGENCY_CHOICES, verbose_name="Agency Name")
-    bushfire = models.ForeignKey(Bushfire, related_name='ground_forces')
     persons = models.PositiveSmallIntegerField(null=True, blank=True)
     pumpers = models.PositiveSmallIntegerField(null=True, blank=True)
     plant = models.PositiveSmallIntegerField(null=True, blank=True)
+    bushfire = models.ForeignKey(Bushfire, related_name='ground_forces')
 
     def __str__(self):
         return self.name
@@ -634,11 +643,11 @@ class AerialForces(models.Model):
     )
 
     name = models.PositiveSmallIntegerField(choices=AF_AGENCY_CHOICES, verbose_name="Agency Name")
-    bushfire = models.ForeignKey(Bushfire, related_name='aerial_forces')
     observer = models.PositiveSmallIntegerField(null=True, blank=True)
     transporter = models.PositiveSmallIntegerField(null=True, blank=True)
     ignition = models.PositiveSmallIntegerField(null=True, blank=True)
     water_bomber = models.PositiveSmallIntegerField(null=True, blank=True)
+    bushfire = models.ForeignKey(Bushfire, related_name='aerial_forces')
 
     def __str__(self):
         return self.name
@@ -651,7 +660,7 @@ Attendance/Behaviour
 """
 @python_2_unicode_compatible
 class FireBehaviour(models.Model):
-    name = models.TextField(verbose_name="Name/Description")
+    name = models.CharField(verbose_name="Name/Description", max_length=50)
     bushfire = models.ForeignKey(Bushfire, related_name='fire_behaviour')
     fuel_type = models.ForeignKey(FuelType, related_name='fuel_types_fire', null=True, blank=True) # vegetation_type was renamed to fuel_type in PBS
     fuel_weight = models.PositiveSmallIntegerField(null=True, blank=True)
@@ -668,8 +677,8 @@ class FireBehaviour(models.Model):
 @python_2_unicode_compatible
 class AttendingOrganisation(models.Model):
     name = models.ForeignKey('Organisation')
-    bushfire = models.ForeignKey(Bushfire, related_name='attending_organisations')
     other = models.CharField(max_length=25, null=True, blank=True)
+    bushfire = models.ForeignKey(Bushfire, related_name='attending_organisations')
 
     def clean_name(self):
         if self.name == 'Other' and not self.other:
@@ -693,9 +702,10 @@ class Legal(models.Model):
     prohibited_period = models.BooleanField(default=False)
     inv_undertaken = models.ForeignKey(InvestigationType, verbose_name="Investigation Undertaken")
     legal_result = models.ForeignKey(LegalResultType)
+    bushfire = models.ForeignKey(Bushfire, related_name='legal')
 
     def __str__(self):
-        return self.name
+        return self.legal_result.name
 
 
 @python_2_unicode_compatible
@@ -878,8 +888,8 @@ class Reporter(models.Model):
     arson_squad_notified = models.BooleanField(verbose_name="Arson Squad Notified", default=False)
     #prescription = models.ForeignKey(Prescription, verbose_name="ePFP (if cause is Escape)", related_name='prescribed_burn', null=True, blank=True)
     prescription = models.ForeignKey(Prescription, verbose_name="Prescription Burn ID", null=True, blank=True)
-    offence_no = models.TextField(verbose_name="Offence No.")
-    bushfire = models.ForeignKey(Bushfire, related_name='reporting')
+    offence_no = models.CharField(verbose_name="Offence No.", max_length=10)
+    bushfire = models.OneToOneField(Bushfire, related_name='reporting')
 
     def __str__(self):
         return self.offence_no
