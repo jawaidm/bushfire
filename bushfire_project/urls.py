@@ -6,5 +6,6 @@ urlpatterns = patterns('',
     # url(r'^$', 'bushfire_project.views.home', name='home'),
     # url(r'^blog/', include('blog.urls')),
 
+    url(r'^chaining/', include('smart_selects.urls')),
     url(r'^admin/', include(admin.site.urls)),
 )

@@ -2,12 +2,13 @@ from django.db import models
 from datetime import datetime, timedelta
 from django.utils import timezone
 #from pbs.prescription.models import (Prescription, Region, District)
-#from smart_selects.db_fields import ChainedForeignKey
+from smart_selects.db_fields import ChainedForeignKey
 from django.contrib.auth.models import User
 from django.utils.encoding import python_2_unicode_compatible
 from django.core.validators import MaxValueValidator, MinValueValidator
 #from smart_selects.db_fields import ChainedForeignKey
 from bushfire.base import Audit
+from django.core.exceptions import (ValidationError)
 
 import sys
 #sys.path.append('/root/project1')
@@ -93,7 +94,7 @@ class FuelType(models.Model):
         return self.name
 
 
-class InitialBushfire(Audit):
+class _InitialBushfire(Audit):
     COORD_TYPE_1 = 1
     COORD_TYPE_2 = 2
     COORD_TYPE_3 = 3
@@ -106,10 +107,10 @@ class InitialBushfire(Audit):
 
     # Main Area
     region = models.ForeignKey(Region)
-    district = models.ForeignKey(District)
-#    district = ChainedForeignKey(
-#        District, chained_field="region", chained_model_field="region",
-#        show_all=False, auto_choose=True)
+#    district = models.ForeignKey(District)
+    district = ChainedForeignKey(
+        District, chained_field="region", chained_model_field="region",
+        show_all=False, auto_choose=True)
 
     name = models.CharField(max_length=100, verbose_name="Name/Description")
     incident_no = models.CharField(verbose_name="Incident No.", max_length=10)
@@ -144,6 +145,10 @@ class InitialBushfire(Audit):
     fd_number = models.PositiveSmallIntegerField(verbose_name="FD Number", null=True, blank=True)
     fd_tenths = models.CharField(verbose_name="FD Tenths", max_length=2, null=True, blank=True)
 
+    class Meta:
+        abstract = True
+
+
 class BushfireBase(Audit):
     COORD_TYPE_1 = 1
     COORD_TYPE_2 = 2
@@ -158,9 +163,9 @@ class BushfireBase(Audit):
     # Main Area
     region = models.ForeignKey(Region)
     district = models.ForeignKey(District)
-#    district = ChainedForeignKey(
-#        District, chained_field="region", chained_model_field="region",
-#        show_all=False, auto_choose=True)
+    district = ChainedForeignKey(
+        District, chained_field="region", chained_model_field="region",
+        show_all=False, auto_choose=True)
 
     name = models.CharField(max_length=100, verbose_name="Fire Name")
     incident_no = models.CharField(verbose_name="Incident No.", max_length=10)
@@ -550,6 +555,9 @@ class Effect(models.Model):
     effect = models.ForeignKey(FrbEffect, verbose_name='FRB Effect')
     bushfire = models.OneToOneField(Bushfire, related_name='effects')
 
+    def __str__(self):
+        return self.effect.name
+
 
 @python_2_unicode_compatible
 class Response(models.Model):
@@ -774,7 +782,7 @@ class InitialDetail(models.Model):
 
     cause = models.ForeignKey(Cause)
     known_possible = models.PositiveSmallIntegerField(choices=CAUSE_CHOICES, verbose_name="Known/Possible")
-    other_cause = models.CharField(verbose_name='Other', max_length=25)
+    other_cause = models.CharField(verbose_name='Other', max_length=25, null=True, blank=True)
     investigation_req = models.BooleanField(verbose_name="Invest'n Required", default=False)
     initial_bushfire = models.OneToOneField(InitialBushfire, related_name='initial_detail')
 
@@ -809,12 +817,20 @@ class Detail(models.Model):
 
     cause = models.ForeignKey(Cause)
     known_possible = models.PositiveSmallIntegerField(choices=CAUSE_CHOICES, verbose_name="Known/Possible")
-    other_cause = models.CharField(verbose_name='Other', max_length=25)
+    other_cause = models.CharField(verbose_name='Other', max_length=25, null=True, blank=True)
     investigation_req = models.BooleanField(verbose_name="Invest'n Required", default=False)
     bushfire = models.OneToOneField(Bushfire, related_name='detail')
 
-    def clean_first_attack(self):
-        if self.first_attack == 'Other' and not self.other:
+    def clean(self):
+        import ipdb; ipdb.set_trace()
+
+        if self.first_attack.name == 'OTHER' and not self.other_agency:
+            raise ValidationError("You must enter 'Other' Forces Agency")
+
+        if not (self.dec and self.lga_bfb and self.fesa and self.police) and len(self.other_force)==0:
+            raise ValidationError("You must specify an Attending Organisation or Other")
+
+        if self.cause.name == 'OTHER' and not self.other_cause:
             raise ValidationError("You must enter 'Other' First Attack Agency")
 
     def __str__(self):

@@ -64,7 +64,8 @@ class DetailInline(admin.StackedInline):
     suit_classes = 'suit-tab suit-tab-detail'
     fieldsets = [
         ('Tenure and Vegetation Affected', {'fields': [('tenure', 'fuel_type', 'area')]}),
-        ('Forces', {'fields': [('first_attack', 'other_agency'), ('dec', 'lga_bfb', 'fesa', 'ses', 'police', 'other_force')]}),
+        ('Forces', {'fields': [('first_attack', 'other_agency')]}),
+        ('Attending Organisation', {'fields': [('dec', 'lga_bfb', 'fesa', 'ses', 'police', 'other_force')]}),
         ('Miscellaneous', {'fields': [('cause', 'known_possible', 'other_cause', 'investigation_req')]}),
     ]
 
@@ -162,6 +163,9 @@ class EffectInline(admin.TabularInline):
     suit_classes = 'suit-tab suit-tab-effect'
     model = Effect
     #extra = 0
+
+    def has_delete_permission(self, request, obj=None):
+        return False
 
 
 class ResponseInline(admin.TabularInline):
@@ -366,6 +370,7 @@ class InitialBushfireAdmin(TabbedModelAdmin):
 class BushfireAdmin(TabbedModelAdmin):
     model = Bushfire
     list_display = ['district', 'incident_no', 'season', 'job_code', 'name', 'potential_fire_level' ]
+    list_filter = ('district', 'season')
 
     tab_overview = (
         (None, {'fields': (('region', 'district'), ('incident_no', 'season', 'job_code'), ('name', 'potential_fire_level'))}),

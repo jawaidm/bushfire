@@ -59,6 +59,7 @@ INSTALLED_APPS = (
     'django_extensions',
     'bushfire',
     'debug_toolbar',
+    'smart_selects',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -113,6 +114,7 @@ TEMPLATE_DIRS = (
 
 # for 'tabbed_admin' app
 TABBED_ADMIN_USE_JQUERY_UI = True
+#USE_DJANGO_JQUERY = False
 
 
 # Internationalization
