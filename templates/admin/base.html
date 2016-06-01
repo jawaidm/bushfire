@@ -126,7 +126,7 @@
         {% block topsearch %}
         <div class="span4 topsearch hidden-phone text-right">
            <div class="hidden-phone">
-             <form action="{% url 'admin:bushfire_initialbushfire_changelist' %}" method="get" class="inline">
+             <form action="{% url 'admin:bushfire_bushfire_changelist' %}" method="get" class="inline">
                <div class="search input">
                  <input name="q" id="mod-search-searchword" maxlength="20" class="input-large" type="text" size="20" placeholder="Search burn ID or name..." />
                </div>
@@ -143,7 +143,7 @@
 <div class="navbar" id="mainnav">
   <div class="container">
     <div class="pull-left visible-phone pad-5">
-      <form action="{% url 'admin:bushfire_initialbushfire_changelist' %}" method="get" class="inline">
+      <form action="{% url 'admin:bushfire_bushfire_changelist' %}" method="get" class="inline">
         <div class="search visible-phone form-search input">
           <input name="q" id="mod-search-searchword" maxlength="20" class="input-medium" type="text" size="30" value="Search..."  onblur="if (this.value=='') this.value='Search...';" onfocus="if (this.value=='Search...') this.value='';" />
         </div>

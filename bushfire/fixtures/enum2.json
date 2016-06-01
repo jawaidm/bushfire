@@ -830,42 +830,6 @@
 
 {
     "pk": 1,
-    "model": "bushfire.initialactivitytype",
-    "fields": {
-        "name": "FIRE DETECTED"
-    }
-},
-{
-    "pk": 2,
-    "model": "bushfire.initialactivitytype",
-    "fields": {
-        "name": "DISPATCH - DEC"
-    }
-},
-{
-    "pk": 3,
-    "model": "bushfire.initialactivitytype",
-    "fields": {
-        "name": "DISPATCH - WATERBOMBER"
-    }
-},
-{
-    "pk": 4,
-    "model": "bushfire.initialactivitytype",
-    "fields": {
-        "name": "ARRIVAL AT FIRE - DEC"
-    }
-},
-{
-    "pk": 5,
-    "model": "bushfire.initialactivitytype",
-    "fields": {
-        "name": "FIRE REPORT COMPILED"
-    }
-},
-
-{
-    "pk": 1,
     "model": "bushfire.activitytype",
     "fields": {
         "name": "FIRE DETECTED"

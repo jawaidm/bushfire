@@ -122,7 +122,8 @@ TABBED_ADMIN_USE_JQUERY_UI = True
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Australia/Perth'
+#TIME_ZONE = 'UTC'
 
 USE_I18N = True
 

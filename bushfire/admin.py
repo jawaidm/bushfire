@@ -1,10 +1,11 @@
 from django.contrib import admin
-from bushfire.models import (InitialBushfire, Bushfire, InitialComment, Comment, PrivateDamage, PublicDamage,
-        InitialActivity, Activity, InitialAuthorisation, Authorisation, InitialOrigin, Origin,
-        InitialDetail, Detail, InitialLocation, Location, Effect, Response,
+from bushfire.models import (Bushfire, Bushfire, Initial, Comment, PrivateDamage, PublicDamage,
+        Activity, Origin,
+        Detail, Location, Effect, Response,
         FirstAttackAgency, AreaBurnt, GroundForces, AerialForces, FireBehaviour,
         AttendingOrganisation, Legal, Reporter)
 from tabbed_admin import TabbedModelAdmin
+from django.contrib.auth.models import User
 
 
 #class CommentInline(admin.TabularInline):
@@ -12,23 +13,23 @@ from tabbed_admin import TabbedModelAdmin
 #
 
 
-class InitialOriginInline(admin.StackedInline):
-    model = InitialOrigin
-    suit_classes = 'suit-tab suit-tab-origin'
-#    fields = (('lat_decimal', 'lat_degrees', 'lat_minutes'), ('lon_decimal', 'lon_degrees', 'lon_minutes'),)
-    fieldsets = [
-        (None, {'fields': [('coord_type', 'fire_not_found')]}),
-        ('Lat/Long', {'fields': [('lat_decimal', 'lat_degrees', 'lat_minutes'), ('lon_decimal', 'lon_degrees', 'lon_minutes')]}),
-        ('MGA', {'fields': [('mga_zone', 'mga_easting', 'mga_northing')]}),
-        #('FD Grid', {'fields': [('fd_letter', 'fd_number', 'fd_tenths')], 'classes': ['collapse',]}),
-        ('FD Grid', {'fields': [('fd_letter', 'fd_number', 'fd_tenths')]}),
-    ]
-    #max_num = 0
-    #extra = 0
-    verbose_name = "Origin"
-    verbose_name_plural = "Origins"
-
-
+#class InitialOriginInline(admin.StackedInline):
+#    model = InitialOrigin
+#    suit_classes = 'suit-tab suit-tab-origin'
+##    fields = (('lat_decimal', 'lat_degrees', 'lat_minutes'), ('lon_decimal', 'lon_degrees', 'lon_minutes'),)
+#    fieldsets = [
+#        (None, {'fields': [('coord_type', 'fire_not_found')]}),
+#        ('Lat/Long', {'fields': [('lat_decimal', 'lat_degrees', 'lat_minutes'), ('lon_decimal', 'lon_degrees', 'lon_minutes')]}),
+#        ('MGA', {'fields': [('mga_zone', 'mga_easting', 'mga_northing')]}),
+#        #('FD Grid', {'fields': [('fd_letter', 'fd_number', 'fd_tenths')], 'classes': ['collapse',]}),
+#        ('FD Grid', {'fields': [('fd_letter', 'fd_number', 'fd_tenths')]}),
+#    ]
+#    #max_num = 0
+#    #extra = 0
+#    verbose_name = "Origin"
+#    verbose_name_plural = "Origins"
+#
+#
 class OriginInline(admin.StackedInline):
     model = Origin
     suit_classes = 'suit-tab suit-tab-origin'
@@ -46,17 +47,17 @@ class OriginInline(admin.StackedInline):
     verbose_name_plural = "Origins"
 
 
-class InitialDetailInline(admin.StackedInline):
-    model = InitialDetail
-    suit_classes = 'suit-tab suit-tab-detail'
-    fieldsets = [
-        ('Tenure and Vegetation Affected', {'fields': [('tenure', 'fuel_type', 'area')]}),
-        ('Forces', {'fields': [('first_attack', 'other_agency'), ('dec', 'lga_bfb', 'fesa', 'ses', 'police', 'other_force')]}),
-        ('Miscellaneous', {'fields': [('cause', 'known_possible', 'other_cause', 'investigation_req')]}),
-    ]
-
-    def has_delete_permission(self, request, obj=None):
-        return False
+#class InitialDetailInline(admin.StackedInline):
+#    model = InitialDetail
+#    suit_classes = 'suit-tab suit-tab-detail'
+#    fieldsets = [
+#        ('Tenure and Vegetation Affected', {'fields': [('tenure', 'fuel_type', 'area')]}),
+#        ('Forces', {'fields': [('first_attack', 'other_agency'), ('dec', 'lga_bfb', 'fesa', 'ses', 'police', 'other_force')]}),
+#        ('Miscellaneous', {'fields': [('cause', 'known_possible', 'other_cause', 'investigation_req')]}),
+#    ]
+#
+#    def has_delete_permission(self, request, obj=None):
+#        return False
 
 
 class DetailInline(admin.StackedInline):
@@ -73,12 +74,13 @@ class DetailInline(admin.StackedInline):
         return False
 
 
-class InitialCommentInline(admin.StackedInline):
-    model = InitialComment
-    suit_classes = 'suit-tab suit-tab-ini_comment'
+class InitialInline(admin.StackedInline):
+    model = Initial
+    suit_classes = 'suit-tab suit-tab-initial'
     fieldsets = [
         ('Miscellaneous', {'fields': [('fuel'), ('ros'), ('flame_height'), ('assistance_required'),
-        ('containment_time', 'fire_contained'), ('ops_point'), ('communications'), ('weather'), ('field_officer')]}),
+        ('containment_time', 'fire_contained'), ('ops_point'), ('communications'), ('weather'), ('field_officer'),
+        ('authorised_by', 'date')]}),
     ]
     #extra = 0
 
@@ -104,15 +106,15 @@ class PublicDamageInline(admin.TabularInline):
         return False
 
 
-class InitialActivityInline(admin.TabularInline):
-    suit_classes = 'suit-tab suit-tab-activities'
-    model = InitialActivity
-    extra = 1
-    max_num = 5
-    verbose_name_plural = "Activities"
-
-    def has_delete_permission(self, request, obj=None):
-        return False
+#class InitialActivityInline(admin.TabularInline):
+#    suit_classes = 'suit-tab suit-tab-activities'
+#    model = InitialActivity
+#    extra = 1
+#    max_num = 5
+#    verbose_name_plural = "Activities"
+#
+#    def has_delete_permission(self, request, obj=None):
+#        return False
 
 
 class ActivityInline(admin.TabularInline):
@@ -126,30 +128,30 @@ class ActivityInline(admin.TabularInline):
         return False
 
 
-class InitialAuthorisationInline(admin.TabularInline):
-    model = InitialAuthorisation
-    suit_classes = 'suit-tab suit-tab-auth'
-    #extra = 0
+#class InitialAuthorisationInline(admin.TabularInline):
+#    model = InitialAuthorisation
+#    suit_classes = 'suit-tab suit-tab-auth'
+#    #extra = 0
+#
+#    fields = ('name', 'date')
+#
+#    def has_delete_permission(self, request, obj=None):
+#        return False
+#
+#
+#class AuthorisationInline(admin.TabularInline):
+#    model = Authorisation
+#    suit_classes = 'suit-tab suit-tab-auth'
+#    extra = 0
+#
+#    fields = ('name', 'date')
 
-    fields = ('name', 'date')
 
-    def has_delete_permission(self, request, obj=None):
-        return False
-
-
-class AuthorisationInline(admin.TabularInline):
-    model = Authorisation
-    suit_classes = 'suit-tab suit-tab-auth'
-    extra = 0
-
-    fields = ('name', 'date')
-
-
-class InitialLocationInline(admin.StackedInline):
-    suit_classes = 'suit-tab suit-tab-location'
-    model = InitialLocation
-    fields = (('distance', 'direction', 'place'), ('lot_no', 'street', 'town'),)
-    #extra = 0
+#class InitialLocationInline(admin.StackedInline):
+#    suit_classes = 'suit-tab suit-tab-location'
+#    model = InitialLocation
+#    fields = (('distance', 'direction', 'place'), ('lot_no', 'street', 'town'),)
+#    #extra = 0
 
 
 class LocationInline(admin.StackedInline):
@@ -159,9 +161,10 @@ class LocationInline(admin.StackedInline):
     #extra = 0
 
 
-class EffectInline(admin.TabularInline):
+class EffectInline(admin.StackedInline):
     suit_classes = 'suit-tab suit-tab-effect'
     model = Effect
+    fields = (('frb_effect', 'fire_stopped', 'waterbomb_effect'), ('last_burnt', 'arrival_area', 'fire_level'), ('rating'),)
     #extra = 0
 
     def has_delete_permission(self, request, obj=None):
@@ -171,7 +174,11 @@ class EffectInline(admin.TabularInline):
 class ResponseInline(admin.TabularInline):
     suit_classes = 'suit-tab suit-tab-response'
     model = Response
-    extra = 0
+    extra = 1
+    max_num = 13
+
+    verbose_name = 'First P&W Response'
+    verbose_name_plural = 'First P&W Responses'
 
 
 class FirstAttackAgencyInline(admin.TabularInline):
@@ -200,7 +207,7 @@ class GroundForcesInline(admin.TabularInline):
     model = GroundForces
     extra = 1
     max_num = 3
-    verbose_name_plural = 'Ground Forces'
+    verbose_name_plural = 'Ground Forces at Fire'
 
     def has_delete_permission(self, request, obj=None):
         return False
@@ -211,7 +218,7 @@ class AerialForcesInline(admin.TabularInline):
     model = AerialForces
     extra = 1
     max_num = 2
-    verbose_name_plural = 'Aerial Forces'
+    verbose_name_plural = 'Aerial Forces at Fire'
 
     def has_delete_permission(self, request, obj=None):
         return False
@@ -263,7 +270,7 @@ class CommentInline(admin.TabularInline):
 
 
 class _BushfireAdmin(admin.ModelAdmin):
-    model = InitialBushfire
+    model = Bushfire
     list_display = ['district', 'incident_no', 'season', 'job_code', 'name', 'potential_fire_level', 'get_tenure'] #, 'authorised_by', 'get_auth_date']
     _fields = ('district', 'incident_no', 'season', 'job_code', 'name', 'potential_fire_level')
 
@@ -331,40 +338,40 @@ class _BushfireAdmin(admin.ModelAdmin):
     get_district.short_description = 'District'
 
 
-class InitialBushfireAdmin(TabbedModelAdmin):
-    model = InitialBushfire
-    list_display = ['district', 'incident_no', 'season', 'job_code', 'name', 'potential_fire_level' ]
-
-    tab_overview = (
-        (None, {'fields': (('region', 'district'), ('incident_no', 'season', 'job_code'), ('name', 'potential_fire_level'))}),
-        InitialActivityInline,
-        InitialAuthorisationInline,
-    )
-
-    tab_origin = (
-        InitialOriginInline,
-        InitialLocationInline,
-    )
-
-    tab_detail = (
-        InitialDetailInline,
-    )
-
-    tab_comment = (
-        InitialCommentInline,
-    )
-
-    tabs = [
-        ('Overview', tab_overview),
-        ('Point of Origin', tab_origin),
-        ('Detail', tab_detail),
-        ('Comment', tab_comment),
-    ]
-
-    def get_auth_date(self, obj):
-        return obj.authorised_by.date
-    get_auth_date.admin_order_field  = 'authorised_by'  #Allows column order sorting
-    get_auth_date.short_description = 'Date'
+#class InitialBushfireAdmin(TabbedModelAdmin):
+#    model = InitialBushfire
+#    list_display = ['district', 'incident_no', 'season', 'job_code', 'name', 'potential_fire_level' ]
+#
+#    tab_overview = (
+#        (None, {'fields': (('region', 'district'), ('incident_no', 'season', 'job_code'), ('name', 'potential_fire_level'))}),
+#        InitialActivityInline,
+#        #InitialAuthorisationInline,
+#    )
+#
+#    tab_origin = (
+#        InitialOriginInline,
+#        InitialLocationInline,
+#    )
+#
+#    tab_detail = (
+#        InitialDetailInline,
+#    )
+#
+#    tab_comment = (
+#        InitialCommentInline,
+#    )
+#
+#    tabs = [
+#        ('Overview', tab_overview),
+#        ('Point of Origin', tab_origin),
+#        ('Detail', tab_detail),
+#        ('Comment', tab_comment),
+#    ]
+#
+#    def get_auth_date(self, obj):
+#        return obj.authorised_by.date
+#    get_auth_date.admin_order_field  = 'authorised_by'  #Allows column order sorting
+#    get_auth_date.short_description = 'Date'
 
 
 class BushfireAdmin(TabbedModelAdmin):
@@ -373,9 +380,14 @@ class BushfireAdmin(TabbedModelAdmin):
     list_filter = ('district', 'season')
 
     tab_overview = (
-        (None, {'fields': (('region', 'district'), ('incident_no', 'season', 'job_code'), ('name', 'potential_fire_level'))}),
+        (None, {'fields': (
+            ('region', 'district'),
+            ('incident_no', 'season', 'job_code'),
+            ('name', 'dfes_incident_no', 'potential_fire_level'),
+            ('authorised_by', 'date'),
+        )}),
         ActivityInline,
-        AuthorisationInline,
+        #AuthorisationInline,
         ReporterInline,
     )
 
@@ -388,9 +400,14 @@ class BushfireAdmin(TabbedModelAdmin):
         DetailInline,
     )
 
+    tab_initial = (
+        InitialInline,
+    )
+
     tab_effect = (
         EffectInline,
         FirstAttackAgencyInline,
+        ResponseInline,
     )
 
     tab_areaburnt = (
@@ -418,6 +435,7 @@ class BushfireAdmin(TabbedModelAdmin):
         ('Overview', tab_overview),
         ('Point of Origin', tab_origin),
         ('Detail', tab_detail),
+        ('Initial', tab_initial),
         ('Effects/Agencies', tab_effect),
         ('Areas Burnt/Forces', tab_areaburnt),
         ('Attendance/Behaviour', tab_attendance),
@@ -431,7 +449,7 @@ class BushfireAdmin(TabbedModelAdmin):
     get_auth_date.short_description = 'Date'
 
 
-admin.site.register(InitialBushfire, InitialBushfireAdmin)
+#admin.site.register(InitialBushfire, InitialBushfireAdmin)
 admin.site.register(Bushfire, BushfireAdmin)
 #admin.site.register(PrivateDamage, PrivateDamageAdmin)
 
