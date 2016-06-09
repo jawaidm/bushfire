@@ -60,6 +60,7 @@ INSTALLED_APPS = (
     'bushfire',
     'debug_toolbar',
     'smart_selects',
+    'webtemplate_dpaw',
 )
 
 MIDDLEWARE_CLASSES = (

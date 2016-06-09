@@ -1,4 +1,26 @@
 [
+
+{
+    "pk": 1,
+    "model": "bushfire.bushfire",
+    "fields": {
+        "creator": ["jm"],
+        "modifier": ["jm"],
+        "created": "2016-05-17",
+        "modified": "2016-05-17",
+        "region": 1,
+        "district": 1,
+        "name": "My Bushfire Name 1",
+        "incident_no": 123456,
+        "season": "2015/2016",
+        "dfes_incident_no": 234567,
+        "job_code": 123456,
+        "potential_fire_level": 1,
+        "authorised_by": ["jm"],
+        "authorised_date": "2016-05-17"
+    }
+},
+
 {
     "pk": 1,
     "model": "bushfire.reporter",
@@ -7,34 +29,35 @@
         "cause": 1,
         "arson_squad_notified": "True",
         "prescription": 1,
-        "offence_no": 123456
+        "offence_no": 123456,
+        "bushfire": 1
     }
 },
 {
     "pk": 1,
     "model": "bushfire.origin",
     "fields": {
-        "auth_type": 1,
         "coord_type": 2,
         "lat_decimal": 1.0,
         "lat_degrees": 1.0,
         "lat_minutes": 1.0,
         "lon_decimal": 1.0,
         "lon_degrees": 1.0,
-        "lon_minutes": 1.0
+        "lon_minutes": 1.0,
+        "bushfire": 1
     }
 },
 {
     "pk": 1,
     "model": "bushfire.location",
     "fields": {
-        "auth_type": 1,
         "distance": 1.0,
         "direction": 1,
         "place": "Kensington",
         "lot_no": 123,
         "street": "Kensington Avenue",
-        "town": "Perth"
+        "town": "Perth",
+        "bushfire": 1
     }
 },
 {
@@ -47,18 +70,18 @@
         "last_burnt": 1,
         "arrival_area": 1.0,
         "fire_level": 1,
-        "rating": 1
+        "rating": 1,
+        "bushfire": 1
     }
 },
 {
     "pk": 1,
-    "model": "bushfire.comment",
+    "model": "bushfire.initial",
     "fields": {
         "creator": ["wilsonc"],
         "modifier": ["wilsonc"],
         "created": "2016-05-17",
         "modified": "2016-05-17",
-        "bushfire": 1,
         "fuel": "Any",
         "ros": "ROS",
         "flame_height": 2.00,
@@ -68,7 +91,8 @@
         "ops_point": "Opes Point ref",
         "communications": "ABC",
         "weather": "Dry",
-        "field_officer": ["jawaidm"]
+        "field_officer": ["jm"],
+        "bushfire": 1
     }
 },
 
@@ -79,55 +103,10 @@
         "first_attack": 1,
         "hazard_mgt": 2,
         "initial_control": 3,
-        "final_control": 4
-    }
-},
-
-
-{
-    "pk": 1,
-    "model": "bushfire.initialbushfire",
-    "fields": {
-        "creator": ["wilsonc"],
-        "modifier": ["wilsonc"],
-        "created": "2016-05-17",
-        "modified": "2016-05-17",
-        "region": 1,
-        "district": 1,
-        "name": "My Bushfire Name 1",
-        "incident_no": 123456,
-        "season": "2015/2016",
-        "dfes_incident_no": 234567,
-        "job_code": 123456,
-        "reporting": 1,
-        "potential_fire_level": 1,
-        "location": 1,
-        "origin": 1,
-        "effect": 1,
-        "first_attack": 1
-
-    }
-},
-
-{
-    "pk": 1,
-    "model": "bushfire.detail",
-    "fields": {
-        "auth_type": 1,
-        "tenure": 1,
-        "fuel_type": 30,
-        "area": 1.0,
-        "first_attack": 1,
-        "other_agency": null,
-        "cause": 1 ,
-        "known_possible": 1,
-        "other_cause": "ABC",
-        "investigation_required": "True",
+        "final_control": 4,
         "bushfire": 1
     }
 }
-
-
 ]
 
 

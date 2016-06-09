@@ -116,12 +116,12 @@ class _InitialBushfire(Audit):
     incident_no = models.CharField(verbose_name="Incident No.", max_length=10)
     season = models.CharField(max_length=9)
     dfes_incident_no = models.CharField(verbose_name="DFES Incident No.", max_length=10)
-    job_code = models.CharField(verbose_name="Job Code", max_length=10)
+    job_code = models.CharField(verbose_name="Job Code", max_length=10, null=True, blank=True)
+    potential_fire_level = models.PositiveSmallIntegerField(choices=FIRE_LEVEL_CHOICES)
 
     #authorised_by = models.ForeignKey('Authorisation', verbose_name="Authorising Officer", blank=True, null=True)
     #reporting = models.ForeignKey('Reporter', verbose_name="Reporting and  Cause")
 
-    potential_fire_level = models.PositiveSmallIntegerField(choices=FIRE_LEVEL_CHOICES)
 
     # TABS
 
@@ -160,11 +160,11 @@ class BushfireBase(Audit):
     incident_no = models.CharField(verbose_name="Incident No.", max_length=10)
     season = models.CharField(max_length=9)
     dfes_incident_no = models.CharField(verbose_name="DFES Incident No.", max_length=10)
-    job_code = models.CharField(verbose_name="Job Code", max_length=10)
+    job_code = models.CharField(verbose_name="Job Code", max_length=10, null=True, blank=True)
     potential_fire_level = models.PositiveSmallIntegerField(choices=FIRE_LEVEL_CHOICES)
 
-    authorised_by = models.ForeignKey(User, verbose_name="Authorising Officer", blank=True, null=True)
-    date = models.DateTimeField(default=timezone.now)
+    authorised_by = models.ForeignKey(User, verbose_name="Authorised By", blank=True, null=True)
+    authorised_date = models.DateTimeField(verbose_name='Authorised Date', default=timezone.now, null=True, blank=True)
     #reporting = models.ForeignKey('Reporter', verbose_name="Reporting and  Cause")
 
 
@@ -640,7 +640,7 @@ class GroundForces(models.Model):
         (3, 'Other Agencies Peak'),
     )
 
-    name = models.PositiveSmallIntegerField(choices=GF_AGENCY_CHOICES, verbose_name="Agency Name")
+    name = models.PositiveSmallIntegerField(choices=GF_AGENCY_CHOICES, verbose_name="Agency Name", null=True, blank=True)
     persons = models.PositiveSmallIntegerField(null=True, blank=True)
     pumpers = models.PositiveSmallIntegerField(null=True, blank=True)
     plant = models.PositiveSmallIntegerField(null=True, blank=True)
@@ -660,7 +660,7 @@ class AerialForces(models.Model):
         (2, 'Helicopter'),
     )
 
-    name = models.PositiveSmallIntegerField(choices=AF_AGENCY_CHOICES, verbose_name="Agency Name")
+    name = models.PositiveSmallIntegerField(choices=AF_AGENCY_CHOICES, verbose_name="Agency Name", null=True, blank=True)
     observer = models.PositiveSmallIntegerField(null=True, blank=True)
     transporter = models.PositiveSmallIntegerField(null=True, blank=True)
     ignition = models.PositiveSmallIntegerField(null=True, blank=True)
@@ -678,12 +678,12 @@ Attendance/Behaviour
 """
 @python_2_unicode_compatible
 class FireBehaviour(models.Model):
-    name = models.CharField(verbose_name="Name/Description", max_length=50)
-    bushfire = models.ForeignKey(Bushfire, related_name='fire_behaviour')
+    name = models.CharField(verbose_name="Name/Description", max_length=50, null=True, blank=True)
     fuel_type = models.ForeignKey(FuelType, related_name='fuel_types_fire', null=True, blank=True) # vegetation_type was renamed to fuel_type in PBS
     fuel_weight = models.PositiveSmallIntegerField(null=True, blank=True)
     fdi = models.PositiveSmallIntegerField(null=True, blank=True)
     ros = models.PositiveSmallIntegerField(null=True, blank=True)
+    bushfire = models.ForeignKey(Bushfire, related_name='fire_behaviour')
 
     def __str__(self):
         return self.name
@@ -694,7 +694,7 @@ class FireBehaviour(models.Model):
 
 @python_2_unicode_compatible
 class AttendingOrganisation(models.Model):
-    name = models.ForeignKey('Organisation')
+    name = models.ForeignKey('Organisation', null=True, blank=True)
     other = models.CharField(max_length=25, null=True, blank=True)
     bushfire = models.ForeignKey(Bushfire, related_name='attending_organisations')
 
