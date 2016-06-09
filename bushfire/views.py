@@ -1,6 +1,7 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.views import generic
+from django.views.generic.edit import CreateView, UpdateView
 
 from bushfire.models import Bushfire
 from bushfire.utils import breadcrumbs_li
@@ -40,4 +41,25 @@ class BushfireDetailView(generic.DetailView):
         context.update({'bushfire': bushfire})
         return context
 
+
+class BushfireCreateView(CreateView):
+    model = Bushfire
+    fields = ['name']
+    template_name = 'bushfire/detail.html'
+
+
+class BushfireUpdateView(UpdateView):
+    model = Bushfire
+    #fields = ['name']
+    template_name = 'bushfire/detail.html'
+
+#    def get_context_data(self, **kwargs):
+#        context = super(BushfireCreateView, self).get_context_data(**kwargs)
+#
+#        id = self.kwargs['pk']
+#        bushfire = Bushfire.objects.get(id=id)
+#
+#        context.update({'bushfire': bushfire})
+#        return context
+#
 
