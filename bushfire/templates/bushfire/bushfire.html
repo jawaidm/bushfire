@@ -20,7 +20,7 @@
       <tr>
         <td><input type="checkbox" name="chkbox" value={{ bushfire.id }}  /></td>
         <td>{{ bushfire.id }}</td>
-        <td>{{ bushfire.name }}</td>
+        <td><a href="{% url 'bushfire:bushfire_detail' bushfire.id %}">{{ bushfire.name }}</td>
         {% comment %}
         <td><a href="{% url 'bushfire:bushfire' bushfire.id %}">{{ bushfire.name }}</td>
         {% endcomment %}

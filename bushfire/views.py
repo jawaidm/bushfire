@@ -27,8 +27,17 @@ class BushfireView(generic.ListView):
 #        return context
 
 
-#class DetailView(generic.DetailView):
-#    model = Bushfire
-#    template_name = 'bushfire/detail.html'
+class BushfireDetailView(generic.DetailView):
+    model = Bushfire
+    template_name = 'bushfire/detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(BushfireDetailView, self).get_context_data(**kwargs)
+
+        id = self.kwargs['pk']
+        bushfire = Bushfire.objects.get(id=id)
+
+        context.update({'bushfire': bushfire})
+        return context
 
 
