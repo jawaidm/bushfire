@@ -166,6 +166,35 @@ class BushfireBase(Audit):
     authorised_by = models.ForeignKey(User, verbose_name="Authorised By", blank=True, null=True)
     authorised_date = models.DateTimeField(verbose_name='Authorised Date', default=timezone.now, null=True, blank=True)
 
+    # Origin
+    COORD_TYPE_1 = 1
+    COORD_TYPE_2 = 2
+    COORD_TYPE_3 = 3
+    COORD_TYPE_CHOICES = (
+        (COORD_TYPE_1, 'MGA'),
+        (COORD_TYPE_2, 'Lat/Long'),
+        (COORD_TYPE_3, 'FD Grid'),
+    )
+
+    coord_type = models.PositiveSmallIntegerField(choices=COORD_TYPE_CHOICES, verbose_name="Coordinate Type")
+    fire_not_found = models.BooleanField(default=False)
+    # TODO number of dp
+    lat_decimal = models.DecimalField(verbose_name="Latitude (Decimal)", max_digits=12, decimal_places=1, validators=[MinValueValidator(0)], null=True, blank=True)
+    lat_degrees = models.DecimalField(verbose_name="Latitude (Degrees)", max_digits=12, decimal_places=1, validators=[MinValueValidator(0)], null=True, blank=True)
+    lat_minutes = models.DecimalField(verbose_name="Latitude (Minutes)", max_digits=12, decimal_places=1, validators=[MinValueValidator(0)], null=True, blank=True)
+    lon_decimal = models.DecimalField(verbose_name="Longitude (Decimal)", max_digits=12, decimal_places=1, validators=[MinValueValidator(0)], null=True, blank=True)
+    lon_degrees = models.DecimalField(verbose_name="Longitude (Degrees)", max_digits=12, decimal_places=1, validators=[MinValueValidator(0)], null=True, blank=True)
+    lon_minutes = models.DecimalField(verbose_name="Longitude (Minutes)", max_digits=12, decimal_places=1, validators=[MinValueValidator(0)], null=True, blank=True)
+
+    mga_zone = models.DecimalField(verbose_name="MGA Zone", max_digits=12, decimal_places=1, validators=[MinValueValidator(0)], null=True, blank=True)
+    mga_easting = models.DecimalField(verbose_name="MGA Easting", max_digits=12, decimal_places=1, validators=[MinValueValidator(0)], null=True, blank=True)
+    mga_northing = models.DecimalField(verbose_name="MGA Northing", max_digits=12, decimal_places=1, validators=[MinValueValidator(0)], null=True, blank=True)
+
+    fd_letter = models.CharField(verbose_name="FD Letter", max_length=2, null=True, blank=True)
+    fd_number = models.PositiveSmallIntegerField(verbose_name="FD Number", null=True, blank=True)
+    fd_tenths = models.CharField(verbose_name="FD Tenths", max_length=2, null=True, blank=True)
+
+
     # Location
     distance = models.DecimalField(
         verbose_name="Distance (km)", max_digits=6, decimal_places=1,
