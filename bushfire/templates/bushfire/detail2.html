@@ -1,0 +1,152 @@
+{% extends "admin/base.html" %}
+{% load static from staticfiles %}
+{% load crispy_forms_tags %}
+{% crispy form %}
+
+{% block extrahead %}
+  {{ block.super }}
+  <style>
+  .filter-pad {
+    margin-top: 5px;
+    margin-bottom: -17px !important;
+    margin-left: 10px;
+  }
+  .adjust-legend{
+    margin-bottom:-40px;
+  }
+
+  .ui-datepicker {
+      width: 216px;
+      height: auto;
+      margin: 5px auto 0;
+      font: 9pt Arial, sans-serif;
+      -webkit-box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, .5);
+      -moz-box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, .5);
+      box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, .5);
+      background-color: #FFF;
+  }
+
+  .myCollapse {
+        display: none;
+  }
+  .myCollapse.in {
+        display: table-row;
+  }
+
+  #content {
+      float:left;
+      text-align:left;
+      width:90%;
+  }
+
+  </style>
+  {% endblock %}
+
+  {% block extrastyle %}
+
+  <link rel="stylesheet" href="{% static "css/jquery-ui-1.11.4.min.css" %}">
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+  {% endblock %}
+
+
+{% block content %}
+
+  <h1>Bushfire Detail</h1>
+  {% crispy form %}
+
+    {% comment %}
+  <form action="" method="post">{% csrf_token %}
+    <b>Region*:</b> {{ form.region }} <b>District*:</b> {{ form.district }} <br><br>
+    <b>DFES Incident No.*</b> {{ form.incident_no}} <b>Season:*</b> {{ form.season }} <b>Job Code:*</b> {{ form.job_code }} <br><br>
+    <b>Fire Name:*</b> {{ form.name}} <br><br>
+    <b>User:*</b> {{ user}} <br><br>
+    {% crispy form %}
+    <input type="submit" value="Save" />
+  </form>
+    {% endcomment %}
+
+  <ul id="report-tabs" class="nav nav-tabs">
+      <li id="origin-tab"  class="active">
+          <a data-toggle="tab" href="#origin">
+              <i class="icon-tag"></i>
+              Point of Origin
+          </a>
+      </li>
+      <li id="detail-tab">
+          <a data-toggle="tab" href="#detail">
+              <i class="icon-tag"></i>
+              Detail
+          </a>
+      </li>
+
+
+
+      {% comment %}
+    {{ form.as_p}}
+      <li id="fireload-tab" {% if report == "epfp_fireload" %} class="active"{% endif %}>
+          <a href="{% url 'admin:daily_burn_program' %}?report=epfp_fireload&date={{date}}">
+              <i class="icon-plus"></i>
+              Fire Load (268b)
+          </a>
+      </li>
+      <li id="summary-tab"  "{% if report == "epfp_summary" %} class="active"{% endif %}>
+          <a href="{% url 'admin:daily_burn_program' %}?report=epfp_summary&date={{date}}">
+              <i class="icon-fire"></i>
+              Approved Burns (268c)
+          </a>
+      </li>
+      {% endcomment %}
+  </ul>
+
+  <div class="tab-content">
+    <div id="origin" class="tab-pane fade in active">
+        <h3>Point of Origin</h3>
+        <p>Some content in Origin.</p>
+
+      {% comment %}
+<table class="table table-bordered table-striped table-condensed">
+    <tbody>
+        <tr>
+            <th>District*</th>
+            <td colspan="3">{{ form.authorised_date }}</td>
+        </tr>
+        <tr>
+            <th class="cbas">Name *</th>
+            <td colspan="3" class="cbas">
+                    {{ form.name }}
+            </td>
+            <td colspan="3" class="cbas">
+                    {{ current.name }}
+            </td>
+
+        </tr>
+        <tr>
+            <th class="cbas">Description <br/>(leave blank to auto-generate)</th>
+            <td colspan="3" class="cbas">
+                    {{ form.description }}
+                    {{ current.description }}
+            </td>
+        </tr>
+    </tbody>
+</table>
+      {% endcomment %}
+
+    </div>
+    <div id="detail" class="tab-pane fade">
+        <h3>Detail</h3>
+        <p>Some content in Detail.</p>
+    </div>
+  </div>
+
+  {% if report == "epfp_planned" %}
+
+    <h1>Bushfire Detail</h1>
+    <p>{{ bushfire.name}}</p>
+    <p>{{ object.job_code}}</p>
+
+  {% endif %}
+
+
+{% endblock %}

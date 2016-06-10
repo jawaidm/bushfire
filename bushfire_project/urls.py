@@ -15,6 +15,6 @@ urlpatterns = patterns('',
 
 
     url(r'^chaining/', include('smart_selects.urls')),
-    url(r'^admin/', include(admin.site.urls)),
     url(r'^bushfire/', include('bushfire.urls', namespace='bushfire')),
+    url(r'^admin/', include(admin.site.urls)),
 )

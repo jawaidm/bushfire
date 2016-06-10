@@ -1,7 +1,7 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.views import generic
-from django.views.generic.edit import CreateView, UpdateView
+from django.views.generic.edit import CreateView, UpdateView, FormView
 
 from bushfire.models import Bushfire
 from bushfire.forms import BushfireForm
@@ -55,10 +55,11 @@ class BushfireUpdateView(UpdateView):
     template_name = 'bushfire/detail.html'
 
 
-class BushfireCreateView2(CreateView):
+class BushfireCreateView2(UpdateView):
+    model = Bushfire
     form_class = BushfireForm
-    template_name = 'bushfire/detail.html'
-    success_url = 'success'
+    template_name = 'bushfire/detail2.html'
+    #success_url = 'success'
 
     def get_form_kwargs(self):
         # pass "user" keyword argument with the current user to your form
@@ -66,3 +67,9 @@ class BushfireCreateView2(CreateView):
         kwargs['user'] = self.request.user
         return kwargs
 
+    def get_success_url(self):
+        return reverse("bushfire:index")
+
+    def form_valid(self, form):
+        form.save()
+        return super(BushfireCreateView2, self).form_valid(form)

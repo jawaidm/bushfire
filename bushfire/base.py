@@ -41,7 +41,7 @@ class Audit(models.Model):
             for field in self._meta.fields:
                 self._initial[field.attname] = getattr(self, field.attname)
 
-    def has_changed(self):
+    def _has_changed(self):
         """
         Returns true if the current data differs from initial.
         """
@@ -58,10 +58,11 @@ class Audit(models.Model):
         return self._changed_data
     changed_data = property(_get_changed_data)
 
-    def save(self, *args, **kwargs):
+    def _save(self, *args, **kwargs):
         '''
         This falls back on using an admin user if a thread request object wasn't found
         '''
+        import ipdb; ipdb.set_trace()
         User = get_user_model()
         _locals = threading.local()
 
@@ -114,9 +115,10 @@ class Audit(models.Model):
     def __str__(self):
         return str(self.pk)
 
-    def get_absolute_url(self):
-        opts = self._meta.app_label, self._meta.module_name
-        return reverse("admin:%s_%s_change" % opts, args=(self.pk, ))
+#    def get_absolute_url(self):
+#        opts = self._meta.app_label, self._meta.module_name
+#        return reverse("admin:%s_%s_change" % opts, args=(self.pk, ))
+#        return reverse("bushfire:index")
 
     def clean_fields(self, exclude=None):
         """

@@ -17,7 +17,15 @@
         "job_code": 123456,
         "potential_fire_level": 1,
         "authorised_by": ["jm"],
-        "authorised_date": "2016-05-17"
+        "authorised_date": "2016-05-17",
+
+        "distance": 1.0,
+        "direction": 1,
+        "place": "Kensington",
+        "lot_no": 123,
+        "street": "Kensington Avenue",
+        "town": "Perth"
+
     }
 },
 

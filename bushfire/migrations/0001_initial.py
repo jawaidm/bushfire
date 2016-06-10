@@ -96,6 +96,11 @@ class Migration(migrations.Migration):
                 ('job_code', models.CharField(max_length=10, null=True, verbose_name=b'Job Code', blank=True)),
                 ('potential_fire_level', models.PositiveSmallIntegerField(choices=[(1, 1), (2, 2), (3, 3)])),
                 ('authorised_date', models.DateTimeField(default=django.utils.timezone.now, null=True, verbose_name=b'Authorised Date', blank=True)),
+                ('distance', models.DecimalField(verbose_name=b'Distance (km)', max_digits=6, decimal_places=1, validators=[django.core.validators.MinValueValidator(0)])),
+                ('place', models.CharField(max_length=25)),
+                ('lot_no', models.CharField(max_length=10, verbose_name=b'Lot Number')),
+                ('street', models.CharField(max_length=25)),
+                ('town', models.CharField(max_length=25)),
                 ('authorised_by', models.ForeignKey(verbose_name=b'Authorised By', blank=True, to=settings.AUTH_USER_MODEL, null=True)),
                 ('creator', models.ForeignKey(related_name='bushfire_bushfire_created', editable=False, to=settings.AUTH_USER_MODEL)),
             ],
@@ -330,6 +335,21 @@ class Migration(migrations.Migration):
                 ('street', models.CharField(max_length=25)),
                 ('town', models.CharField(max_length=25)),
                 ('bushfire', models.OneToOneField(related_name='location', to='bushfire.Bushfire')),
+                ('direction', models.ForeignKey(verbose_name=b'Direction', to='bushfire.Direction')),
+            ],
+            options={
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='Location2',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('distance', models.DecimalField(verbose_name=b'Distance (km)', max_digits=6, decimal_places=1, validators=[django.core.validators.MinValueValidator(0)])),
+                ('place', models.CharField(max_length=25)),
+                ('lot_no', models.CharField(max_length=10, verbose_name=b'Lot Number')),
+                ('street', models.CharField(max_length=25)),
+                ('town', models.CharField(max_length=25)),
                 ('direction', models.ForeignKey(verbose_name=b'Direction', to='bushfire.Direction')),
             ],
             options={
@@ -612,6 +632,12 @@ class Migration(migrations.Migration):
             model_name='detail',
             name='tenure',
             field=models.ForeignKey(to='bushfire.Tenure'),
+            preserve_default=True,
+        ),
+        migrations.AddField(
+            model_name='bushfire',
+            name='direction',
+            field=models.ForeignKey(verbose_name=b'Direction', to='bushfire.Direction'),
             preserve_default=True,
         ),
         migrations.AddField(

@@ -80,7 +80,7 @@ class InitialInline(admin.StackedInline):
     fieldsets = [
         ('Miscellaneous', {'fields': [('fuel'), ('ros'), ('flame_height'), ('assistance_required'),
         ('containment_time', 'fire_contained'), ('ops_point'), ('communications'), ('weather'), ('field_officer'),
-        ('authorised_by', 'date')]}),
+        ('authorised_by', 'authorised_date')]}),
     ]
     #extra = 0
 
@@ -384,7 +384,7 @@ class BushfireAdmin(TabbedModelAdmin):
             ('region', 'district'),
             ('incident_no', 'season', 'job_code'),
             ('name', 'dfes_incident_no', 'potential_fire_level'),
-            ('authorised_by', 'date'),
+            ('authorised_by', 'authorised_date'),
         )}),
         ActivityInline,
         #AuthorisationInline,
@@ -450,6 +450,6 @@ class BushfireAdmin(TabbedModelAdmin):
 
 
 #admin.site.register(InitialBushfire, InitialBushfireAdmin)
-admin.site.register(Bushfire, BushfireAdmin)
+#admin.site.register(Bushfire, BushfireAdmin)
 #admin.site.register(PrivateDamage, PrivateDamageAdmin)
 

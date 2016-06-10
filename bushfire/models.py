@@ -165,6 +165,17 @@ class BushfireBase(Audit):
 
     authorised_by = models.ForeignKey(User, verbose_name="Authorised By", blank=True, null=True)
     authorised_date = models.DateTimeField(verbose_name='Authorised Date', default=timezone.now, null=True, blank=True)
+
+    # Location
+    distance = models.DecimalField(
+        verbose_name="Distance (km)", max_digits=6, decimal_places=1,
+        validators=[MinValueValidator(0)])
+    direction = models.ForeignKey('Direction', verbose_name="Direction")
+    place = models.CharField(max_length=25)
+    lot_no = models.CharField(verbose_name="Lot Number", max_length=10)
+    street = models.CharField(max_length=25)
+    town = models.CharField(max_length=25)
+
     #reporting = models.ForeignKey('Reporter', verbose_name="Reporting and  Cause")
 
 
@@ -270,6 +281,23 @@ class Bushfire(BushfireBase):
 
     def __str__(self):
         return self.name
+
+
+@python_2_unicode_compatible
+class Location2(models.Model):
+    distance = models.DecimalField(
+        verbose_name="Distance (km)", max_digits=6, decimal_places=1,
+        validators=[MinValueValidator(0)])
+    direction = models.ForeignKey('Direction', verbose_name="Direction")
+    place = models.CharField(max_length=25)
+    lot_no = models.CharField(verbose_name="Lot Number", max_length=10)
+    street = models.CharField(max_length=25)
+    town = models.CharField(max_length=25)
+    #bushfire = models.OneToOneField(Bushfire, related_name='location')
+
+    def __str__(self):
+        return self.direction.name
+
 
 
 @python_2_unicode_compatible
@@ -864,7 +892,7 @@ class Initial(Audit):
     weather = models.CharField(max_length=50)
     field_officer = models.ForeignKey(User, verbose_name="Field Officer", related_name='field_officer')
     authorised_by = models.ForeignKey(User, verbose_name="Authorising Officer", blank=True, null=True)
-    date = models.DateTimeField(default=timezone.now)
+    authorised_date = models.DateTimeField(default=timezone.now)
 
     bushfire = models.OneToOneField(Bushfire, related_name='initial_report')
 
