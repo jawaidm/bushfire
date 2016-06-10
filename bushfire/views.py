@@ -4,6 +4,7 @@ from django.views import generic
 from django.views.generic.edit import CreateView, UpdateView
 
 from bushfire.models import Bushfire
+from bushfire.forms import BushfireForm
 from bushfire.utils import breadcrumbs_li
 
 class BushfireView(generic.ListView):
@@ -53,13 +54,15 @@ class BushfireUpdateView(UpdateView):
     #fields = ['name']
     template_name = 'bushfire/detail.html'
 
-#    def get_context_data(self, **kwargs):
-#        context = super(BushfireCreateView, self).get_context_data(**kwargs)
-#
-#        id = self.kwargs['pk']
-#        bushfire = Bushfire.objects.get(id=id)
-#
-#        context.update({'bushfire': bushfire})
-#        return context
-#
+
+class BushfireCreateView2(CreateView):
+    form_class = BushfireForm
+    template_name = 'bushfire/detail.html'
+    success_url = 'success'
+
+    def get_form_kwargs(self):
+        # pass "user" keyword argument with the current user to your form
+        kwargs = super(BushfireCreateView2, self).get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
 
