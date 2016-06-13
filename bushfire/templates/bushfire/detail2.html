@@ -56,30 +56,97 @@
 
 {% block content %}
 
+{% if form.errors %}
+    <div class="alert alert-error">
+        <button type="button" class="close" data-dismiss="alert">×</button>
+        {% for field in form %} 
+            {% if field.errors %}
+            <font color="red"><li>{{ field.label }}: {{ field.errors|striptags }}</li></font>
+            {% endif %}
+        {% endfor %}
+    </div>
+{% endif %}
+
+
   <h1>Bushfire Detail</h1>
-  {% crispy form %}
-
-
-  {{ activity_formset.management_form }}
-
-  {% for activity_form in activity_formset %}
-        <div class="activity-formset">
-            {{ activity_form.activity }}
-
-            {{ activity_form.date }}
-        </div>
-  {% endfor %}
-
-    {% comment %}
   <form action="" method="post">{% csrf_token %}
-    <b>Region*:</b> {{ form.region }} <b>District*:</b> {{ form.district }} <br><br>
-    <b>DFES Incident No.*</b> {{ form.incident_no}} <b>Season:*</b> {{ form.season }} <b>Job Code:*</b> {{ form.job_code }} <br><br>
-    <b>Fire Name:*</b> {{ form.name}} <br><br>
-    <b>User:*</b> {{ user}} <br><br>
-    {% crispy form %}
+
+<div class="row">
+    <div class="col-sm-2" > 
+        <div id="div_id_region" class="form-group"> 
+            <label for="id_region" class="control-label requiredField">Region*</label>
+            <div class="controls ">{{form.region}}</div>
+        </div>
+    </div>
+
+    <div class="col-sm-2" > 
+        <div id="div_id_district" class="form-group"> 
+            <label for="id_district" class="control-label requiredField">District*</label>
+            <div class="controls ">{{form.district}}</div>
+        </div>
+    </div>
+
+    <div class="col-sm-2" > 
+        <div id="div_id_incident_no" class="form-group"> 
+            <label for="id_incident_no" class="control-label requiredField">Incident No.*</label>
+            <div class="controls ">{{form.incident_no}}</div>
+        </div>
+    </div>
+
+    <div class="col-sm-2" > 
+        <div id="div_id_season" class="form-group"> 
+            <label for="id_season" class="control-label  requiredField">Season*</label>
+            <div class="controls ">{{form.season}}</div>
+        </div>
+    </div>
+
+    <div class="col-sm-2" > 
+        <div id="div_id_job_code" class="form-group"> 
+            <label for="id_job_code" class="control-label">Job Code</label>
+            <div class="controls ">{{form.job_code}}</div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-2" > 
+        <div id="div_id_name" class="form-group"> 
+            <label for="id_name" class="control-label  requiredField">Name*</label>
+            <div class="controls ">{{form.name}}</div>
+        </div>
+    </div>
+
+    <div class="col-sm-2" > 
+        <div id="div_id_dfes_incident_no" class="form-group"> 
+            <label for="id_dfes_incident_no" class="control-label  requiredField">DFES Incident No.*</label>
+            <div class="controls ">{{form.dfes_incident_no}}</div>
+        </div>
+    </div>
+
+    <div class="col-sm-2" > 
+        <div id="div_potential_fire_level" class="form-group"> 
+            <label for="id_potential_fire_level" class="control-label  requiredField">Potential Fire Level*</label>
+            <div class="controls ">{{form.potential_fire_level}}</div>
+        </div>
+    </div>
+
+    <div class="col-sm-2" > 
+        <div id="div_id_authorised_by" class="form-group"> 
+            <label for="id_authorised_by" class="control-label  requiredField">Authorised By*</label>
+            <div class="controls ">{{form.authorised_by}}</div>
+        </div>
+    </div>
+
+    <div class="col-sm-2" > 
+        <div id="div_id_authorised_date" class="form-group"> 
+            <label for="id_authorised_date" class="control-label  requiredField">Authorised Date*</label>
+            <div class="controls ">{{form.authorised_date}}</div>
+        </div>
+    </div>
+</div>
+
     <input type="submit" value="Save" />
   </form>
-    {% endcomment %}
 
   <ul id="report-tabs" class="nav nav-tabs">
       <li id="origin-tab"  class="active">

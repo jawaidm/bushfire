@@ -14,72 +14,84 @@ class ActivityForm(forms.ModelForm):
         #import ipdb; ipdb.set_trace()
         super(ActivityForm, self).__init__(*args, **kwargs)
 
+        self.helper = FormHelper()
+#        self.helper.form_method = 'post'
+
+        self.helper.layout = Layout(
+            Div(
+                Div('activity',css_class='col-sm-2',),
+                Div('date',css_class='col-sm-2',),
+                css_class='row',
+            ),
+        )
+
     class Meta:
         model = Activity
         fields = ('activity', 'date',)
 
 
-class BushfireForm(forms.ModelForm):
-    def __init__(self, *args, **kwargs):
-        #import ipdb; ipdb.set_trace()
-        if kwargs.has_key('user'):
-            user = kwargs.pop('user')
-        super(BushfireForm, self).__init__(*args, **kwargs)
+class _BushfireForm(forms.ModelForm):
+#    def __init__(self, *args, **kwargs):
+#        #import ipdb; ipdb.set_trace()
+#        if kwargs.has_key('user'):
+#            user = kwargs.pop('user')
+#        super(BushfireForm, self).__init__(*args, **kwargs)
 
-        self.helper = FormHelper()
-        self.helper.form_method = 'post'
+#        self.helper = FormHelper()
+#        self.helper.form_method = 'post'
 #        self.helper.form_class = 'form-horizontal'
 #        self.helper.label_class = 'col-sm-2'
 #        self.helper.field_class = 'col-sm-8'
 
-        self.helper.layout = Layout(
-            Div(
-                Div('region',css_class='col-sm-2',),
-                Div('district',css_class='col-sm-2',),
-                Div('incident_no',css_class='col-sm-2',),
-                Div('season',css_class='col-sm-2',),
-                Div('job_code',css_class='col-sm-2',),
-                css_class='row',
-            ),
-            Div(
-                Div('name',css_class='col-sm-2',),
-                Div('dfes_incident_no',css_class='col-sm-2',),
-                Div('potential_fire_level',css_class='col-sm-2',),
-                Div('authorised_by',css_class='col-sm-2',),
-                Div('authorised_date',css_class='col-sm-2',),
-                css_class='row',
-            ),
-
-
-            TabHolder(
-                self.add_origin(),
-                self.add_location(),
-                Tab(
-                    'PlaceHolder',
-                    #'location2',
-                ),
+#        self.helper.layout = Layout(
+#            Div(
+#                Div('region',css_class='col-sm-2',),
+#                Div('district',css_class='col-sm-2',),
+#                Div('incident_no',css_class='col-sm-2',),
+#                Div('season',css_class='col-sm-2',),
+#                Div('job_code',css_class='col-sm-2',),
+#                css_class='row',
+#            ),
+#            Div(
+#                Div('name',css_class='col-sm-2',),
+#                Div('dfes_incident_no',css_class='col-sm-2',),
+#                Div('potential_fire_level',css_class='col-sm-2',),
+#                Div('authorised_by',css_class='col-sm-2',),
+#                Div('authorised_date',css_class='col-sm-2',),
+#                css_class='row',
+#            ),
+#
+#
+#            TabHolder(
+#                self.add_origin(),
+#                self.add_location(),
+#                #self.add_activities(),
 #                Tab(
-#                    'Location',
-#                    Div(
-#                        Div('distance',css_class='col-sm-2',),
-#                        Div('direction',css_class='col-sm-2',),
-#                        Div('place',css_class='col-sm-4',),
-#                        Div('lot_no',css_class='col-sm-2',),
-#                        css_class='row',
-#                    ),
-#                    Div(
-#                        Div('street',css_class='col-sm-4',),
-#                        Div('town',css_class='col-sm-2',),
-#                        css_class='row',
-#                    ),
+#                    'PlaceHolder',
+#                    #'location2',
 #                ),
-            ),
-
-            ButtonHolder(
-                Submit('submit', 'Submit', css_class='button white')
-            )
-
-        )
+##                Tab(
+##                    'Location',
+##                    Div(
+##                        Div('distance',css_class='col-sm-2',),
+##                        Div('direction',css_class='col-sm-2',),
+##                        Div('place',css_class='col-sm-4',),
+##                        Div('lot_no',css_class='col-sm-2',),
+##                        css_class='row',
+##                    ),
+##                    Div(
+##                        Div('street',css_class='col-sm-4',),
+##                        Div('town',css_class='col-sm-2',),
+##                        css_class='row',
+##                    ),
+##                ),
+#            ),
+#
+#            ButtonHolder(
+#                Submit('submit', 'Submit', css_class='button white')
+#            )
+#
+#        )
 
     def add_origin(self):
         return Tab(
@@ -139,14 +151,25 @@ class BushfireForm(forms.ModelForm):
             ),
         )
 
+    def add_activities(self):
+        return Tab(
+            'Activities',
+            Div(
+                Div('activity',css_class='col-sm-2',),
+                Div('date',css_class='col-sm-2',),
+            ),
+        )
+
+
+class BushfireForm(forms.ModelForm):
     class Meta:
         model = Bushfire
         fields = ('region', 'district', 'incident_no', 'season', 'job_code',
                   'name', 'dfes_incident_no', 'potential_fire_level', 'authorised_by', 'authorised_date',
-                  'distance', 'direction', 'place', 'lot_no', 'street', 'town',
-                  'coord_type', 'fire_not_found', 'lat_decimal', 'lat_degrees', 'lat_minutes',
-                  'lon_decimal', 'lon_degrees', 'lon_minutes', 'mga_zone', 'mga_easting', 'mga_northing',
-                  'fd_letter', 'fd_number', 'fd_tenths',
+#                  'distance', 'direction', 'place', 'lot_no', 'street', 'town',
+#                  'coord_type', 'fire_not_found', 'lat_decimal', 'lat_degrees', 'lat_minutes',
+#                  'lon_decimal', 'lon_degrees', 'lon_minutes', 'mga_zone', 'mga_easting', 'mga_northing',
+#                  'fd_letter', 'fd_number', 'fd_tenths',
                  )
 
 

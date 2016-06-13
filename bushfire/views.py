@@ -60,16 +60,27 @@ class BushfireCreateView2(UpdateView):
     model = Bushfire
     form_class = BushfireForm
     template_name = 'bushfire/detail2.html'
-    #success_url = 'success'
+    success_url = 'success'
 
-    def get_form_kwargs(self):
-        # pass "user" keyword argument with the current user to your form
-        kwargs = super(BushfireCreateView2, self).get_form_kwargs()
-        kwargs['user'] = self.request.user
-        return kwargs
+#    def get_form_kwargs(self):
+#        # pass "user" keyword argument with the current user to your form
+#        kwargs = super(BushfireCreateView2, self).get_form_kwargs()
+#        kwargs['user'] = self.request.user
+#        return kwargs
 
     def get_success_url(self):
         return reverse("bushfire:index")
+
+#    def post(self, request, *args, **kwargs):
+#        super(BushfireCreateView2, self).post(request, *args, **kwargs)
+#        self.object.save()
+#        return HttpResponseRedirect(self.get_success_url())
+
+#    def get_object(self, queryset=None):
+#        return super(BushfireCreateView2, self).get_object()
+
+    def form_invalid(self, form):
+        return super(BushfireCreateView2, self).form_invalid(form)
 
     def form_valid(self, form):
         form.save()
