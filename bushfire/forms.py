@@ -167,9 +167,9 @@ class BushfireForm(forms.ModelForm):
         fields = ('region', 'district', 'incident_no', 'season', 'job_code',
                   'name', 'dfes_incident_no', 'potential_fire_level', 'authorised_by', 'authorised_date',
                   'distance', 'direction', 'place', 'lot_no', 'street', 'town',
-#                  'coord_type', 'fire_not_found', 'lat_decimal', 'lat_degrees', 'lat_minutes',
-#                  'lon_decimal', 'lon_degrees', 'lon_minutes', 'mga_zone', 'mga_easting', 'mga_northing',
-#                  'fd_letter', 'fd_number', 'fd_tenths',
+                  'coord_type', 'fire_not_found', 'lat_decimal', 'lat_degrees', 'lat_minutes',
+                  'lon_decimal', 'lon_degrees', 'lon_minutes', 'mga_zone', 'mga_easting', 'mga_northing',
+                  'fd_letter', 'fd_number', 'fd_tenths',
                  )
 
 
