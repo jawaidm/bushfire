@@ -1,5 +1,5 @@
 from django import forms
-from bushfire.models import Bushfire, Region, District
+from bushfire.models import Bushfire, Activity, Region, District
 from datetime import datetime, timedelta
 from django.conf import settings
 from django.forms import ValidationError
@@ -7,6 +7,17 @@ from django.forms import ValidationError
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Fieldset, ButtonHolder, Submit, Div, HTML
 from crispy_forms.bootstrap import TabHolder, Tab
+
+
+class ActivityForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        #import ipdb; ipdb.set_trace()
+        super(ActivityForm, self).__init__(*args, **kwargs)
+
+    class Meta:
+        model = Activity
+        fields = ('activity', 'date',)
+
 
 class BushfireForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
@@ -108,7 +119,6 @@ class BushfireForm(forms.ModelForm):
                 css_class='row',
             ),
             HTML('<hr>'),
-
 
         )
 

@@ -2,9 +2,10 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.views import generic
 from django.views.generic.edit import CreateView, UpdateView, FormView
+from django.forms.formsets import formset_factory
 
 from bushfire.models import Bushfire
-from bushfire.forms import BushfireForm
+from bushfire.forms import BushfireForm, ActivityForm
 from bushfire.utils import breadcrumbs_li
 
 class BushfireView(generic.ListView):
@@ -73,3 +74,13 @@ class BushfireCreateView2(UpdateView):
     def form_valid(self, form):
         form.save()
         return super(BushfireCreateView2, self).form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super(BushfireCreateView2, self).get_context_data(**kwargs)
+
+        ActivityFormSet = formset_factory(ActivityForm)
+        activity_formset = ActivityFormSet()
+        context.update({'activity_formset': activity_formset, 'myval': 'MyVal'})
+        return context
+
+

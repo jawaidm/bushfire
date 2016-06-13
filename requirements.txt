@@ -19,7 +19,7 @@ django-smart-selects==1.2.2
 
 webtemplate-dpaw
 fabric
-django-crispy-forms
+#git clone https://github.com/elo80ka/django-dynamic-formset - copy jquery.forset.js to statics/js dir
 
 # install postgress
 # sudp apt-get install postgresql postgresql-contrib

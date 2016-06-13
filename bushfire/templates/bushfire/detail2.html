@@ -46,8 +46,11 @@
 
   <link rel="stylesheet" href="{% static "css/jquery-ui-1.11.4.min.css" %}">
   <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>i
+  <script src="{% static 'js/jquery.formset.js' %}"></script>
   <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+
   {% endblock %}
 
 
@@ -55,6 +58,17 @@
 
   <h1>Bushfire Detail</h1>
   {% crispy form %}
+
+
+  {{ activity_formset.management_form }}
+
+  {% for activity_form in activity_formset %}
+        <div class="activity-formset">
+            {{ activity_form.activity }}
+
+            {{ activity_form.date }}
+        </div>
+  {% endfor %}
 
     {% comment %}
   <form action="" method="post">{% csrf_token %}
@@ -148,5 +162,12 @@
 
   {% endif %}
 
+<script>
 
+    $('.activity-formset').formset({
+        addText: 'add another activity',
+        deleteText: 'remove'
+    })
+
+</script>
 {% endblock %}
