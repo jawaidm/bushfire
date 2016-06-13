@@ -145,9 +145,6 @@
     </div>
 </div>
 
-    <input type="submit" value="Save" />
-  </form>
-
   <ul id="report-tabs" class="nav nav-tabs">
       <li id="origin-tab"  class="active">
           <a data-toggle="tab" href="#origin">
@@ -184,7 +181,52 @@
   <div class="tab-content">
     <div id="origin" class="tab-pane fade in active">
         <h3>Point of Origin</h3>
-        <p>Some content in Origin.</p>
+        <div class="row">
+            <div class="col-sm-2" > 
+                <div id="div_id_distance" class="form-group"> 
+                    <label for="id_distance" class="control-label  requiredField">Distance*</label>
+                    <div class="controls ">{{form.distance}}</div>
+                </div>
+            </div>
+
+            <div class="col-sm-2" > 
+                <div id="div_id_direction" class="form-group"> 
+                    <label for="id_direction" class="control-label  requiredField">Direction*</label>
+                    <div class="controls ">{{form.direction}}</div>
+                </div>
+            </div>
+
+            <div class="col-sm-2" > 
+                <div id="div_place" class="form-group"> 
+                    <label for="id_place" class="control-label  requiredField">Place*</label>
+                    <div class="controls ">{{form.place}}</div>
+                </div>
+            </div>
+
+            <div class="col-sm-2" > 
+                <div id="div_id_lot_no" class="form-group"> 
+                    <label for="id_lot_no" class="control-label  requiredField">Lot No.*</label>
+                    <div class="controls ">{{form.lot_no}}</div>
+                </div>
+            </div>
+
+            <div class="col-sm-2" > 
+                <div id="div_id_street" class="form-group"> 
+                    <label for="id_street" class="control-label  requiredField">Street*</label>
+                    <div class="controls ">{{form.street}}</div>
+                </div>
+            </div>
+
+            <div class="col-sm-2" > 
+                <div id="div_id_town" class="form-group"> 
+                    <label for="id_town" class="control-label  requiredField">Town*</label>
+                    <div class="controls ">{{form.town}}</div>
+                </div>
+            </div>
+
+
+        </div>
+
 
       {% comment %}
 <table class="table table-bordered table-striped table-condensed">
@@ -228,6 +270,9 @@
     <p>{{ object.job_code}}</p>
 
   {% endif %}
+    <input type="submit" value="Save" />
+  </form>
+
 
 <script>
 
