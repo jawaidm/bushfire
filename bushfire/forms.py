@@ -3,27 +3,28 @@ from bushfire.models import Bushfire, Activity, Region, District
 from datetime import datetime, timedelta
 from django.conf import settings
 from django.forms import ValidationError
+from django.forms.models import inlineformset_factory
 
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Fieldset, ButtonHolder, Submit, Div, HTML
 from crispy_forms.bootstrap import TabHolder, Tab
 
 
-class ActivityForm(forms.ModelForm):
+class _ActivityForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         #import ipdb; ipdb.set_trace()
         super(ActivityForm, self).__init__(*args, **kwargs)
 
-        self.helper = FormHelper()
-#        self.helper.form_method = 'post'
-
-        self.helper.layout = Layout(
-            Div(
-                Div('activity',css_class='col-sm-2',),
-                Div('date',css_class='col-sm-2',),
-                css_class='row',
-            ),
-        )
+#        self.helper = FormHelper()
+##        self.helper.form_method = 'post'
+#
+#        self.helper.layout = Layout(
+#            Div(
+#                Div('activity',css_class='col-sm-2',),
+#                Div('date',css_class='col-sm-2',),
+#                css_class='row',
+#            ),
+#        )
 
     class Meta:
         model = Activity
@@ -159,7 +160,9 @@ class _BushfireForm(forms.ModelForm):
                 Div('date',css_class='col-sm-2',),
             ),
         )
-
+    class Meta:
+        model = Bushfire
+        fields = ('region', 'district', 'incident_no', 'season', 'job_code',)
 
 class BushfireForm(forms.ModelForm):
     class Meta:
@@ -171,6 +174,9 @@ class BushfireForm(forms.ModelForm):
                   'lon_decimal', 'lon_degrees', 'lon_minutes', 'mga_zone', 'mga_easting', 'mga_northing',
                   'fd_letter', 'fd_number', 'fd_tenths',
                  )
+
+
+ActivityFormSet = inlineformset_factory(Bushfire, Activity, extra=1, max_num=7, can_delete=True)
 
 
 

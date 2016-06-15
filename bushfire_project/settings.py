@@ -109,12 +109,12 @@ DATABASES = {'default': database.config()}
 #    }
 #}
 
-TEMPLATE_DIRS = (
-    # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
-    # Always use forward slashes, even on Windows.
-    # Don't forget to use absolute paths, not relative paths.
-    os.path.join(BASE_DIR, 'templates'),
-)
+#TEMPLATE_DIRS = (
+#    # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
+#    # Always use forward slashes, even on Windows.
+#    # Don't forget to use absolute paths, not relative paths.
+#    os.path.join(BASE_DIR, 'templates'),
+#)
 
 # for 'tabbed_admin' app
 TABBED_ADMIN_USE_JQUERY_UI = True
@@ -150,6 +150,7 @@ STATICFILES_FINDERS = (
 
 TEMPLATE_DIRS = (
     os.path.join(BASE_DIR, 'templates'),
+    os.path.join(BASE_DIR, 'bushfire', 'templates'),
 )
 
 TEMPLATE_LOADERS = (

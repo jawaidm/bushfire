@@ -5,7 +5,7 @@ from django.views.generic.edit import CreateView, UpdateView, FormView
 from django.forms.formsets import formset_factory
 
 from bushfire.models import Bushfire
-from bushfire.forms import BushfireForm, ActivityForm
+from bushfire.forms import BushfireForm, ActivityFormSet
 from bushfire.utils import breadcrumbs_li
 
 class BushfireView(generic.ListView):
@@ -50,13 +50,13 @@ class BushfireCreateView(CreateView):
     template_name = 'bushfire/detail.html'
 
 
-class BushfireUpdateView(UpdateView):
+class _BushfireUpdateView(UpdateView):
     model = Bushfire
     #fields = ['name']
     template_name = 'bushfire/detail.html'
 
 
-class BushfireCreateView2(UpdateView):
+class BushfireUpdateView(UpdateView):
     model = Bushfire
     form_class = BushfireForm
     template_name = 'bushfire/detail2.html'
@@ -71,6 +71,20 @@ class BushfireCreateView2(UpdateView):
     def get_success_url(self):
         return reverse("bushfire:index")
 
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        form_class = self.get_form_class()
+        form = self.get_form(form_class)
+        activity_formset = ActivityFormSet(self.request.POST)
+
+        import ipdb; ipdb.set_trace()
+        if form.is_valid() and activity_formset.is_valid():
+            return self.form_valid(form, activity_formset)
+        else:
+            return self.form_invalid(form, activity_formset)
+
+
+
 #    def post(self, request, *args, **kwargs):
 #        super(BushfireCreateView2, self).post(request, *args, **kwargs)
 #        self.object.save()
@@ -79,19 +93,29 @@ class BushfireCreateView2(UpdateView):
 #    def get_object(self, queryset=None):
 #        return super(BushfireCreateView2, self).get_object()
 
-    def form_invalid(self, form):
-        return super(BushfireCreateView2, self).form_invalid(form)
+    def form_invalid(self, form, activity_formset):
+        import ipdb; ipdb.set_trace()
+        #return super(BushfireCreateView2, self).form_invalid(form)
+        return self.render_to_response(
+            self.get_context_data(form=form, activity_formset=activity_formset)
+        )
 
-    def form_valid(self, form):
-        form.save()
-        return super(BushfireCreateView2, self).form_valid(form)
+    def form_valid(self, form, activity_formset):
+        import ipdb; ipdb.set_trace()
+        self.object = form.save()
+        activity_formset.instance = self.object
+        activity_formset.save()
+        return HttpResponseRedirect(self.get_success_url())
+        #return super(BushfireCreateView2, self).form_valid(form)
 
     def get_context_data(self, **kwargs):
-        context = super(BushfireCreateView2, self).get_context_data(**kwargs)
+        context = super(BushfireUpdateView, self).get_context_data(**kwargs)
 
-        ActivityFormSet = formset_factory(ActivityForm)
+        form_class = self.get_form_class()
+        form = self.get_form(form_class)
+        #ActivityFormSet = formset_factory(ActivityForm, max_num=7)
         activity_formset = ActivityFormSet()
-        context.update({'activity_formset': activity_formset, 'myval': 'MyVal'})
+        context.update({'form': form, 'activity_formset': activity_formset, 'myval': 'MyVal'})
         return context
 
 
