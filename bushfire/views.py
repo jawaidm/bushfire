@@ -103,10 +103,25 @@ class BushfireUpdateView(UpdateView):
     def form_valid(self, form, activity_formset):
         import ipdb; ipdb.set_trace()
         self.object = form.save()
+
+        #instances = activity_formset.save(commit=False)
+        #for obj in activity_formset.deleted_objects:
+        #    obj.delete()
+
+        # hack, because couldn't get above deleted_objects to work
+        for obj in activity_formset.cleaned_data:
+            if obj.has_key('DELETE') and obj['DELETE']:
+                obj['id'].delete()
+            elif obj.has_key('id'):
+                import ipdb; ipdb.set_trace()
+                obj['id'].save()
+            else:
+                import ipdb; ipdb.set_trace()
+                obj.save()
+
         activity_formset.instance = self.object
-        activity_formset.save()
+        #activity_formset.save()
         return HttpResponseRedirect(self.get_success_url())
-        #return super(BushfireCreateView2, self).form_valid(form)
 
     def get_context_data(self, **kwargs):
         context = super(BushfireUpdateView, self).get_context_data(**kwargs)
@@ -114,7 +129,7 @@ class BushfireUpdateView(UpdateView):
         form_class = self.get_form_class()
         form = self.get_form(form_class)
         #ActivityFormSet = formset_factory(ActivityForm, max_num=7)
-        activity_formset = ActivityFormSet()
+        activity_formset = ActivityFormSet(instance=self.object)
         context.update({'form': form, 'activity_formset': activity_formset, 'myval': 'MyVal'})
         return context
 

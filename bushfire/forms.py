@@ -176,7 +176,7 @@ class BushfireForm(forms.ModelForm):
                  )
 
 
-ActivityFormSet = inlineformset_factory(Bushfire, Activity, extra=1, max_num=7, can_delete=True)
+ActivityFormSet = inlineformset_factory(Bushfire, Activity, extra=1, max_num=7)
 
 
 
