@@ -181,6 +181,7 @@ class BushfireForm(forms.ModelForm):
                   'coord_type', 'fire_not_found', 'lat_decimal', 'lat_degrees', 'lat_minutes',
                   'lon_decimal', 'lon_degrees', 'lon_minutes', 'mga_zone', 'mga_easting', 'mga_northing',
                   'fd_letter', 'fd_number', 'fd_tenths',
+                  'source','cause', 'arson_squad_notified', 'prescription', 'offence_no',
                  )
 
 

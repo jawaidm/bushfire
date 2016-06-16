@@ -205,6 +205,15 @@ class BushfireBase(Audit):
     street = models.CharField(max_length=25)
     town = models.CharField(max_length=25)
 
+    # Reporter
+    source = models.ForeignKey('Source', verbose_name="Reported By", null=True, blank=True)
+    cause = models.ForeignKey('Cause')
+    arson_squad_notified = models.BooleanField(verbose_name="Arson Squad Notified", default=False)
+    #prescription = models.ForeignKey(Prescription, verbose_name="ePFP (if cause is Escape)", related_name='prescribed_burn', null=True, blank=True)
+    prescription = models.ForeignKey('Prescription', verbose_name="Prescription Burn ID", null=True, blank=True)
+    offence_no = models.CharField(verbose_name="Offence No.", max_length=10)
+
+
     #reporting = models.ForeignKey('Reporter', verbose_name="Reporting and  Cause")
 
 

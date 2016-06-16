@@ -219,6 +219,45 @@
     {{ activity_formset.management_form }}
 </div>
 
+<div class="row">
+    <div class="col-sm-2" > 
+        <div id="div_id_source" class="form-group"> 
+            <label for="id_source" class="control-label">Reported By</label>
+            <div class="controls ">{{form.source}}</div>
+        </div>
+    </div>
+
+    <div class="col-sm-2" > 
+        <div id="div_id_cause" class="form-group"> 
+            <label for="id_cause" class="control-label">Cause</label>
+            <div class="controls ">{{form.cause}}</div>
+        </div>
+    </div>
+
+    <div class="col-sm-2" > 
+        <div id="div_id_arson_squad_notified" class="form-group"> 
+            <label for="id_arson_squad_notified" class="control-label">Arson Squad Notified</label>
+            <div class="controls ">{{form.arson_squad_notified}}</div>
+        </div>
+    </div>
+
+    <div class="col-sm-2" > 
+        <div id="div_id_prescription" class="form-group"> 
+            <label for="id_prescription" class="control-label">Prescription Burn ID</label>
+            <div class="controls ">{{form.prescription}}</div>
+        </div>
+    </div>
+
+    <div class="col-sm-2" > 
+        <div id="div_id_offence_no" class="form-group"> 
+            <label for="id_offence_no" class="control-label">Offence No.</label>
+            <div class="controls ">{{form.offence_no}}</div>
+        </div>
+    </div>
+</div>
+
+
+
   <ul id="report-tabs" class="nav nav-tabs">
       <li id="origin-tab"  class="active">
           <a data-toggle="tab" href="#origin">

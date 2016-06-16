@@ -450,6 +450,6 @@ class BushfireAdmin(TabbedModelAdmin):
 
 
 #admin.site.register(InitialBushfire, InitialBushfireAdmin)
-#admin.site.register(Bushfire, BushfireAdmin)
+admin.site.register(Bushfire, BushfireAdmin)
 #admin.site.register(PrivateDamage, PrivateDamageAdmin)
 
