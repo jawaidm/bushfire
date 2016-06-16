@@ -97,7 +97,6 @@ class BushfireUpdateView(UpdateView):
         self.object = form.save()
 
         activity_formset.instance = self.object
-
         new_activities = []
         for activity_form in activity_formset:
             activity = activity_form.cleaned_data.get('activity')
@@ -113,6 +112,7 @@ class BushfireUpdateView(UpdateView):
                 Activity.objects.bulk_create(new_activities)
 
                 # And notify our users that it worked
+                #messages.success(request, 'Activities have been updated.')
                 messages.success(request, 'Activities have been updated.')
 
         except IntegrityError: #If the transaction failed
@@ -130,5 +130,6 @@ class BushfireUpdateView(UpdateView):
         activity_formset = ActivityFormSet(instance=self.object)
         context.update({'form': form, 'activity_formset': activity_formset, 'myval': 'MyVal'})
         return context
+
 
 
