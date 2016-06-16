@@ -4,9 +4,11 @@ from django.views import generic
 from django.views.generic.edit import CreateView, UpdateView, FormView
 from django.forms.formsets import formset_factory
 
-from bushfire.models import Bushfire
+from bushfire.models import Bushfire, Activity
 from bushfire.forms import BushfireForm, ActivityFormSet
 from bushfire.utils import breadcrumbs_li
+from django.db import IntegrityError, transaction
+from django.contrib import messages
 
 class BushfireView(generic.ListView):
     model = Bushfire
@@ -79,48 +81,44 @@ class BushfireUpdateView(UpdateView):
 
         import ipdb; ipdb.set_trace()
         if form.is_valid() and activity_formset.is_valid():
-            return self.form_valid(form, activity_formset)
+            return self.form_valid(request, form, activity_formset)
         else:
-            return self.form_invalid(form, activity_formset)
+            return self.form_invalid(request, form, activity_formset)
 
-
-
-#    def post(self, request, *args, **kwargs):
-#        super(BushfireCreateView2, self).post(request, *args, **kwargs)
-#        self.object.save()
-#        return HttpResponseRedirect(self.get_success_url())
-
-#    def get_object(self, queryset=None):
-#        return super(BushfireCreateView2, self).get_object()
-
-    def form_invalid(self, form, activity_formset):
+    def form_invalid(self, request, form, activity_formset):
         import ipdb; ipdb.set_trace()
         #return super(BushfireCreateView2, self).form_invalid(form)
         return self.render_to_response(
             self.get_context_data(form=form, activity_formset=activity_formset)
         )
 
-    def form_valid(self, form, activity_formset):
+    def form_valid(self, request, form, activity_formset):
         import ipdb; ipdb.set_trace()
         self.object = form.save()
 
-        #instances = activity_formset.save(commit=False)
-        #for obj in activity_formset.deleted_objects:
-        #    obj.delete()
-
-        # hack, because couldn't get above deleted_objects to work
-        for obj in activity_formset.cleaned_data:
-            if obj.has_key('DELETE') and obj['DELETE']:
-                obj['id'].delete()
-            elif obj.has_key('id'):
-                import ipdb; ipdb.set_trace()
-                obj['id'].save()
-            else:
-                import ipdb; ipdb.set_trace()
-                obj.save()
-
         activity_formset.instance = self.object
-        #activity_formset.save()
+
+        new_activities = []
+        for activity_form in activity_formset:
+            activity = activity_form.cleaned_data.get('activity')
+            dt = activity_form.cleaned_data.get('date')
+            remove = activity_form.cleaned_data.get('DELETE')
+
+            if not remove and (activity and dt):
+                new_activities.append(Activity(bushfire=self.object, activity=activity, date=dt))
+        try:
+            with transaction.atomic():
+                #Replace the old with the new
+                Activity.objects.filter(bushfire=self.object).delete()
+                Activity.objects.bulk_create(new_activities)
+
+                # And notify our users that it worked
+                messages.success(request, 'Activities have been updated.')
+
+        except IntegrityError: #If the transaction failed
+            messages.error(request, 'There was an error saving Activities.')
+            return HttpResponseRedirect(self.get_success_url())
+
         return HttpResponseRedirect(self.get_success_url())
 
     def get_context_data(self, **kwargs):
