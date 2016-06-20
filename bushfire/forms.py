@@ -182,6 +182,8 @@ class BushfireForm(forms.ModelForm):
                   'lon_decimal', 'lon_degrees', 'lon_minutes', 'mga_zone', 'mga_easting', 'mga_northing',
                   'fd_letter', 'fd_number', 'fd_tenths',
                   'source','cause', 'arson_squad_notified', 'prescription', 'offence_no',
+                  'fuel','ros', 'flame_height', 'assistance_required', 'fire_contained', 'containment_time',
+                  'ops_point', 'communications', 'weather', 'field_officer', 'init_authorised_by', 'init_authorised_date',
                  )
 
 

@@ -213,6 +213,19 @@ class BushfireBase(Audit):
     prescription = models.ForeignKey('Prescription', verbose_name="Prescription Burn ID", null=True, blank=True)
     offence_no = models.CharField(verbose_name="Offence No.", max_length=10)
 
+    # Initial
+    fuel = models.CharField(max_length=50)
+    ros = models.CharField(verbose_name="Rate of Spread", max_length=50)
+    flame_height = models.DecimalField(max_digits=12, decimal_places=2, validators=[MinValueValidator(0)])
+    assistance_required = models.CharField(max_length=50)
+    fire_contained = models.BooleanField(default=False)
+    containment_time = models.CharField(verbose_name="ET to Contain", max_length=50)
+    ops_point = models.CharField(verbose_name="OPS Point (grid ref)", max_length=50)
+    communications = models.CharField(verbose_name='Communication', max_length=50)
+    weather = models.CharField(max_length=50)
+    field_officer = models.ForeignKey(User, verbose_name="Field Officer", related_name='init_field_officer')
+    init_authorised_by = models.ForeignKey(User, verbose_name="Authorised By", blank=True, null=True, related_name='init_auth_by')
+    init_authorised_date = models.DateTimeField(verbose_name='Authorised Date', default=timezone.now, null=True, blank=True)
 
     #reporting = models.ForeignKey('Reporter', verbose_name="Reporting and  Cause")
 
