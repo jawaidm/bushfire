@@ -255,6 +255,33 @@
           </a>
       </li>
 
+      <li id="area-burnt-tab">
+          <a data-toggle="tab" href="#area-burnt">
+              <i class="icon-tag"></i>
+              Areas Burnt/Forces
+          </a>
+      </li>
+
+      <li id="attending-org-tab">
+          <a data-toggle="tab" href="#attending_org">
+              <i class="icon-tag"></i>
+              Attendance/Behaviour
+          </a>
+      </li>
+
+      <li id="damages-tab">
+          <a data-toggle="tab" href="#damages">
+              <i class="icon-tag"></i>
+              Damages/Legal
+          </a>
+      </li>
+
+      <li id="comment-tab">
+          <a data-toggle="tab" href="#comment">
+              <i class="icon-tag"></i>
+              Comment
+          </a>
+      </li>
 
   </ul>
 
@@ -271,6 +298,21 @@
         {% include "bushfire/effects.html" %}
     </div>
 
+    <div id="area-burnt" class="tab-pane fade active">
+        {% include "bushfire/area-burnt.html" %}
+    </div>
+
+    <div id="attending_org" class="tab-pane fade active">
+        {% include "bushfire/attending_org.html" %}
+    </div>
+
+    <div id="damages" class="tab-pane fade active">
+        {% include "bushfire/damages.html" %}
+    </div>
+
+    <div id="comment" class="tab-pane fade active">
+        {% include "bushfire/comment.html" %}
+    </div>
 
   </div>
 

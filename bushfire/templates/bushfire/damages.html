@@ -1,0 +1,103 @@
+<h3>Damages/Legal</h3>
+
+<div id="id_legal" class="row legal-formset">
+    <table border="0" cellpadding="0" cellspacing="0">
+        <tbody>
+            <th></th>
+            <th>Community Protection (%)</th>
+            <th>Est. Cost of Damages ($)</th>
+            <th>Restricted Period</th>
+            <th>Prohibited Period</th>
+            <th>Investigation Undertaken</th>
+            <th>Legal Result</th>
+            {% for form in legal_formset %}
+            <tr>
+               <td>
+                    {% if form.instance.pk %}{{ form.DELETE }}{% endif %}
+                    {{ form.id }}
+                </td>
+               <td>{{ form.protection }}</td>
+               <td>{{ form.cost }}</td>
+               <td>{{ form.restricted_period }}</td>
+               <td>{{ form.prohibited_period }}</td>
+               <td>{{ form.inv_undertaken }}</td>
+               <td>{{ form.legal_result }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {{ legal_formset.management_form }}
+</div>
+
+<hr>
+<div id="id_private_damage" class="row private-damage-formset">
+    <table border="0" cellpadding="0" cellspacing="0">
+        <tbody>
+            <th></th>
+            <th>Damage Type</th>
+            <th>Number</th>
+            {% for form in private_damage_formset %}
+            <tr>
+               <td>
+                    {% if form.instance.pk %}{{ form.DELETE }}{% endif %}
+                    {{ form.id }}
+                </td>
+               <td>{{ form.damage_type }}</td>
+               <td>{{ form.number }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {{ private_damage_formset.management_form }}
+</div>
+
+<hr>
+<div id="id_public_damage" class="row public-damage-formset">
+    <table border="0" cellpadding="0" cellspacing="0">
+        <tbody>
+            <th></th>
+            <th>Damage Type</th>
+            <th>Fuel Type</th>
+            <th>Area (ha)</th>
+            {% for form in public_damage_formset %}
+            <tr>
+               <td>
+                    {% if form.instance.pk %}{{ form.DELETE }}{% endif %}
+                    {{ form.id }}
+                </td>
+               <td>{{ form.damage_type }}</td>
+               <td>{{ form.fuel_type }}</td>
+               <td>{{ form.area }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {{ public_damage_formset.management_form }}
+</div>
+
+
+<script>
+    $('.legal-formset tbody tr').formset({
+        prefix: '{{ legal_formset.prefix }}',
+        addText: '<i class="icon-plus"></i> add another legal',
+        deleteText: '<i class="icon-remove"></i>',
+    });
+
+    $('.private-damage-formset tbody tr').formset({
+        prefix: '{{ private_damage_formset.prefix }}',
+        addText: '<i class="icon-plus"></i> add another private damage',
+        deleteText: '<i class="icon-remove"></i>',
+    });
+
+    $('.public-damage-formset tbody tr').formset({
+        prefix: '{{ public_damage_formset.prefix }}',
+        addText: '<i class="icon-plus"></i> add another public damage',
+        deleteText: '<i class="icon-remove"></i>',
+    });
+
+
+</script>
+
+
+
+
