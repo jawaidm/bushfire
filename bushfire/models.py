@@ -227,6 +227,21 @@ class BushfireBase(Audit):
     init_authorised_by = models.ForeignKey(User, verbose_name="Authorised By", blank=True, null=True, related_name='init_auth_by')
     init_authorised_date = models.DateTimeField(verbose_name='Authorised Date', default=timezone.now, null=True, blank=True)
 
+    # Effect
+    frb_effect = models.ForeignKey('FrbEffect', verbose_name='Presence/Effect of FRB', null=True, blank=True)
+    fire_stopped = models.PositiveSmallIntegerField(verbose_name="Fuel Age - Fire Stopped (Yr)", null=True, blank=True)
+    waterbomb_effect = models.ForeignKey('WaterBombEffect', verbose_name='Presence/Effect of WaterBomb', null=True, blank=True)
+    last_burnt = models.PositiveSmallIntegerField(verbose_name="Fuel Age - Area Last Burnt (Yr)", null=True, blank=True)
+    arrival_area = models.DecimalField(verbose_name="Fire Area at Arrival (ha)", max_digits=12, decimal_places=1, validators=[MinValueValidator(0)])
+    fire_level = models.PositiveSmallIntegerField(verbose_name='Final Fire Level', choices=FIRE_LEVEL_CHOICES)
+    rating = models.ForeignKey('PriorityRating', verbose_name="Area Priority Rating")
+
+    # First Attack
+    first_attack = models.ForeignKey('Agency', verbose_name="First Attack Agency", related_name='first_attack')
+    hazard_mgt = models.ForeignKey('Agency', verbose_name="Hazard Management Agency", null=True, blank=True, related_name='hazard_mgt')
+    initial_control = models.ForeignKey('Agency', verbose_name="Initial Controlling Agency", null=True, blank=True, related_name='initial_control')
+    final_control = models.ForeignKey('Agency', verbose_name="Final Controlling Agency", null=True, blank=True, related_name='final_control')
+
     #reporting = models.ForeignKey('Reporter', verbose_name="Reporting and  Cause")
 
 
@@ -651,7 +666,7 @@ class Response(models.Model):
     #response = models.PositiveSmallIntegerField(choices=RESPONSE_CHOICES)
 
     def __str__(self):
-        return self.response
+        return self.response.name
 
     class Meta:
         unique_together = ('bushfire', 'response',)
@@ -669,11 +684,11 @@ class Response(models.Model):
 @python_2_unicode_compatible
 class FirstAttackAgency(models.Model):
 
-    first_attack = models.ForeignKey(Agency, verbose_name="First Attack Agency", related_name='first_attack')
-    hazard_mgt = models.ForeignKey(Agency, verbose_name="Hazard Management Agency", null=True, blank=True, related_name='hazard_mgt')
-    initial_control = models.ForeignKey(Agency, verbose_name="Initial Controlling Agency", null=True, blank=True, related_name='initial_control')
-    final_control = models.ForeignKey(Agency, verbose_name="Final Controlling Agency", null=True, blank=True, related_name='final_control')
-    bushfire = models.OneToOneField(Bushfire, related_name='first_attack')
+    first_attack = models.ForeignKey(Agency, verbose_name="First Attack Agency", related_name='first_attack_agency')
+    hazard_mgt = models.ForeignKey(Agency, verbose_name="Hazard Management Agency", null=True, blank=True, related_name='hazard_mgt_agency')
+    initial_control = models.ForeignKey(Agency, verbose_name="Initial Controlling Agency", null=True, blank=True, related_name='initial_control_agency')
+    final_control = models.ForeignKey(Agency, verbose_name="Final Controlling Agency", null=True, blank=True, related_name='final_control_agency')
+    bushfire = models.OneToOneField(Bushfire, related_name='first_attacki_bushfire')
 
     def __str__(self):
         l = []

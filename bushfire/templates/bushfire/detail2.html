@@ -1,7 +1,5 @@
 {% extends "admin/base.html" %}
 {% load static from staticfiles %}
-{% load crispy_forms_tags %}
-{% crispy form %}
 
 {% block extrahead %}
   {{ block.super }}
@@ -250,6 +248,14 @@
               Detail
           </a>
       </li>
+      <li id="effect-tab">
+          <a data-toggle="tab" href="#effect">
+              <i class="icon-tag"></i>
+              Effects/Agencies
+          </a>
+      </li>
+
+
   </ul>
 
   <div class="tab-content">
@@ -257,9 +263,15 @@
         {% include "bushfire/origin.html" %}
     </div>
 
-    <div id="initial" class="tab-pane fade">
+    <div id="initial" class="tab-pane fade active">
         {% include "bushfire/initial.html" %}
     </div>
+
+    <div id="effect" class="tab-pane fade active">
+        {% include "bushfire/effects.html" %}
+    </div>
+
+
   </div>
 
     <input type="submit" value="Save" />
@@ -274,7 +286,6 @@
         deleteText: '<i class="icon-remove"></i>'
     })
 */
-
     $('.activity-formset tbody tr').formset({
         prefix: '{{ activity_formset.prefix }}',
         addText: '<i class="icon-plus"></i> add another activity',

@@ -1,5 +1,5 @@
 from django import forms
-from bushfire.models import Bushfire, Activity, Region, District
+from bushfire.models import Bushfire, Activity, Response, Region, District
 from datetime import datetime, timedelta
 from django.conf import settings
 from django.forms import ValidationError
@@ -175,19 +175,21 @@ class _BushfireForm(forms.ModelForm):
 class BushfireForm(forms.ModelForm):
     class Meta:
         model = Bushfire
-        fields = ('region', 'district', 'incident_no', 'season', 'job_code',
-                  'name', 'dfes_incident_no', 'potential_fire_level', 'authorised_by', 'authorised_date',
-                  'distance', 'direction', 'place', 'lot_no', 'street', 'town',
-                  'coord_type', 'fire_not_found', 'lat_decimal', 'lat_degrees', 'lat_minutes',
-                  'lon_decimal', 'lon_degrees', 'lon_minutes', 'mga_zone', 'mga_easting', 'mga_northing',
-                  'fd_letter', 'fd_number', 'fd_tenths',
-                  'source','cause', 'arson_squad_notified', 'prescription', 'offence_no',
-                  'fuel','ros', 'flame_height', 'assistance_required', 'fire_contained', 'containment_time',
-                  'ops_point', 'communications', 'weather', 'field_officer', 'init_authorised_by', 'init_authorised_date',
-                 )
+#        fields = ('region', 'district', 'incident_no', 'season', 'job_code',
+#                  'name', 'dfes_incident_no', 'potential_fire_level', 'authorised_by', 'authorised_date',
+#                  'distance', 'direction', 'place', 'lot_no', 'street', 'town',
+#                  'coord_type', 'fire_not_found', 'lat_decimal', 'lat_degrees', 'lat_minutes',
+#                  'lon_decimal', 'lon_degrees', 'lon_minutes', 'mga_zone', 'mga_easting', 'mga_northing',
+#                  'fd_letter', 'fd_number', 'fd_tenths',
+#                  'source','cause', 'arson_squad_notified', 'prescription', 'offence_no',
+#                  'fuel','ros', 'flame_height', 'assistance_required', 'fire_contained', 'containment_time',
+#                  'ops_point', 'communications', 'weather', 'field_officer', 'init_authorised_by', 'init_authorised_date',
+#                 )
+        exclude = ()
 
 
 ActivityFormSet = inlineformset_factory(Bushfire, Activity, extra=1, max_num=7)
+ResponseFormSet = inlineformset_factory(Bushfire, Response, extra=1, max_num=13, can_delete=True)
 
 
 
