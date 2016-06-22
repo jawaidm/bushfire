@@ -53,12 +53,14 @@
 <script>
     $('.attending-org-formset tbody tr').formset({
         prefix: '{{ attending_org_formset.prefix }}',
+        formCssClass: 'attending_org_fs',
         addText: '<i class="icon-plus"></i> add another attending organisation',
         deleteText: '<i class="icon-remove"></i>',
     });
 
     $('.fire-behaviour-formset tbody tr').formset({
         prefix: '{{ fire_behaviour_formset.prefix }}',
+        formCssClass: 'fire_behaviour_fs',
         addText: '<i class="icon-plus"></i> add another fire behaviour',
         deleteText: '<i class="icon-remove"></i>',
     });

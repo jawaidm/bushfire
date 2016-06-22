@@ -79,18 +79,21 @@
 <script>
     $('.legal-formset tbody tr').formset({
         prefix: '{{ legal_formset.prefix }}',
+        formCssClass: 'legal_fs',
         addText: '<i class="icon-plus"></i> add another legal',
         deleteText: '<i class="icon-remove"></i>',
     });
 
     $('.private-damage-formset tbody tr').formset({
         prefix: '{{ private_damage_formset.prefix }}',
+        formCssClass: 'private_damage_fs',
         addText: '<i class="icon-plus"></i> add another private damage',
         deleteText: '<i class="icon-remove"></i>',
     });
 
     $('.public-damage-formset tbody tr').formset({
         prefix: '{{ public_damage_formset.prefix }}',
+        formCssClass: 'public_damage_fs',
         addText: '<i class="icon-plus"></i> add another public damage',
         deleteText: '<i class="icon-remove"></i>',
     });

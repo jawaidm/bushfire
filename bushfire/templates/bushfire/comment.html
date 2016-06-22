@@ -23,6 +23,7 @@
 <script>
     $('.comment-formset tbody tr').formset({
         prefix: '{{ comment_formset.prefix }}',
+        formCssClass: 'comment_fs',
         addText: '<i class="icon-plus"></i> add another comment',
         deleteText: '<i class="icon-remove"></i>',
     });

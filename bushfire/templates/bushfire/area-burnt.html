@@ -83,18 +83,21 @@
 <script>
     $('.areas-burnt-formset tbody tr').formset({
         prefix: '{{ areas_burnt_formset.prefix }}',
+        formCssClass: 'area_burnt_fs',
         addText: '<i class="icon-plus"></i> add another area burnt',
         deleteText: '<i class="icon-remove"></i>',
     });
 
     $('.groundforces-formset tbody tr').formset({
         prefix: '{{ groundforces_formset.prefix }}',
+        formCssClass: 'groundforces_fs',
         addText: '<i class="icon-plus"></i> add another ground force',
         deleteText: '<i class="icon-remove"></i>',
     });
 
     $('.aerialforces-formset tbody tr').formset({
         prefix: '{{ aerialforces_formset.prefix }}',
+        formCssClass: 'aerialforces_fs',
         addText: '<i class="icon-plus"></i> add another aerial force',
         deleteText: '<i class="icon-remove"></i>',
     });
