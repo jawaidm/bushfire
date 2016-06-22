@@ -714,9 +714,9 @@ class AreaBurnt(models.Model):
     origin = models.BooleanField(verbose_name="Point of Origin", default=False)
     bushfire = models.ForeignKey(Bushfire, related_name='areas_burnt')
 
-    def clean(self):
-        if self.bushfire.areas_burnt.all().count() == 0:
-            raise ValidationError("You must enter one Area Burnt record")
+#    def clean(self):
+#        if self.bushfire.areas_burnt.all().count() == 0:
+#            raise ValidationError("You must enter one Area Burnt record")
 
     def __str__(self):
         return 'Tenure: {}, Fuel Type: {}, Area: {}, Origin: {}'.format(
@@ -853,10 +853,10 @@ Final Comments
 @python_2_unicode_compatible
 class Comment(Audit):
     comment = models.TextField()
-    bushfire = models.ForeignKey(Bushfire, related_name='final_comments')
+    bushfire = models.ForeignKey(Bushfire, related_name='comments')
 
     def __str__(self):
-        return self.damage_type
+        return self.comment
 
 
 """

@@ -191,17 +191,17 @@ class BushfireForm(forms.ModelForm):
         exclude = ()
 
 
-ActivityFormSet = inlineformset_factory(Bushfire, Activity, extra=1, max_num=7, can_delete=True)
-ResponseFormSet = inlineformset_factory(Bushfire, Response, extra=1, max_num=13, can_delete=True)
-AreaBurntFormSet = inlineformset_factory(Bushfire, AreaBurnt, extra=1, can_delete=True)
-GroundForcesFormSet = inlineformset_factory(Bushfire, GroundForces, extra=1, can_delete=True)
-AerialForcesFormSet = inlineformset_factory(Bushfire, AerialForces, extra=1, can_delete=True)
-AttendingOrganisationFormSet = inlineformset_factory(Bushfire, AttendingOrganisation, extra=1, max_num=11, can_delete=True)
-FireBehaviourFormSet = inlineformset_factory(Bushfire, FireBehaviour, extra=1, can_delete=True)
-LegalFormSet = inlineformset_factory(Bushfire, Legal, extra=1, max_num=12, can_delete=True)
-PrivateDamageFormSet = inlineformset_factory(Bushfire, PrivateDamage, extra=1, max_num=12, can_delete=True)
-PublicDamageFormSet = inlineformset_factory(Bushfire, PublicDamage, extra=1, can_delete=True)
-CommentFormSet = inlineformset_factory(Bushfire, Comment, extra=1, can_delete=True)
+ActivityFormSet             = inlineformset_factory(Bushfire, Activity, extra=1, max_num=7, can_delete=True)
+ResponseFormSet             = inlineformset_factory(Bushfire, Response, extra=1, max_num=13, can_delete=True)
+AreaBurntFormSet            = inlineformset_factory(Bushfire, AreaBurnt, extra=1, can_delete=True)
+GroundForcesFormSet         = inlineformset_factory(Bushfire, GroundForces, extra=1, max_num=3, can_delete=True)
+AerialForcesFormSet         = inlineformset_factory(Bushfire, AerialForces, extra=1, can_delete=True)
+AttendingOrganisationFormSet= inlineformset_factory(Bushfire, AttendingOrganisation, extra=1, max_num=11, can_delete=True)
+FireBehaviourFormSet        = inlineformset_factory(Bushfire, FireBehaviour, extra=1, can_delete=True)
+LegalFormSet                = inlineformset_factory(Bushfire, Legal, extra=1, max_num=12, can_delete=True)
+PrivateDamageFormSet        = inlineformset_factory(Bushfire, PrivateDamage, extra=1, max_num=12, can_delete=True)
+PublicDamageFormSet         = inlineformset_factory(Bushfire, PublicDamage, extra=1, can_delete=True)
+CommentFormSet              = inlineformset_factory(Bushfire, Comment, extra=1, can_delete=True)
 
 
 
