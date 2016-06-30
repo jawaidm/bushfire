@@ -66,7 +66,8 @@ class _BushfireUpdateView(UpdateView):
 class BushfireUpdateView(UpdateView):
     model = Bushfire
     form_class = BushfireForm
-    template_name = 'bushfire/detail2.html'
+    #template_name = 'bushfire/detail2.html'
+    template_name = 'bushfire/detail4.html'
     success_url = 'success'
 
 #    def get_form_kwargs(self):
@@ -79,79 +80,82 @@ class BushfireUpdateView(UpdateView):
         return reverse("bushfire:index")
 
     def post(self, request, *args, **kwargs):
+        import ipdb; ipdb.set_trace()
         self.object = self.get_object()
         form_class = self.get_form_class()
         form = self.get_form(form_class)
         activity_formset        = ActivityFormSet(self.request.POST, prefix='activity_fs')
-        response_formset        = ResponseFormSet(self.request.POST, prefix='response_fs')
-        area_burnt_formset      = AreaBurntFormSet(self.request.POST, prefix='area_burnt_fs')
-        groundforces_formset    = GroundForcesFormSet(self.request.POST, prefix='groundforces_fs')
-        aerialforces_formset    = AerialForcesFormSet(self.request.POST, prefix='aerialforces_fs')
-        attending_org_formset   = AttendingOrganisationFormSet(self.request.POST, prefix='attending_org_fs')
-        fire_behaviour_formset  = FireBehaviourFormSet(self.request.POST, prefix='fire_behaviour_fs')
-        legal_formset           = LegalFormSet(self.request.POST, prefix='legal_fs')
-        private_damage_formset  = PrivateDamageFormSet(self.request.POST, prefix='private_damage_fs')
-        public_damage_formset   = PublicDamageFormSet(self.request.POST, prefix='public_damage_fs')
+#        response_formset        = ResponseFormSet(self.request.POST, prefix='response_fs')
+#        area_burnt_formset      = AreaBurntFormSet(self.request.POST, prefix='area_burnt_fs')
+#        groundforces_formset    = GroundForcesFormSet(self.request.POST, prefix='groundforces_fs')
+#        aerialforces_formset    = AerialForcesFormSet(self.request.POST, prefix='aerialforces_fs')
+#        attending_org_formset   = AttendingOrganisationFormSet(self.request.POST, prefix='attending_org_fs')
+#        fire_behaviour_formset  = FireBehaviourFormSet(self.request.POST, prefix='fire_behaviour_fs')
+#        legal_formset           = LegalFormSet(self.request.POST, prefix='legal_fs')
+#        private_damage_formset  = PrivateDamageFormSet(self.request.POST, prefix='private_damage_fs')
+#        public_damage_formset   = PublicDamageFormSet(self.request.POST, prefix='public_damage_fs')
         comment_formset         = CommentFormSet(self.request.POST, prefix='comment_fs')
 
-        if form.is_valid() and activity_formset.is_valid():
+        import ipdb; ipdb.set_trace()
+        if form.is_valid(): # and activity_formset.is_valid():
             return self.form_valid(request,
                 form,
                 activity_formset,
-                response_formset,
-                area_burnt_formset,
-                groundforces_formset,
-                aerialforces_formset,
-                attending_org_formset,
-                fire_behaviour_formset,
-                legal_formset,
-                private_damage_formset,
-                public_damage_formset,
+#                response_formset,
+#                area_burnt_formset,
+#                groundforces_formset,
+#                aerialforces_formset,
+#                attending_org_formset,
+#                fire_behaviour_formset,
+#                legal_formset,
+#                private_damage_formset,
+#                public_damage_formset,
                 comment_formset
             )
         else:
             return self.form_invalid(request,
                 form,
                 activity_formset,
-                response_formset,
-                area_burnt_formset,
-                groundforces_formset,
-                aerialforces_formset,
-                attending_org_formset,
-                fire_behaviour_formset,
-                legal_formset,
-                private_damage_formset,
-                public_damage_formset,
+#                response_formset,
+#                area_burnt_formset,
+#                groundforces_formset,
+#                aerialforces_formset,
+#                attending_org_formset,
+#                fire_behaviour_formset,
+#                legal_formset,
+#                private_damage_formset,
+#                public_damage_formset,
                 comment_formset
             )
 
     def form_invalid(self, request,
             form,
             activity_formset,
-            response_formset,
-            area_burnt_formset,
-            groundforces_formset,
-            aerialforces_formset,
-            attending_org_formset,
-            fire_behaviour_formset,
-            legal_formset,
-            private_damage_formset,
-            public_damage_formset,
-            comment_formset):
+#            response_formset,
+#            area_burnt_formset,
+#            groundforces_formset,
+#            aerialforces_formset,
+#            attending_org_formset,
+#            fire_behaviour_formset,
+#            legal_formset,
+#            private_damage_formset,
+#            public_damage_formset,
+            comment_formset
+        ):
         #import ipdb; ipdb.set_trace()
         return self.render_to_response(
             self.get_context_data(
                 form=form,
                 activity_formset=activity_formset,
-                response_formset=response_formset,
-                area_burnt_formset=area_burnt_formset,
-                groundforces_formset=groundforces_formset,
-                aerialforces_formset=aerialforces_formset,
-                attending_org_formset=attending_org_formset,
-                fire_behaviour_formset=fire_behaviour_formset,
-                legal_formset=legal_formset,
-                private_damage_formset=private_damage_formset,
-                public_damage_formset=public_damage_formset,
+#                response_formset=response_formset,
+#                area_burnt_formset=area_burnt_formset,
+#                groundforces_formset=groundforces_formset,
+#                aerialforces_formset=aerialforces_formset,
+#                attending_org_formset=attending_org_formset,
+#                fire_behaviour_formset=fire_behaviour_formset,
+#                legal_formset=legal_formset,
+#                private_damage_formset=private_damage_formset,
+#                public_damage_formset=public_damage_formset,
                 comment_formset=comment_formset,
             )
         )
@@ -159,28 +163,29 @@ class BushfireUpdateView(UpdateView):
     def form_valid(self, request,
             form,
             activity_formset,
-            response_formset,
-            area_burnt_formset,
-            groundforces_formset,
-            aerialforces_formset,
-            attending_org_formset,
-            fire_behaviour_formset,
-            legal_formset,
-            private_damage_formset,
-            public_damage_formset,
-            comment_formset):
+#            response_formset,
+#            area_burnt_formset,
+#            groundforces_formset,
+#            aerialforces_formset,
+#            attending_org_formset,
+#            fire_behaviour_formset,
+#            legal_formset,
+#            private_damage_formset,
+#            public_damage_formset,
+            comment_formset
+        ):
         self.object = form.save()
 
         activities_updated = self.update_activity_fs(activity_formset)
-        responses_updated = self.update_response_fs(response_formset)
-        areas_burnt_updated = self.update_areas_burnt_fs(area_burnt_formset)
-        groundforces_updated = self.update_groundforces_fs(groundforces_formset)
-        aerialforces_updated = self.update_aerialforces_fs(aerialforces_formset)
-        attending_org_updated = self.update_attending_org_fs(attending_org_formset)
-        fire_behaviour_updated = self.update_fire_behaviour_fs(fire_behaviour_formset)
-        legal_updated = self.update_legal_fs(legal_formset)
-        private_damage_updated = self.update_private_damage_fs(private_damage_formset)
-        public_damage_updated = self.update_public_damage_fs(public_damage_formset)
+#        responses_updated = self.update_response_fs(response_formset)
+#        areas_burnt_updated = self.update_areas_burnt_fs(area_burnt_formset)
+#        groundforces_updated = self.update_groundforces_fs(groundforces_formset)
+#        aerialforces_updated = self.update_aerialforces_fs(aerialforces_formset)
+#        attending_org_updated = self.update_attending_org_fs(attending_org_formset)
+#        fire_behaviour_updated = self.update_fire_behaviour_fs(fire_behaviour_formset)
+#        legal_updated = self.update_legal_fs(legal_formset)
+#        private_damage_updated = self.update_private_damage_fs(private_damage_formset)
+#        public_damage_updated = self.update_public_damage_fs(public_damage_formset)
         comment_updated = self.update_comment_fs(request, comment_formset)
 
         redirect_referrer =  HttpResponseRedirect(request.META.get('HTTP_REFERER'))
@@ -188,42 +193,42 @@ class BushfireUpdateView(UpdateView):
             messages.error(request, 'There was an error saving Activities.')
             return redirect_referrer
 
-        elif not responses_updated:
-            messages.error(request, 'There was an error saving Responses.')
-            return redirect_referrer
-
-        elif not areas_burnt_updated:
-            messages.error(request, 'There was an error saving Areas Burnt.')
-            return redirect_referrer
-
-        elif not groundforces_updated:
-            messages.error(request, 'There was an error saving Ground Forces.')
-            return redirect_referrer
-
-        elif not aerialforces_updated:
-            messages.error(request, 'There was an error saving Aerial Forces.')
-            return redirect_referrer
-
-        elif not attending_org_updated:
-            messages.error(request, 'There was an error saving Attending Organisation.')
-            return redirect_referrer
-
-        elif not fire_behaviour_updated:
-            messages.error(request, 'There was an error saving Fire Behaviour.')
-            return redirect_referrer
-
-        elif not legal_updated:
-            messages.error(request, 'There was an error saving Legal.')
-            return redirect_referrer
-
-        elif not private_damage_updated:
-            messages.error(request, 'There was an error saving Private Damage.')
-            return redirect_referrer
-
-        elif not public_damage_updated:
-            messages.error(request, 'There was an error saving Public Damage.')
-            return redirect_referrer
-
+#        elif not responses_updated:
+#            messages.error(request, 'There was an error saving Responses.')
+#            return redirect_referrer
+#
+#        elif not areas_burnt_updated:
+#            messages.error(request, 'There was an error saving Areas Burnt.')
+#            return redirect_referrer
+#
+#        elif not groundforces_updated:
+#            messages.error(request, 'There was an error saving Ground Forces.')
+#            return redirect_referrer
+#
+#        elif not aerialforces_updated:
+#            messages.error(request, 'There was an error saving Aerial Forces.')
+#            return redirect_referrer
+#
+#        elif not attending_org_updated:
+#            messages.error(request, 'There was an error saving Attending Organisation.')
+#            return redirect_referrer
+#
+#        elif not fire_behaviour_updated:
+#            messages.error(request, 'There was an error saving Fire Behaviour.')
+#            return redirect_referrer
+#
+#        elif not legal_updated:
+#            messages.error(request, 'There was an error saving Legal.')
+#            return redirect_referrer
+#
+#        elif not private_damage_updated:
+#            messages.error(request, 'There was an error saving Private Damage.')
+#            return redirect_referrer
+#
+#        elif not public_damage_updated:
+#            messages.error(request, 'There was an error saving Public Damage.')
+#            return redirect_referrer
+#
         elif not comment_updated:
             messages.error(request, 'There was an error saving Comment.')
             return redirect_referrer
@@ -461,12 +466,14 @@ class BushfireUpdateView(UpdateView):
                 remove = form.cleaned_data.get('DELETE')
 
                 if not remove and comment:
-                    new_fs_object.append(Comment(bushfire=self.object, comment=comment, creator_id=request.user.id, modifier_id=request.user.id))
+                    if request.user.id:
+                        new_fs_object.append(Comment(bushfire=self.object, comment=comment, creator_id=request.user.id, modifier_id=request.user.id))
+                    else:
+                        new_fs_object.append(Comment(bushfire=self.object, comment=comment, creator_id=1, modifier_id=1))
 
         try:
-            with transaction.atomic():
-                Comment.objects.filter(bushfire=self.object).delete()
-                Comment.objects.bulk_create(new_fs_object)
+            Comment.objects.filter(bushfire=self.object).delete()
+            Comment.objects.bulk_create(new_fs_object)
         except IntegrityError:
             return 0
 
@@ -479,27 +486,27 @@ class BushfireUpdateView(UpdateView):
         form_class = self.get_form_class()
         form = self.get_form(form_class)
         activity_formset        = ActivityFormSet(instance=self.object, prefix='activity_fs') # self.object posts the initial data
-        response_formset        = ResponseFormSet(instance=self.object, prefix='response_fs')
-        area_burnt_formset      = AreaBurntFormSet(instance=self.object, prefix='area_burnt_fs')
-        groundforces_formset    = GroundForcesFormSet(instance=self.object, prefix='groundforces_fs')
-        aerialforces_formset    = AerialForcesFormSet(instance=self.object, prefix='aerialforces_fs')
-        attending_org_formset   = AttendingOrganisationFormSet(instance=self.object, prefix='attending_org_fs')
-        fire_behaviour_formset  = FireBehaviourFormSet(instance=self.object, prefix='fire_behaviour_fs')
-        legal_formset           = LegalFormSet(instance=self.object, prefix='legal_fs')
-        private_damage_formset  = PrivateDamageFormSet(instance=self.object, prefix='private_damage_fs')
-        public_damage_formset   = PublicDamageFormSet(instance=self.object, prefix='public_damage_fs')
+#        response_formset        = ResponseFormSet(instance=self.object, prefix='response_fs')
+#        area_burnt_formset      = AreaBurntFormSet(instance=self.object, prefix='area_burnt_fs')
+#        groundforces_formset    = GroundForcesFormSet(instance=self.object, prefix='groundforces_fs')
+#        aerialforces_formset    = AerialForcesFormSet(instance=self.object, prefix='aerialforces_fs')
+#        attending_org_formset   = AttendingOrganisationFormSet(instance=self.object, prefix='attending_org_fs')
+#        fire_behaviour_formset  = FireBehaviourFormSet(instance=self.object, prefix='fire_behaviour_fs')
+#        legal_formset           = LegalFormSet(instance=self.object, prefix='legal_fs')
+#        private_damage_formset  = PrivateDamageFormSet(instance=self.object, prefix='private_damage_fs')
+#        public_damage_formset   = PublicDamageFormSet(instance=self.object, prefix='public_damage_fs')
         comment_formset         = CommentFormSet(instance=self.object, prefix='comment_fs')
         context.update({'form': form,
                         'activity_formset': activity_formset,
-                        'response_formset': response_formset,
-                        'area_burnt_formset': area_burnt_formset,
-                        'groundforces_formset': groundforces_formset,
-                        'aerialforces_formset': aerialforces_formset,
-                        'attending_org_formset': attending_org_formset,
-                        'fire_behaviour_formset': fire_behaviour_formset,
-                        'legal_formset': legal_formset,
-                        'private_damage_formset': private_damage_formset,
-                        'public_damage_formset': public_damage_formset,
+#                        'response_formset': response_formset,
+#                        'area_burnt_formset': area_burnt_formset,
+#                        'groundforces_formset': groundforces_formset,
+#                        'aerialforces_formset': aerialforces_formset,
+#                        'attending_org_formset': attending_org_formset,
+#                        'fire_behaviour_formset': fire_behaviour_formset,
+#                        'legal_formset': legal_formset,
+#                        'private_damage_formset': private_damage_formset,
+#                        'public_damage_formset': public_damage_formset,
                         'comment_formset': comment_formset,
             })
         return context
