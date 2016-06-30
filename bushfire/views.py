@@ -461,7 +461,10 @@ class BushfireUpdateView(UpdateView):
                 remove = form.cleaned_data.get('DELETE')
 
                 if not remove and comment:
-                    new_fs_object.append(Comment(bushfire=self.object, comment=comment, creator_id=request.user.id, modifier_id=request.user.id))
+                    if request.user.id:
+                        new_fs_object.append(Comment(bushfire=self.object, comment=comment, creator_id=request.user.id, modifier_id=request.user.id))
+                    else:
+                        new_fs_object.append(Comment(bushfire=self.object, comment=comment, creator_id=1, modifier_id=1))
 
         try:
             with transaction.atomic():

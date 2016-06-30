@@ -157,7 +157,7 @@ class BushfireBase(Audit):
         show_all=False, auto_choose=True)
 
     name = models.CharField(max_length=100, verbose_name="Fire Name")
-    incident_no = models.CharField(verbose_name="Incident No.", max_length=10)
+    incident_no = models.CharField(verbose_name="Fire Incident No.", max_length=10)
     season = models.CharField(max_length=9)
     dfes_incident_no = models.CharField(verbose_name="DFES Incident No.", max_length=10)
     job_code = models.CharField(verbose_name="Job Code", max_length=10, null=True, blank=True)
@@ -196,22 +196,20 @@ class BushfireBase(Audit):
 
 
     # Location
-    distance = models.DecimalField(
-        verbose_name="Distance (km)", max_digits=6, decimal_places=1,
-        validators=[MinValueValidator(0)])
-    direction = models.ForeignKey('Direction', verbose_name="Direction")
-    place = models.CharField(max_length=25)
-    lot_no = models.CharField(verbose_name="Lot Number", max_length=10)
-    street = models.CharField(max_length=25)
-    town = models.CharField(max_length=25)
+    distance = models.DecimalField(verbose_name="Distance (km)", max_digits=6, decimal_places=1, validators=[MinValueValidator(0)], null=True, blank=True)
+    direction = models.ForeignKey('Direction', verbose_name="Direction", null=True, blank=True)
+    place = models.CharField(max_length=25, null=True, blank=True)
+    lot_no = models.CharField(verbose_name="Lot Number", max_length=10, null=True, blank=True)
+    street = models.CharField(max_length=25, null=True, blank=True)
+    town = models.CharField(max_length=25, null=True, blank=True)
 
     # Reporter
     source = models.ForeignKey('Source', verbose_name="Reported By", null=True, blank=True)
-    cause = models.ForeignKey('Cause')
+    cause = models.ForeignKey('Cause', null=True, blank=True)
     arson_squad_notified = models.BooleanField(verbose_name="Arson Squad Notified", default=False)
     #prescription = models.ForeignKey(Prescription, verbose_name="ePFP (if cause is Escape)", related_name='prescribed_burn', null=True, blank=True)
-    prescription = models.ForeignKey('Prescription', verbose_name="Prescription Burn ID", null=True, blank=True)
-    offence_no = models.CharField(verbose_name="Offence No.", max_length=10)
+    prescription = models.ForeignKey('Prescription', verbose_name="Pres Burn ID", null=True, blank=True)
+    offence_no = models.CharField(verbose_name="Offence No.", max_length=10, null=True, blank=True)
 
     # Initial
     fuel = models.CharField(max_length=50)

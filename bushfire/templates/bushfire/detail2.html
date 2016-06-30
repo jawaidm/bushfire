@@ -37,6 +37,20 @@
       width:90%;
   }
 
+  .formset {
+      text-indent: -1em;
+      padding-left: 1em;
+  }
+
+  .nonRequiredField {
+      font-weight: normal !important;
+  }
+
+  .requiredField {
+      font-weight: strong !important;
+  }
+
+
   </style>
   {% endblock %}
 
@@ -114,7 +128,7 @@
 
     <div class="col-sm-2" > 
         <div id="div_id_incident_no" class="form-group"> 
-            <label for="id_incident_no" class="control-label requiredField">Incident No.*</label>
+            <label for="id_incident_no" class="control-label requiredField">Fire Incident No.*</label>
             <div class="controls ">{{form.incident_no}}</div>
         </div>
     </div>
@@ -158,14 +172,14 @@
 
     <div class="col-sm-2" > 
         <div id="div_id_authorised_by" class="form-group"> 
-            <label for="id_authorised_by" class="control-label  requiredField">Authorised By*</label>
+            <label for="id_authorised_by" class="control-label">Authorised By</label>
             <div class="controls ">{{form.authorised_by}}</div>
         </div>
     </div>
 
     <div class="col-sm-2" > 
         <div id="div_id_authorised_date" class="form-group"> 
-            <label for="id_authorised_date" class="control-label  requiredField">Authorised Date*</label>
+            <label for="id_authorised_date" class="control-label">Authorised Date</label>
             <div class="controls ">{{form.authorised_date}}</div>
         </div>
     </div>
@@ -182,7 +196,7 @@
 
     <div class="col-sm-4" > 
         <div id="div_id_cause" class="form-group"> 
-            <label for="id_cause" class="control-label">Cause</label>
+            <label for="id_cause" class="control-label requiredField">Cause*</label>
             <div class="controls ">{{form.cause}}</div>
         </div>
     </div>
@@ -196,9 +210,9 @@
 </div>
 
 <div class="row">
-    <div class="col-sm-2" > 
+    <div class="col-sm-4" > 
         <div id="div_id_prescription" class="form-group"> 
-            <label for="id_prescription" class="control-label">Prescription Burn ID</label>
+            <label for="id_prescription" class="control-label">Burn ID (if cause is Escape)</label>
             <div class="controls ">{{form.prescription}}</div>
         </div>
     </div>
@@ -212,7 +226,7 @@
 </div>
 
 <hr>
-<div id="id_activities" class="row activity-formset">
+<div id="id_activities" class="row formset activity-formset">
     <table border="0" cellpadding="0" cellspacing="0">
         <tbody>
             <th></th>
