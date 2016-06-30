@@ -5,7 +5,7 @@
         <tbody>
             <th></th>
             <th>Comment</th>
-            {% for form in comment_formset %}
+            {% for form in comment_formset reversed %}
             <tr>
                <td>
                     {% if form.instance.pk %}{{ form.DELETE }}{% endif %}
@@ -19,7 +19,6 @@
     {{ comment_formset.management_form }}
 </div>
 
-
 <script>
     $('.comment-formset tbody tr').formset({
         prefix: '{{ comment_formset.prefix }}',
@@ -27,7 +26,6 @@
         addText: '<i class="icon-plus"></i> add another comment',
         deleteText: '<i class="icon-remove"></i>',
     });
-
 </script>
 
 
