@@ -48,7 +48,7 @@ ALLOWED_HOSTS = [
 # Application definition
 
 INSTALLED_APPS = (
-    'tabbed_admin',
+    #'tabbed_admin',
     #'merged_inlines',
     #'suit',
     'django.contrib.admin',
@@ -58,10 +58,10 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'smart_selects',
     'django_extensions',
     'bushfire',
     'debug_toolbar',
-    'smart_selects',
     'crispy_forms',
     #'webtemplate_dpaw',
 )
@@ -117,8 +117,10 @@ DATABASES = {'default': database.config()}
 #)
 
 # for 'tabbed_admin' app
-TABBED_ADMIN_USE_JQUERY_UI = True
+#TABBED_ADMIN_USE_JQUERY_UI = True
 #USE_DJANGO_JQUERY = False
+#JQUERY_URL="https://code.jquery.com/jquery-3.0.0.js"
+#JQUERY_URL= os.path.join(STATIC_URL, "smart-selects/admin/js/chainedfk.js")
 
 
 # Internationalization

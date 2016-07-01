@@ -7,6 +7,7 @@ urlpatterns = patterns('',
     #url(r'(?P<pk>\d+)/$', views.BushfireDetailView.as_view(), name='bushfire_detail'),
     #url(r'(?P<pk>\d+)/$', views.BushfireCreateView.as_view(), name='bushfire_detail'),
     #url(r'(?P<pk>\d+)/$', views.BushfireUpdateView.as_view(), name='bushfire_update'),
+    url(r'create/$', views.BushfireCreateView.as_view(), name='bushfire_create'),
     url(r'(?P<pk>\d+)/$', views.BushfireUpdateView.as_view(), name='bushfire_form'),
 
 )

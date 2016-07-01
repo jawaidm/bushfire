@@ -7,7 +7,8 @@ from django.forms.formsets import formset_factory
 from bushfire.models import (Bushfire, Activity, Response, AreaBurnt, GroundForces, AerialForces,
         AttendingOrganisation, FireBehaviour, Legal, PrivateDamage, PublicDamage, Comment
     )
-from bushfire.forms import (BushfireForm, ActivityFormSet, ResponseFormSet, AreaBurntFormSet,
+from bushfire.forms import (BushfireForm, BushfireCreateForm,
+        ActivityFormSet, ResponseFormSet, AreaBurntFormSet,
         GroundForcesFormSet, AerialForcesFormSet, AttendingOrganisationFormSet, FireBehaviourFormSet,
         LegalFormSet, PrivateDamageFormSet, PublicDamageFormSet, CommentFormSet
     )
@@ -51,16 +52,166 @@ class BushfireDetailView(generic.DetailView):
         return context
 
 
+from bushfire.forms import (BushfireTestForm)
+from bushfire.models import (BushfireTest)
+class _BushfireCreateView(CreateView):
+    model = BushfireTest
+    form_class = BushfireTestForm
+    template_name = 'bushfire/create_tmp.html'
+
+
 class BushfireCreateView(CreateView):
     model = Bushfire
-    fields = ['name']
-    template_name = 'bushfire/detail.html'
+    form_class = BushfireCreateForm
+    template_name = 'bushfire/create.html'
 
+    def get_success_url(self):
+        return reverse("bushfire:index")
 
-class _BushfireUpdateView(UpdateView):
-    model = Bushfire
-    #fields = ['name']
-    template_name = 'bushfire/detail.html'
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        form_class = self.get_form_class()
+        form = self.get_form(form_class)
+        activity_formset        = ActivityFormSet(self.request.POST, prefix='activity_fs')
+        area_burnt_formset      = AreaBurntFormSet(self.request.POST, prefix='area_burnt_fs')
+        attending_org_formset   = AttendingOrganisationFormSet(self.request.POST, prefix='attending_org_fs')
+
+        if form.is_valid() and activity_formset.is_valid():
+            return self.form_valid(request,
+                form,
+                activity_formset,
+                area_burnt_formset,
+                attending_org_formset,
+            )
+        else:
+            return self.form_invalid(request,
+                form,
+                activity_formset,
+                area_burnt_formset,
+                attending_org_formset,
+            )
+
+    def form_invalid(self, request,
+            form,
+            activity_formset,
+            area_burnt_formset,
+            attending_org_formset,
+        ):
+        #import ipdb; ipdb.set_trace()
+        return self.render_to_response(
+            self.get_context_data(
+                form=form,
+                activity_formset=activity_formset,
+                area_burnt_formset=area_burnt_formset,
+                attending_org_formset=attending_org_formset,
+            )
+        )
+
+    def form_valid(self, request,
+            form,
+            activity_formset,
+            area_burnt_formset,
+            attending_org_formset,
+        ):
+        self.object = form.save()
+        activities_updated = self.update_activity_fs(activity_formset)
+        areas_burnt_updated = self.update_areas_burnt_fs(area_burnt_formset)
+        attending_org_updated = self.update_attending_org_fs(attending_org_formset)
+
+        redirect_referrer =  HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+        if not activities_updated:
+            messages.error(request, 'There was an error saving Activities.')
+            return redirect_referrer
+
+        elif not areas_burnt_updated:
+            messages.error(request, 'There was an error saving Areas Burnt.')
+            return redirect_referrer
+
+        elif not attending_org_updated:
+            messages.error(request, 'There was an error saving Attending Organisation.')
+            return redirect_referrer
+
+        return HttpResponseRedirect(self.get_success_url())
+
+    def update_activity_fs(self, activity_formset):
+        #activity_formset.instance = self.object
+        new_fs_object = []
+        for form in activity_formset:
+            if form.is_valid():
+                activity = form.cleaned_data.get('activity')
+                dt = form.cleaned_data.get('date')
+                remove = form.cleaned_data.get('DELETE')
+
+                if not remove and (activity and dt):
+                    new_fs_object.append(Activity(bushfire=self.object, activity=activity, date=dt))
+
+        try:
+            with transaction.atomic():
+                #Replace the old with the new
+                Activity.objects.filter(bushfire=self.object).delete()
+                Activity.objects.bulk_create(new_fs_object)
+        except IntegrityError: #If the transaction failed
+            return 0
+
+        return 1
+
+    def update_areas_burnt_fs(self, area_burnt_formset):
+        new_fs_object = []
+        for form in area_burnt_formset:
+            if form.is_valid():
+                tenure = form.cleaned_data.get('tenure')
+                fuel_type = form.cleaned_data.get('fuel_type')
+                area = form.cleaned_data.get('area')
+                origin = form.cleaned_data.get('origin')
+                remove = form.cleaned_data.get('DELETE')
+
+                if not remove and (tenure and fuel_type and area):
+                    new_fs_object.append(AreaBurnt(bushfire=self.object, tenure=tenure, fuel_type=fuel_type, area=area, origin=origin))
+
+        try:
+            with transaction.atomic():
+                AreaBurnt.objects.filter(bushfire=self.object).delete()
+                AreaBurnt.objects.bulk_create(new_fs_object)
+        except IntegrityError:
+            return 0
+
+        return 1
+
+    def update_attending_org_fs(self, attending_org_formset):
+        new_fs_object = []
+        for form in attending_org_formset:
+            if form.is_valid():
+                name = form.cleaned_data.get('name')
+                other = form.cleaned_data.get('other')
+                remove = form.cleaned_data.get('DELETE')
+
+                if not remove and (name and other):
+                    new_fs_object.append(AttendingOrganisation(bushfire=self.object, name=name, other=other))
+
+        try:
+            with transaction.atomic():
+                AttendingOrganisation.objects.filter(bushfire=self.object).delete()
+                AttendingOrganisation.objects.bulk_create(new_fs_object)
+        except IntegrityError:
+            return 0
+
+        return 1
+
+    def get_context_data(self, **kwargs):
+        context = super(BushfireCreateView, self).get_context_data(**kwargs)
+
+        form_class = self.get_form_class()
+        form = self.get_form(form_class)
+        activity_formset        = ActivityFormSet(instance=self.object, prefix='activity_fs') # self.object posts the initial data
+        area_burnt_formset      = AreaBurntFormSet(instance=self.object, prefix='area_burnt_fs')
+        attending_org_formset   = AttendingOrganisationFormSet(instance=self.object, prefix='attending_org_fs')
+        context.update({'form': form,
+                        'activity_formset': activity_formset,
+                        'area_burnt_formset': area_burnt_formset,
+                        'attending_org_formset': attending_org_formset,
+            })
+        return context
+
 
 
 class BushfireUpdateView(UpdateView):

@@ -69,6 +69,7 @@
             $('#id_mga_zone').hide();
             $('#id_fd_grid').hide();
         } else {
+            var coord_type = $('#id_coord_type :selected').text();
             if (coord_type.indexOf('---') > -1) {
                 $('#id_latlong').hide();
                 $('#id_mga_zone').hide();
@@ -179,7 +180,7 @@
     </div>
 
     <div id="initial" class="tab-pane fade active">
-        {% include "bushfire/initial.html" %}
+        {% include "bushfire/initial_comment.html" %}
     </div>
 
     <div id="effect" class="tab-pane fade active">

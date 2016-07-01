@@ -72,6 +72,13 @@ class District(models.Model):
         return self.name
 
 
+class BushfireTest(models.Model):
+    region = models.ForeignKey(Region)
+    district = ChainedForeignKey(
+        District, chained_field="region", chained_model_field="region",
+        show_all=False, auto_choose=True)
+
+
 @python_2_unicode_compatible
 class Tenure(models.Model):
     name = models.CharField(max_length=200)
@@ -176,6 +183,11 @@ class BushfireBase(Audit):
         (COORD_TYPE_3, 'FD Grid'),
     )
 
+    CAUSE_CHOICES = (
+        (1, 'Known'),
+        (2, 'Possible'),
+    )
+
     coord_type = models.PositiveSmallIntegerField(choices=COORD_TYPE_CHOICES, verbose_name="Coordinate Type")
     fire_not_found = models.BooleanField(default=False)
     # TODO number of dp
@@ -205,7 +217,7 @@ class BushfireBase(Audit):
 
     # Reporter
     source = models.ForeignKey('Source', verbose_name="Reported By", null=True, blank=True)
-    cause = models.ForeignKey('Cause', null=True, blank=True)
+    cause = models.ForeignKey('Cause')
     arson_squad_notified = models.BooleanField(verbose_name="Arson Squad Notified", default=False)
     #prescription = models.ForeignKey(Prescription, verbose_name="ePFP (if cause is Escape)", related_name='prescribed_burn', null=True, blank=True)
     prescription = models.ForeignKey('Prescription', verbose_name="Pres Burn ID", null=True, blank=True)
@@ -239,6 +251,13 @@ class BushfireBase(Audit):
     hazard_mgt = models.ForeignKey('Agency', verbose_name="Hazard Management Agency", null=True, blank=True, related_name='hazard_mgt')
     initial_control = models.ForeignKey('Agency', verbose_name="Initial Controlling Agency", null=True, blank=True, related_name='initial_control')
     final_control = models.ForeignKey('Agency', verbose_name="Final Controlling Agency", null=True, blank=True, related_name='final_control')
+    other_agency = models.CharField(verbose_name="Other Agency", max_length=50)
+
+    # Initial Misc
+    #cause = models.ForeignKey(Cause)
+    known_possible = models.PositiveSmallIntegerField(choices=CAUSE_CHOICES, verbose_name="Known/Possible")
+    other_cause = models.CharField(verbose_name='Other', max_length=50, null=True, blank=True)
+    investigation_req = models.BooleanField(verbose_name="Invest'n Required", default=False)
 
     #reporting = models.ForeignKey('Reporter', verbose_name="Reporting and  Cause")
 

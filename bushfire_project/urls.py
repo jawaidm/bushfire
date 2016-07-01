@@ -14,7 +14,7 @@ urlpatterns = patterns('',
 #    url(r'^$', TemplateView.as_view(template_name="home.html")),
 
 
-    url(r'^chaining/', include('smart_selects.urls')),
     url(r'^bushfire/', include('bushfire.urls', namespace='bushfire')),
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^chaining/', include('smart_selects.urls')),
 )
