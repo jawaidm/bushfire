@@ -69,7 +69,6 @@ table, tr, td {
   {% block extrastyle %}
   <link rel="stylesheet" href="{% static "css/jquery-ui-1.11.4.min.css" %}">
   <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-  <link rel="stylesheet" type="text/css" href="{% static 'css/jquery.datetimepicker.css' %}"/ >
   {% comment %}
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
   {% endcomment %}
@@ -80,6 +79,8 @@ table, tr, td {
   <script src="{% static 'js/jquery.formset.js' %}"></script>
   <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 
+  <!-- http://xdsoft.net/jqplugins/datetimepicker/ -->
+  <link rel="stylesheet" type="text/css" href="{% static 'css/jquery.datetimepicker.css' %}"/ >
   <script src="{% static 'js/jquery.datetimepicker.full.min.js' %}"></script>
 
   <script>
