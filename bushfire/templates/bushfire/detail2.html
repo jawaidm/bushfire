@@ -58,9 +58,18 @@
 
   <link rel="stylesheet" href="{% static "css/jquery-ui-1.11.4.min.css" %}">
   <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>i
+  <link rel="stylesheet" type="text/css" href="{% static 'css/jquery.datetimepicker.css' %}"/ >
+  {% comment %}
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+  {% endcomment %}
+
+  <script src="{% static 'js/jquery-1.9.1.min.js' %}"></script>
+  <script src="{% static 'js/jquery-ui-1.11.4.min.js' %}"></script>
+
   <script src="{% static 'js/jquery.formset.js' %}"></script>
   <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+  <script src="{% static 'js/jquery.datetimepicker.full.min.js' %}"></script>
 
   <script>
     $(function(){
@@ -215,6 +224,9 @@
 //$('#id_mga_zone').find('input, textarea, button, select').attr('disabled','disabled');
 //$('#id_fd_grid').find('input, textarea, button, select').attr('disabled','disabled');
 
+// $('[id^=""]').hide() // starts with 
+$('[id$="-date"]').datetimepicker({ dateFormat: "yy-mm-dd", timeFormat:  "hh:mm" }); //ends with
+
 $('#id_fire_not_found').click(function() {
     if ($(this).is(':checked')) {
         $('#id_latlong').hide();
@@ -267,4 +279,5 @@ $('#id_coord_type').on('change', function() {
 
 
 </script>
+<script src="{% static 'smart-selects/admin/js/chainedfk.js' %}"></script>
 {% endblock %}

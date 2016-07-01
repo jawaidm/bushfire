@@ -95,6 +95,7 @@
 
 
 <script>
+
     $('.areas-burnt-formset tbody tr').formset({
         prefix: '{{ areas_burnt_formset.prefix }}',
         formCssClass: 'area_burnt_fs',
@@ -109,6 +110,9 @@
         deleteText: '<i class="icon-remove"></i>',
     });
 
+    // $('[id^=""]').hide() // starts with 
+    $('[id$="-date"]').datepicker({ dateFormat: "yy-mm-dd" }).val(); //ends with
+    //$('#id_init_authorised_date').datepicker({ dateFormat: "yy-mm-dd" }).val(); //ends with
     $('#div_id_other_agency').hide();
     $(function(){
         $('#id_first_attack').on('change', function() {
