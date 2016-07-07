@@ -1,4 +1,4 @@
-<h3>Areas Burnt</h3>
+<h3>Tenure and Vegetation Affected</h3>
 <div id="id_areas_burnt" class="row formset areas-burnt-formset">
     <table border="0" cellpadding="0" cellspacing="0">
         <tbody>
@@ -7,16 +7,16 @@
             <th>Fuel Type</th>
             <th>Area (ha)</th>
             <th>Point of Origin</th>
-            {% for form in area_burnt_formset %}
+            {% for fs in area_burnt_formset %}
             <tr>
                <td>
-                    {% if form.instance.pk %}{{ form.DELETE }}{% endif %}
-                    {{ form.id }}
+                    {% if fs.instance.pk %}{{ fs.DELETE }}{% endif %}
+                    {{ fs.id }}
                 </td>
-               <td>{{ form.tenure }}</td>
-               <td>{{ form.fuel_type }}</td>
-               <td>{{ form.area }}</td>
-               <td>{{ form.origin }}</td>
+               <td>{{ fs.tenure }}</td>
+               <td>{{ fs.fuel_type }}</td>
+               <td>{{ fs.area }}</td>
+               <td>{{ fs.origin }}</td>
             </tr>
             {% endfor %}
         </tbody>
@@ -41,21 +41,21 @@
 
 </div>
 
-<h3>Organisations Attending</h3>
+<h3>Forces in Attendance</h3>
 <div id="id_attending_org" class="row formset attending-org-formset">
     <table border="0" cellpadding="0" cellspacing="0">
         <tbody>
             <th></th>
             <th>Name</th>
             <th>Other</th>
-            {% for form in attending_org_formset %}
+            {% for fs in attending_org_formset %}
             <tr>
                <td>
-                    {% if form.instance.pk %}{{ form.DELETE }}{% endif %}
-                    {{ form.id }}
+                    {% if fs.instance.pk %}{{ fs.DELETE }}{% endif %}
+                    {{ fs.id }}
                 </td>
-               <td>{{ form.name }}</td>
-               <td>{{ form.other }}</td>
+               <td>{{ fs.name }}</td>
+               <td>{{ fs.other }}</td>
             </tr>
             {% endfor %}
         </tbody>
@@ -111,7 +111,7 @@
     });
 
     // $('[id^=""]').hide() // starts with 
-    $('[id$="-date"]').datepicker({ dateFormat: "yy-mm-dd" }).val(); //ends with
+    //$('[id$="-date"]').datepicker({ dateFormat: "yy-mm-dd" }).val(); //ends with
     //$('#id_init_authorised_date').datepicker({ dateFormat: "yy-mm-dd" }).val(); //ends with
     $('#div_id_other_agency').hide();
     $(function(){

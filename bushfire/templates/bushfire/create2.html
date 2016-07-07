@@ -170,7 +170,7 @@ table, tr, td {
 
     <div class="col-sm-2" > 
         <div id="div_id_job_code" class="form-group"> 
-            <label for="id_job_code" class="control-label nonRequiredField">Job Code</label>
+            <label for="id_job_code" class="control-label">Job Code</label>
             <div class="controls ">{{form.job_code}}</div>
         </div>
     </div>
@@ -193,47 +193,18 @@ table, tr, td {
 
     <div class="col-sm-2" > 
         <div id="div_id_init_authorised_by" class="form-group"> 
-            <label for="id_init_authorised_by" class="control-label nonRequiredField">Authorised By</label>
+            <label for="id_init_authorised_by" class="control-label">Authorised By</label>
             <div class="controls ">{{form.init_authorised_by}}</div>
         </div>
     </div>
 
     <div class="col-sm-2" > 
         <div id="div_id_init_authorised_date" class="form-group"> 
-            <label for="id_init_authorised_date" class="control-label nonRequiredField">Authorised Date</label>
+            <label for="id_init_authorised_date" class="control-label">Authorised Date</label>
             <div class="controls ">{{form.init_authorised_date}}</div>
         </div>
     </div>
 </div>
-
-{%comment%}
-<div class="row formset activity-formset2">
-<tbody>
-{% for fs in activity_formset.forms %}
-<tr>
-    <div class="col-sm-2" > 
-        <div id="div_id_formid" class="form-group"> 
-            <div class="controls ">{% if fs.instance.pk %}{{ fs.DELETE }}{% endif %}</div>
-            <div class="controls ">{{ fs.id }}</div>
-        </div>
-    </div>
-    <div class="col-sm-3" > 
-        <div id="div_id_activity" class="form-group"> 
-            <div class="controls ">{{fs.activity}}</div>
-        </div>
-    </div>
-    <div class="col-sm-2" > 
-        <div id="div_id_date" class="form-group"> 
-            <div class="controls ">{{fs.date}}</div>
-        </div>
-    </div>
-</tr>
-{% endfor %}
-</tbody>
-</div>
-{{ activity_formset.management_form }}
-{%endcomment%}
-
 
 <hr>
 <h3>Activities</h3>
@@ -257,46 +228,6 @@ table, tr, td {
     </table>
     {{ activity_formset.management_form }}
 </div>
-<hr>
-
-
-  <ul id="report-tabs" class="nav nav-tabs">
-      <li id="origin-tab" class="active">
-          <a data-toggle="tab" href="#origin">
-              <i class="icon-tag"></i>
-              Point of Origin
-          </a>
-      </li>
-      <li id="detail-tab">
-          <a data-toggle="tab" href="#detail">
-              <i class="icon-tag"></i>
-              Details
-          </a>
-      </li>
-      <li id="comments-tab">
-          <a data-toggle="tab" href="#comments">
-              <i class="icon-tag"></i>
-              Comments
-          </a>
-      </li>
-
-  </ul>
-
-  <div class="tab-content">
-    <div id="origin" class="tab-pane fade in active">
-        {% include "bushfire/origin.html" %}
-    </div>
-
-    <div id="detail" class="tab-pane fade active">
-        {% include "bushfire/initial_detail.html" %}
-    </div>
-
-    <div id="comments" class="tab-pane fade active">
-        {% include "bushfire/initial_comment.html" %}
-    </div>
-  </div>
-
-
 
     <hr><br>
   <input type="submit" value="Save" />

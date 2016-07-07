@@ -78,6 +78,23 @@ class BushfireTest(models.Model):
         District, chained_field="region", chained_model_field="region",
         show_all=False, auto_choose=True)
 
+#class BushfireTest2(Audit):
+class BushfireTest2(models.Model):
+    region = models.ForeignKey(Region)
+    district = ChainedForeignKey(
+        District, chained_field="region", chained_model_field="region",
+        show_all=False, auto_choose=True)
+
+    name = models.CharField(max_length=100, verbose_name="Fire Name")
+    incident_no = models.CharField(verbose_name="Fire Incident No.", max_length=10)
+    season = models.CharField(max_length=9)
+    dfes_incident_no = models.CharField(verbose_name="DFES Incident No.", max_length=10)
+    job_code = models.CharField(verbose_name="Job Code", max_length=10, null=True, blank=True)
+    potential_fire_level = models.PositiveSmallIntegerField(choices=FIRE_LEVEL_CHOICES)
+
+    init_authorised_by = models.ForeignKey(User, verbose_name="Authorised By", blank=True, null=True)
+    init_authorised_date = models.DateTimeField(verbose_name='Authorised Date', default=timezone.now, null=True, blank=True)
+
 
 @python_2_unicode_compatible
 class Tenure(models.Model):
@@ -188,7 +205,7 @@ class BushfireBase(Audit):
         (2, 'Possible'),
     )
 
-    coord_type = models.PositiveSmallIntegerField(choices=COORD_TYPE_CHOICES, verbose_name="Coordinate Type")
+    coord_type = models.PositiveSmallIntegerField(choices=COORD_TYPE_CHOICES, verbose_name="Coordinate Type", null=True, blank=True)
     fire_not_found = models.BooleanField(default=False)
     # TODO number of dp
     lat_decimal = models.DecimalField(verbose_name="Latitude (Decimal)", max_digits=12, decimal_places=1, validators=[MinValueValidator(0)], null=True, blank=True)
@@ -224,15 +241,15 @@ class BushfireBase(Audit):
     offence_no = models.CharField(verbose_name="Offence No.", max_length=10, null=True, blank=True)
 
     # Initial
-    fuel = models.CharField(max_length=50)
-    ros = models.CharField(verbose_name="Rate of Spread", max_length=50)
-    flame_height = models.DecimalField(max_digits=12, decimal_places=2, validators=[MinValueValidator(0)])
-    assistance_required = models.CharField(max_length=50)
+    fuel = models.CharField(max_length=50, null=True, blank=True)
+    ros = models.CharField(verbose_name="Rate of Spread", max_length=50, null=True, blank=True)
+    flame_height = models.DecimalField(max_digits=12, decimal_places=2, validators=[MinValueValidator(0)], null=True, blank=True)
+    assistance_required = models.CharField(max_length=50, null=True, blank=True)
     fire_contained = models.BooleanField(default=False)
-    containment_time = models.CharField(verbose_name="ET to Contain", max_length=50)
-    ops_point = models.CharField(verbose_name="OPS Point (grid ref)", max_length=50)
-    communications = models.CharField(verbose_name='Communication', max_length=50)
-    weather = models.CharField(max_length=50)
+    containment_time = models.CharField(verbose_name="ET to Contain", max_length=50, null=True, blank=True)
+    ops_point = models.CharField(verbose_name="OPS Point (grid ref)", max_length=50, null=True, blank=True)
+    communications = models.CharField(verbose_name='Communication', max_length=50, null=True, blank=True)
+    weather = models.CharField(max_length=50, null=True, blank=True)
     field_officer = models.ForeignKey(User, verbose_name="Field Officer", related_name='init_field_officer')
     init_authorised_by = models.ForeignKey(User, verbose_name="Authorised By", blank=True, null=True, related_name='init_auth_by')
     init_authorised_date = models.DateTimeField(verbose_name='Authorised Date', default=timezone.now, null=True, blank=True)
@@ -242,16 +259,16 @@ class BushfireBase(Audit):
     fire_stopped = models.PositiveSmallIntegerField(verbose_name="Fuel Age - Fire Stopped (Yr)", null=True, blank=True)
     waterbomb_effect = models.ForeignKey('WaterBombEffect', verbose_name='Presence/Effect of WaterBomb', null=True, blank=True)
     last_burnt = models.PositiveSmallIntegerField(verbose_name="Fuel Age - Area Last Burnt (Yr)", null=True, blank=True)
-    arrival_area = models.DecimalField(verbose_name="Fire Area at Arrival (ha)", max_digits=12, decimal_places=1, validators=[MinValueValidator(0)])
-    fire_level = models.PositiveSmallIntegerField(verbose_name='Final Fire Level', choices=FIRE_LEVEL_CHOICES)
-    rating = models.ForeignKey('PriorityRating', verbose_name="Area Priority Rating")
+    arrival_area = models.DecimalField(verbose_name="Fire Area at Arrival (ha)", max_digits=12, decimal_places=1, validators=[MinValueValidator(0)], null=True, blank=True)
+    fire_level = models.PositiveSmallIntegerField(verbose_name='Final Fire Level', choices=FIRE_LEVEL_CHOICES, null=True, blank=True)
+    rating = models.ForeignKey('PriorityRating', verbose_name="Area Priority Rating", null=True, blank=True)
 
     # First Attack
     first_attack = models.ForeignKey('Agency', verbose_name="First Attack Agency", related_name='first_attack')
     hazard_mgt = models.ForeignKey('Agency', verbose_name="Hazard Management Agency", null=True, blank=True, related_name='hazard_mgt')
     initial_control = models.ForeignKey('Agency', verbose_name="Initial Controlling Agency", null=True, blank=True, related_name='initial_control')
     final_control = models.ForeignKey('Agency', verbose_name="Final Controlling Agency", null=True, blank=True, related_name='final_control')
-    other_agency = models.CharField(verbose_name="Other Agency", max_length=50)
+    other_agency = models.CharField(verbose_name="Other Agency", max_length=50, null=True, blank=True)
 
     # Initial Misc
     #cause = models.ForeignKey(Cause)
@@ -363,7 +380,7 @@ class Bushfire(BushfireBase):
         unique_together = ('district', 'incident_no', 'season')
 
     def __str__(self):
-        return self.name
+        return ', '.join([self.name, self.district.name, self.season, self.incident_no])
 
 
 @python_2_unicode_compatible
@@ -1016,6 +1033,23 @@ class Activity(models.Model):
     activity = models.ForeignKey(ActivityType)
     date = models.DateTimeField(default=timezone.now)
     bushfire = models.ForeignKey(Bushfire, related_name='activities')
+
+    class Meta:
+        ordering = ['activity']
+
+    def __str__(self):
+        return self.activity.name
+
+    class Meta:
+        unique_together = ('bushfire', 'activity',)
+
+
+@python_2_unicode_compatible
+class Activity2(models.Model):
+    #activity = models.PositiveSmallIntegerField(choices=ACTIVITY_CHOICES)
+    activity = models.ForeignKey(ActivityType)
+    date = models.DateTimeField(default=timezone.now)
+    bushfire = models.ForeignKey(BushfireTest2, related_name='activities2')
 
     class Meta:
         ordering = ['activity']

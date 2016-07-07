@@ -7,6 +7,7 @@ from datetime import datetime, timedelta
 from django.conf import settings
 from django.forms import ValidationError
 from django.forms.models import inlineformset_factory
+from django.forms.formsets import BaseFormSet
 
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Fieldset, ButtonHolder, Submit, Div, HTML
@@ -207,6 +208,36 @@ class BushfireCreateForm(forms.ModelForm):
                   'cause', 'known_possible', 'other_cause', 'investigation_req',
                  )
 
+    def clean(self):
+        import ipdb; ipdb.set_trace()
+        district = self.cleaned_data['district']
+        incident_no = self.cleaned_data['incident_no']
+        season = self.cleaned_data['season']
+        bushfire = Bushfire.objects.filter(district=district, season=season, incident_no=incident_no)
+        if bushfire:
+            raise ValidationError('There is already a Bushfire with this District, Season and Incident No. {} - {} - {}'.format(district, season, incident_no))
+        else:
+            return cleaned_data
+
+
+from bushfire.models import (BushfireTest2, Activity2)
+class BushfireCreateForm2(forms.ModelForm):
+    class Meta:
+        model = BushfireTest2
+        fields = ('region', 'district', 'incident_no', 'season', 'job_code',
+                  'name', 'potential_fire_level', 'init_authorised_by', 'init_authorised_date',
+#                  'distance', 'direction', 'place', 'lot_no', 'street', 'town',
+#                  'coord_type', 'fire_not_found',
+#                  'lat_decimal', 'lat_degrees', 'lat_minutes', 'lon_decimal', 'lon_degrees', 'lon_minutes',
+#                  'mga_zone', 'mga_easting', 'mga_northing',
+#                  'fd_letter', 'fd_number', 'fd_tenths',
+##                  'source','cause', 'arson_squad_notified', 'prescription', 'offence_no',
+#                  'fuel','ros', 'flame_height', 'assistance_required', 'fire_contained',
+#                  'containment_time', 'ops_point', 'communications', 'weather', 'field_officer',
+#                  'first_attack', 'other_agency',
+#                  'cause', 'known_possible', 'other_cause', 'investigation_req',
+                 )
+
 
 from bushfire.models import (BushfireTest)
 class BushfireTestForm(forms.ModelForm):
@@ -215,7 +246,52 @@ class BushfireTestForm(forms.ModelForm):
         fields = ('region', 'district')
 
 
-ActivityFormSet             = inlineformset_factory(Bushfire, Activity, extra=1, max_num=7, can_delete=True)
+class BaseActivityFormSet(BaseFormSet):
+    def clean(self):
+        """
+        Adds validation to check that no two links have the same anchor or URL
+        and that all links have both an anchor and URL.
+        """
+        if any(self.errors):
+            return
+
+        activities = []
+        dates = []
+        duplicates = False
+
+        for form in self.forms:
+            if form.cleaned_data:
+                activity = form.cleaned_data['activity']
+                date = form.cleaned_data['date']
+
+                # Check that no two links have the same anchor or URL
+                if activity:
+                    if activity in activities:
+                        duplicates = True
+                    anchors.append(anchor)
+
+                if duplicates:
+                    raise forms.ValidationError(
+                        'Activities must have unique.',
+                        code='duplicate_activity'
+                    )
+
+                # Check that all links have both an anchor and URL
+                if activity and not date:
+                    raise forms.ValidationError(
+                        'All Activities must have a date',
+                        code='missing_date'
+                    )
+                elif date and not activity:
+                    raise forms.ValidationError(
+                        'All Activities must have both an activity and date.',
+                        code='missing_date'
+                    )
+
+
+ActivityFormSet2            = inlineformset_factory(BushfireTest2, Activity2, extra=1, max_num=7, can_delete=True)
+#ActivityFormSet             = inlineformset_factory(Bushfire, Activity, extra=1, max_num=7, can_delete=True)
+ActivityFormSet             = inlineformset_factory(Bushfire, Activity, formset=BaseActivityFormSet, extra=1, max_num=7, can_delete=True)
 ResponseFormSet             = inlineformset_factory(Bushfire, Response, extra=1, max_num=13, can_delete=True)
 AreaBurntFormSet            = inlineformset_factory(Bushfire, AreaBurnt, extra=1, can_delete=True)
 GroundForcesFormSet         = inlineformset_factory(Bushfire, GroundForces, extra=1, max_num=3, can_delete=True)
