@@ -65,7 +65,7 @@ class BushfireCreateView(generic.CreateView):
         #self.object = self.get_object()
         form_class = self.get_form_class()
         form = self.get_form(form_class)
-        activity_formset        = ActivityFormSet(self.request.POST, prefix='activity_fs')
+        activity_formset        = ActivityFormSet(self.request.POST, initial=self.object, prefix='activity_fs')
         area_burnt_formset      = AreaBurntFormSet(self.request.POST, prefix='area_burnt_fs')
         attending_org_formset   = AttendingOrganisationFormSet(self.request.POST, prefix='attending_org_fs')
 
@@ -99,6 +99,7 @@ class BushfireCreateView(generic.CreateView):
             attending_org_formset,
             kwargs,
         ):
+        import ipdb; ipdb.set_trace()
         context = {
             'form': form,
             'activity_formset': activity_formset,
@@ -212,7 +213,7 @@ class BushfireCreateView(generic.CreateView):
 #        activity_formset        = ActivityFormSet(instance=self.object, prefix='activity_fs') # self.object posts the initial data
 #        area_burnt_formset      = AreaBurntFormSet(instance=self.object, prefix='area_burnt_fs')
 #        attending_org_formset   = AttendingOrganisationFormSet(instance=self.object, prefix='attending_org_fs')
-        activity_formset        = ActivityFormSet(prefix='activity_fs') # self.object posts the initial data
+        activity_formset        = ActivityFormSet(instance=self.object, prefix='activity_fs') # self.object posts the initial data
         area_burnt_formset      = AreaBurntFormSet(prefix='area_burnt_fs')
         attending_org_formset   = AttendingOrganisationFormSet(prefix='attending_org_fs')
         context.update({'form': form,
@@ -642,7 +643,8 @@ class BushfireUpdateView(UpdateView):
 
         form_class = self.get_form_class()
         form = self.get_form(form_class)
-        activity_formset        = ActivityFormSet(instance=self.object, prefix='activity_fs') # self.object posts the initial data
+        #activity_formset        = ActivityFormSet(instance=self.object, prefix='activity_fs') # self.object posts the initial data
+        activity_formset        = ActivityFormSet(initial=self.object, prefix='activity_fs') # self.object posts the initial data
         response_formset        = ResponseFormSet(instance=self.object, prefix='response_fs')
         area_burnt_formset      = AreaBurntFormSet(instance=self.object, prefix='area_burnt_fs')
         groundforces_formset    = GroundForcesFormSet(instance=self.object, prefix='groundforces_fs')

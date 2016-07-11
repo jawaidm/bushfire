@@ -17,7 +17,7 @@ from crispy_forms.bootstrap import TabHolder, Tab
 class _ActivityForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         #import ipdb; ipdb.set_trace()
-        super(ActivityForm, self).__init__(*args, **kwargs)
+        super(_ActivityForm, self).__init__(*args, **kwargs)
 
 #        self.helper = FormHelper()
 ##        self.helper.form_method = 'post'
@@ -217,7 +217,7 @@ class BushfireCreateForm(forms.ModelForm):
         if bushfire:
             raise ValidationError('There is already a Bushfire with this District, Season and Incident No. {} - {} - {}'.format(district, season, incident_no))
         else:
-            return cleaned_data
+            return self.cleaned_data
 
 
 from bushfire.models import (BushfireTest2, Activity2)
@@ -252,6 +252,7 @@ class BaseActivityFormSet(BaseFormSet):
         Adds validation to check that no two links have the same anchor or URL
         and that all links have both an anchor and URL.
         """
+        import ipdb; ipdb.set_trace()
         if any(self.errors):
             return
 
@@ -268,7 +269,7 @@ class BaseActivityFormSet(BaseFormSet):
                 if activity:
                     if activity in activities:
                         duplicates = True
-                    anchors.append(anchor)
+                    activities.append(activity)
 
                 if duplicates:
                     raise forms.ValidationError(
@@ -291,7 +292,7 @@ class BaseActivityFormSet(BaseFormSet):
 
 ActivityFormSet2            = inlineformset_factory(BushfireTest2, Activity2, extra=1, max_num=7, can_delete=True)
 #ActivityFormSet             = inlineformset_factory(Bushfire, Activity, extra=1, max_num=7, can_delete=True)
-ActivityFormSet             = inlineformset_factory(Bushfire, Activity, formset=BaseActivityFormSet, extra=1, max_num=7, can_delete=True)
+ActivityFormSet             = inlineformset_factory(Bushfire, Activity, form=_ActivityForm, formset=BaseActivityFormSet, extra=1, max_num=7, can_delete=True)
 ResponseFormSet             = inlineformset_factory(Bushfire, Response, extra=1, max_num=13, can_delete=True)
 AreaBurntFormSet            = inlineformset_factory(Bushfire, AreaBurnt, extra=1, can_delete=True)
 GroundForcesFormSet         = inlineformset_factory(Bushfire, GroundForces, extra=1, max_num=3, can_delete=True)
