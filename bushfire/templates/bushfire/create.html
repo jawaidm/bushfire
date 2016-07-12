@@ -132,6 +132,7 @@ table, tr, td {
             <font color="red"><li>{{ field.label }}: {{ field.errors|striptags }}</li></font>
             {% endif %}
         {% endfor %}
+        {{ form.non_field_errors  }}
     </div>
 {% endif %}
 
@@ -315,8 +316,8 @@ table, tr, td {
     });
 
 // $('[id^=""]').hide() // starts with 
-$('#id_init_authorised_date').datetimepicker({ dateFormat: "yy-mm-dd", timeFormat:  "hh:mm" }); //ends with
-$('[id$="-date"]').datetimepicker({ dateFormat: "yy-mm-dd", timeFormat:  "hh:mm" }); //ends with
+$('#id_init_authorised_date').datetimepicker({ format: "Y-m-d H:i" }); //ends with
+$('[id$="-date"]').datetimepicker({ format: "Y-m-d H:i" }); //ends with
 
 $('#id_fire_not_found').click(function() {
     if ($(this).is(':checked')) {

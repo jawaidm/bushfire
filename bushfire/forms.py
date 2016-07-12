@@ -6,7 +6,7 @@ from bushfire.models import (Bushfire, Activity, Response, AreaBurnt, GroundForc
 from datetime import datetime, timedelta
 from django.conf import settings
 from django.forms import ValidationError
-from django.forms.models import inlineformset_factory
+from django.forms.models import inlineformset_factory, formset_factory
 from django.forms.formsets import BaseFormSet
 
 from crispy_forms.helper import FormHelper
@@ -291,8 +291,9 @@ class BaseActivityFormSet(BaseFormSet):
 
 
 ActivityFormSet2            = inlineformset_factory(BushfireTest2, Activity2, extra=1, max_num=7, can_delete=True)
-#ActivityFormSet             = inlineformset_factory(Bushfire, Activity, extra=1, max_num=7, can_delete=True)
-ActivityFormSet             = inlineformset_factory(Bushfire, Activity, form=_ActivityForm, formset=BaseActivityFormSet, extra=1, max_num=7, can_delete=True)
+ActivityFormSet             = inlineformset_factory(Bushfire, Activity, extra=1, max_num=7, can_delete=True)
+#ActivityFormSet             = inlineformset_factory(Bushfire, Activity, form=_ActivityForm, formset=BaseActivityFormSet, extra=1, max_num=7, can_delete=True)
+#ActivityFormSet             = formset_factory(_ActivityForm, formset=BaseActivityFormSet, extra=1, max_num=7, can_delete=True)
 ResponseFormSet             = inlineformset_factory(Bushfire, Response, extra=1, max_num=13, can_delete=True)
 AreaBurntFormSet            = inlineformset_factory(Bushfire, AreaBurnt, extra=1, can_delete=True)
 GroundForcesFormSet         = inlineformset_factory(Bushfire, GroundForces, extra=1, max_num=3, can_delete=True)

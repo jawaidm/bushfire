@@ -5,6 +5,7 @@ from bushfire import views
 urlpatterns = patterns('',
     url(r'^$', views.BushfireView.as_view(), name='index'),
     url(r'create/$', views.BushfireCreateView.as_view(), name='bushfire_create'),
+    #url(r'create/$', views.BushfireInitUpdateView.as_view(), name='bushfire_create'),
     url(r'create2/$', views.BushfireCreateTest2View.as_view(), name='bushfire_create2'),
     url(r'create_test/$', views.BushfireCreateTestView.as_view(), name='bushfire_create_test'),
 #    url(r'^$', views.BushfireView.as_view(), name='index'),

@@ -65,7 +65,7 @@ class BushfireCreateView(generic.CreateView):
         #self.object = self.get_object()
         form_class = self.get_form_class()
         form = self.get_form(form_class)
-        activity_formset        = ActivityFormSet(self.request.POST, initial=self.object, prefix='activity_fs')
+        activity_formset        = ActivityFormSet(self.request.POST, prefix='activity_fs')
         area_burnt_formset      = AreaBurntFormSet(self.request.POST, prefix='area_burnt_fs')
         attending_org_formset   = AttendingOrganisationFormSet(self.request.POST, prefix='attending_org_fs')
 
@@ -210,12 +210,12 @@ class BushfireCreateView(generic.CreateView):
 
         form_class = self.get_form_class()
         form = self.get_form(form_class)
-#        activity_formset        = ActivityFormSet(instance=self.object, prefix='activity_fs') # self.object posts the initial data
-#        area_burnt_formset      = AreaBurntFormSet(instance=self.object, prefix='area_burnt_fs')
-#        attending_org_formset   = AttendingOrganisationFormSet(instance=self.object, prefix='attending_org_fs')
         activity_formset        = ActivityFormSet(instance=self.object, prefix='activity_fs') # self.object posts the initial data
-        area_burnt_formset      = AreaBurntFormSet(prefix='area_burnt_fs')
-        attending_org_formset   = AttendingOrganisationFormSet(prefix='attending_org_fs')
+        area_burnt_formset      = AreaBurntFormSet(instance=self.object, prefix='area_burnt_fs')
+        attending_org_formset   = AttendingOrganisationFormSet(instance=self.object, prefix='attending_org_fs')
+#        activity_formset        = ActivityFormSet(instance=self.object, prefix='activity_fs') # self.object posts the initial data
+#        area_burnt_formset      = AreaBurntFormSet(prefix='area_burnt_fs')
+#        attending_org_formset   = AttendingOrganisationFormSet(prefix='attending_org_fs')
         context.update({'form': form,
                         'activity_formset': activity_formset,
                         'area_burnt_formset': area_burnt_formset,
@@ -256,6 +256,7 @@ class BushfireUpdateView(UpdateView):
         public_damage_formset   = PublicDamageFormSet(self.request.POST, prefix='public_damage_fs')
         comment_formset         = CommentFormSet(self.request.POST, prefix='comment_fs')
 
+        import ipdb; ipdb.set_trace()
         if form.is_valid() and activity_formset.is_valid():
             return self.form_valid(request,
                 form,
@@ -300,7 +301,7 @@ class BushfireUpdateView(UpdateView):
             private_damage_formset,
             public_damage_formset,
             comment_formset):
-        #import ipdb; ipdb.set_trace()
+        import ipdb; ipdb.set_trace()
         return self.render_to_response(
             self.get_context_data(
                 form=form,
@@ -331,6 +332,7 @@ class BushfireUpdateView(UpdateView):
             private_damage_formset,
             public_damage_formset,
             comment_formset):
+        import ipdb; ipdb.set_trace()
         self.object = form.save()
 
         activities_updated = self.update_activity_fs(activity_formset)
@@ -643,8 +645,8 @@ class BushfireUpdateView(UpdateView):
 
         form_class = self.get_form_class()
         form = self.get_form(form_class)
-        #activity_formset        = ActivityFormSet(instance=self.object, prefix='activity_fs') # self.object posts the initial data
-        activity_formset        = ActivityFormSet(initial=self.object, prefix='activity_fs') # self.object posts the initial data
+        activity_formset        = ActivityFormSet(instance=self.object, prefix='activity_fs') # self.object posts the initial data
+        #activity_formset        = ActivityFormSet(initial=self.object, prefix='activity_fs') # self.object posts the initial data
         response_formset        = ResponseFormSet(instance=self.object, prefix='response_fs')
         area_burnt_formset      = AreaBurntFormSet(instance=self.object, prefix='area_burnt_fs')
         groundforces_formset    = GroundForcesFormSet(instance=self.object, prefix='groundforces_fs')
@@ -655,6 +657,7 @@ class BushfireUpdateView(UpdateView):
         private_damage_formset  = PrivateDamageFormSet(instance=self.object, prefix='private_damage_fs')
         public_damage_formset   = PublicDamageFormSet(instance=self.object, prefix='public_damage_fs')
         comment_formset         = CommentFormSet(instance=self.object, prefix='comment_fs')
+        import ipdb; ipdb.set_trace()
         context.update({'form': form,
                         'activity_formset': activity_formset,
                         'response_formset': response_formset,
