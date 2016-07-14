@@ -6,8 +6,9 @@ from bushfire.models import (Bushfire, Activity, Response, AreaBurnt, GroundForc
 from datetime import datetime, timedelta
 from django.conf import settings
 from django.forms import ValidationError
-from django.forms.models import inlineformset_factory, formset_factory
-from django.forms.formsets import BaseFormSet
+from django.forms.models import inlineformset_factory, formset_factory, BaseInlineFormSet
+#from django.forms.formsets import BaseFormSet
+from django.contrib import messages
 
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Fieldset, ButtonHolder, Submit, Div, HTML
@@ -29,6 +30,50 @@ class _ActivityForm(forms.ModelForm):
 #                css_class='row',
 #            ),
 #        )
+
+#    def clean(self):
+#        """
+#        Adds validation to check that no two links have the same anchor or URL
+#        and that all links have both an anchor and URL.
+#        """
+#        import ipdb; ipdb.set_trace()
+#        if any(self.errors):
+#            return
+#
+#        activities = []
+#        dates = []
+#        duplicates = False
+#
+#        for form in self.forms:
+#            if form.cleaned_data:
+#                activity = form.cleaned_data['activity']
+#                date = form.cleaned_data['date']
+#
+#                # Check that no two links have the same anchor or URL
+#                if activity:
+#                    if activity in activities:
+#                        duplicates = True
+#                    activities.append(activity)
+#
+#                if duplicates:
+#                    raise forms.ValidationError(
+#                        'Activities must have unique.',
+#                        code='duplicate_activity'
+#                    )
+#
+#                # Check that all links have both an anchor and URL
+#                if activity and not date:
+#                    raise forms.ValidationError(
+#                        'All Activities must have a date',
+#                        code='missing_date'
+#                    )
+#                elif date and not activity:
+#                    raise forms.ValidationError(
+#                        'All Activities must have both an activity and date.',
+#                        code='missing_date'
+#                    )
+
+
 
     class Meta:
         model = Activity
@@ -191,6 +236,7 @@ class BushfireForm(forms.ModelForm):
 #                 )
         exclude = ()
 
+
 class BushfireCreateForm(forms.ModelForm):
     class Meta:
         model = Bushfire
@@ -236,17 +282,61 @@ class BushfireInitUpdateForm(forms.ModelForm):
                   'cause', 'known_possible', 'other_cause', 'investigation_req',
                  )
 
-#    def clean(self):
-#        import ipdb; ipdb.set_trace()
-#        district = self.cleaned_data['district']
-#        incident_no = self.cleaned_data['incident_no']
-#        season = self.cleaned_data['season']
-#        bushfire = Bushfire.objects.filter(district=district, season=season, incident_no=incident_no)
-#        if bushfire:
-#            raise ValidationError('There is already a Bushfire with this District, Season and Incident No. {} - {} - {}'.format(district, season, incident_no))
-#        else:
-#            return self.cleaned_data
+    def clean(self):
+        """
+        Form can be saved prior to sign-off, without checking req'd fields.
+        Required fields are checked during Authorisation sign-off, therefore checking and adding error fields manually
+        """
+        req_fields = [
+            #'region', 'district', 'incident_no', 'season', # these are delcared Required in models.py
+            'name', 'potential_fire_level', 'init_authorised_by', 'init_authorised_date',
+            'first_attack',
+            'cause',
+            'field_officer',
+            'known_possible',
+        ]
 
+        req_dep_fields = { # required dependent fields
+            'first_attack': 'other_agency',
+            'cause': 'other_cause',
+            'coord_type': {
+                'MGA': ['MGA Zone','MGA Easting','MGA Northing'],
+                }
+        }
+
+        req_coord_fields = {
+            'MGA': ['mga_zone','mga_easting','mga_northing'],
+            'FD Grid': ['fd_letter','fd_number','fd_tenths'],
+            'Lat/Long': ['lat_decimal','lat_degrees','lat_minutes', 'lon_decimal','lon_degrees','lon_minutes'],
+        }
+
+        req_activity_fields = [
+            'FIRE DETECTED',
+            'FIRE REPORT COMPILED',
+        ]
+
+        if self.cleaned_data['init_authorised_by']:
+            # check all required fields
+            #import ipdb; ipdb.set_trace()
+            [self.add_error(field, 'This field is required.') for field in req_fields if not self.cleaned_data.has_key(field) or not self.cleaned_data[field]]
+
+            # check if 'Other' has been selected from drop down and field has been set
+            for field in req_dep_fields.keys():
+                if self.cleaned_data.has_key(field) and 'other' in str(self.cleaned_data[field]).lower():
+                    other_field = self.cleaned_data[req_dep_fields[field]]
+                    if not other_field:
+                        self.add_error(req_dep_fields[field], 'This field is required.')
+
+            coord_type = [i[1] for i in Bushfire.COORD_TYPE_CHOICES if i[0]==self.cleaned_data['coord_type']][0]
+            if coord_type:
+                #import ipdb; ipdb.set_trace()
+                for field in req_coord_fields[coord_type]:
+                    if self.cleaned_data.has_key(field) and not self.cleaned_data[field]:
+                        self.add_error(field, 'This field is required.')
+
+            #import ipdb; ipdb.set_trace()
+            #if missing_fields:
+            #    raise ValidationError('Cannot Authorise, must input required fields: {}'.format(', '.join([i.replace('_', ' ').title() for i in missing_fields])))
 
 
 from bushfire.models import (BushfireTest2, Activity2)
@@ -275,53 +365,50 @@ class BushfireTestForm(forms.ModelForm):
         fields = ('region', 'district')
 
 
-class BaseActivityFormSet(BaseFormSet):
+#class BaseActivityFormSet(BaseFormSet):
+class BaseActivityFormSet(BaseInlineFormSet):
     def clean(self):
         """
-        Adds validation to check that no two links have the same anchor or URL
-        and that all links have both an anchor and URL.
+        Adds validation to check:
+            1. no duplicate activities
+            2. required activities have been selected
         """
-        import ipdb; ipdb.set_trace()
+        #import ipdb; ipdb.set_trace()
         if any(self.errors):
+            import ipdb; ipdb.set_trace()
             return
 
         activities = []
         dates = []
         duplicates = False
+        required_activities = ['FIRE DETECTED*', 'FIRE REPORT COMPILED*']
 
+        #import ipdb; ipdb.set_trace()
         for form in self.forms:
             if form.cleaned_data:
-                activity = form.cleaned_data['activity']
-                date = form.cleaned_data['date']
+                activity = form.cleaned_data['activity'] if form.cleaned_data.has_key('activity') else None
+                date = form.cleaned_data['date'] if form.cleaned_data.has_key('date') else None
+                remove = form.cleaned_data['DELETE'] if form.cleaned_data.has_key('DELETE') else False
 
-                # Check that no two links have the same anchor or URL
-                if activity:
-                    if activity in activities:
-                        duplicates = True
-                    activities.append(activity)
+                if not remove:
+                    # Check that no two links have the same anchor or URL
+                    if activity:
+                        if activity.name in activities:
+                            duplicates = True
+                        activities.append(activity.name)
 
-                if duplicates:
-                    raise forms.ValidationError(
-                        'Activities must have unique.',
-                        code='duplicate_activity'
-                    )
+                    if duplicates:
+                        form.add_error('activity', 'Duplicate: must be unique')
 
-                # Check that all links have both an anchor and URL
-                if activity and not date:
-                    raise forms.ValidationError(
-                        'All Activities must have a date',
-                        code='missing_date'
-                    )
-                elif date and not activity:
-                    raise forms.ValidationError(
-                        'All Activities must have both an activity and date.',
-                        code='missing_date'
-                    )
+        # check required activities have been selected
+        if not set(required_activities).issubset(activities) and self.forms:
+            form.add_error('__all__', 'Must select required Activities: {}'.format(', '.join(required_activities)))
+
 
 
 ActivityFormSet2            = inlineformset_factory(BushfireTest2, Activity2, extra=1, max_num=7, can_delete=True)
-ActivityFormSet             = inlineformset_factory(Bushfire, Activity, extra=1, max_num=7, can_delete=True)
-#ActivityFormSet             = inlineformset_factory(Bushfire, Activity, form=_ActivityForm, formset=BaseActivityFormSet, extra=1, max_num=7, can_delete=True)
+#ActivityFormSet             = inlineformset_factory(Bushfire, Activity, form=_ActivityForm, extra=1, max_num=7, can_delete=True)
+ActivityFormSet             = inlineformset_factory(Bushfire, Activity, formset=BaseActivityFormSet, extra=1, max_num=7,  min_num=2, can_delete=True)
 #ActivityFormSet             = formset_factory(_ActivityForm, formset=BaseActivityFormSet, extra=1, max_num=7, can_delete=True)
 ResponseFormSet             = inlineformset_factory(Bushfire, Response, extra=1, max_num=13, can_delete=True)
 AreaBurntFormSet            = inlineformset_factory(Bushfire, AreaBurnt, extra=1, can_delete=True)

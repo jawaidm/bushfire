@@ -16,6 +16,7 @@ from bushfire.forms import (BushfireForm, BushfireCreateForm, BushfireInitUpdate
 from bushfire.utils import breadcrumbs_li
 from django.db import IntegrityError, transaction
 from django.contrib import messages
+from django.forms import ValidationError
 
 class BushfireView(generic.ListView):
     model = Bushfire
@@ -240,7 +241,8 @@ class BushfireInitUpdateView(UpdateView):
         area_burnt_formset      = AreaBurntFormSet(self.request.POST, prefix='area_burnt_fs')
         attending_org_formset   = AttendingOrganisationFormSet(self.request.POST, prefix='attending_org_fs')
 
-        if form.is_valid() and activity_formset.is_valid():
+        #import ipdb; ipdb.set_trace()
+        if form.is_valid() and activity_formset.is_valid() and area_burnt_formset.is_valid() and attending_org_formset.is_valid():
             #self.object = self.get_object()
             return self.form_valid(request,
                 form,
@@ -249,10 +251,9 @@ class BushfireInitUpdateView(UpdateView):
                 attending_org_formset,
             )
         else:
-            import ipdb; ipdb.set_trace()
-            activity_formset        = ActivityFormSet(prefix='activity_fs')
-            area_burnt_formset      = AreaBurntFormSet(prefix='area_burnt_fs')
-            attending_org_formset   = AttendingOrganisationFormSet(prefix='attending_org_fs')
+#            activity_formset        = ActivityFormSet(instance=self.object, prefix='activity_fs')
+#            area_burnt_formset      = AreaBurntFormSet(instance=self.object, prefix='area_burnt_fs')
+#            attending_org_formset   = AttendingOrganisationFormSet(instance=self.object, prefix='attending_org_fs')
 
             #self.object = self.get_object()
             return self.form_invalid(
@@ -270,7 +271,6 @@ class BushfireInitUpdateView(UpdateView):
             attending_org_formset,
             kwargs,
         ):
-        import ipdb; ipdb.set_trace()
         context = {
             'form': form,
             'activity_formset': activity_formset,
@@ -285,7 +285,6 @@ class BushfireInitUpdateView(UpdateView):
             area_burnt_formset,
             attending_org_formset,
         ):
-        import ipdb; ipdb.set_trace()
         self.object = form.save(commit=False)
         if not self.object.creator:
             self.object.creator_id = 1 #User.objects.all()[0] #request.user
@@ -313,6 +312,8 @@ class BushfireInitUpdateView(UpdateView):
     def update_activity_fs(self, activity_formset):
         #activity_formset.instance = self.object
         new_fs_object = []
+        activities = []
+
         for form in activity_formset:
             if form.is_valid():
                 activity = form.cleaned_data.get('activity')

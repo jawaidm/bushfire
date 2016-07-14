@@ -132,9 +132,34 @@ table, tr, td {
             <font color="red"><li>{{ field.label }}: {{ field.errors|striptags }}</li></font>
             {% endif %}
         {% endfor %}
-        {{ form.non_field_errors  }}
+
+        {% if form.non_field_errors %}
+            {{ form.non_field_errors  }}
+        {% else %}
+            <p>**********</p>
+        {% endif %}
+
     </div>
 {% endif %}
+
+{% if activity_formset.errors %}
+    <div class="alert alert-error">
+        <button type="button" class="close" data-dismiss="alert">×</button>
+        {% for fs in activity_formset %} 
+            {% for field in fs %} 
+                {% if field.errors %}
+                <font color="red"><li>{{ field.label }}: {{ field.errors|striptags }}</li></font>
+                {% endif %}
+            {% endfor %}
+            {% if fs.non_field_errors %}
+                {{ fs.non_field_errors  }}
+            {% endif %}
+        {% endfor %}
+
+    </div>
+{% endif %}
+
+
 
 
 <h1>Bushfire Detail</h1>
@@ -244,7 +269,8 @@ table, tr, td {
             <th></th>
             <th>Activity</th>
             <th>Date</th>
-            {% for fs in activity_formset.forms %}
+            <th></th>
+            {% for fs in activity_formset %}
             <tr>
                <td>
                     {% if fs.instance.pk %}{{ fs.DELETE }}{% endif %}
@@ -252,6 +278,16 @@ table, tr, td {
                 </td>
                <td>{{ fs.activity }}</td>
                <td>{{ fs.date }}</td>
+
+               <td>
+               {% for field in fs %} 
+                    {% if field.errors %}
+                        <font color="red"><li>{{ field.label }}: {{ field.errors|striptags }}</li></font>
+                    {% endif %}
+               {% endfor %}
+
+               </td>
+
             </tr>
             {% endfor %}
         </tbody>
@@ -313,6 +349,7 @@ table, tr, td {
         formCssClass: 'activity_fs',
         addText: '<i class="icon-plus"></i> add another activity',
         deleteText: '<i class="icon-remove"></i>'
+
     });
 
 // $('[id^=""]').hide() // starts with 

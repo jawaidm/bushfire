@@ -183,9 +183,9 @@ class BushfireBase(Audit):
     name = models.CharField(max_length=100, verbose_name="Fire Name")
     incident_no = models.CharField(verbose_name="Fire Incident No.", max_length=10)
     season = models.CharField(max_length=9)
-    dfes_incident_no = models.CharField(verbose_name="DFES Incident No.", max_length=10)
+    dfes_incident_no = models.CharField(verbose_name="DFES Incident No.", max_length=10, null=True, blank=True)
     job_code = models.CharField(verbose_name="Job Code", max_length=10, null=True, blank=True)
-    potential_fire_level = models.PositiveSmallIntegerField(choices=FIRE_LEVEL_CHOICES)
+    potential_fire_level = models.PositiveSmallIntegerField(choices=FIRE_LEVEL_CHOICES, null=True, blank=True)
 
     authorised_by = models.ForeignKey(User, verbose_name="Authorised By", blank=True, null=True)
     authorised_date = models.DateTimeField(verbose_name='Authorised Date', default=timezone.now, null=True, blank=True)
@@ -234,7 +234,7 @@ class BushfireBase(Audit):
 
     # Reporter
     source = models.ForeignKey('Source', verbose_name="Reported By", null=True, blank=True)
-    cause = models.ForeignKey('Cause')
+    cause = models.ForeignKey('Cause', null=True, blank=True)
     arson_squad_notified = models.BooleanField(verbose_name="Arson Squad Notified", default=False)
     #prescription = models.ForeignKey(Prescription, verbose_name="ePFP (if cause is Escape)", related_name='prescribed_burn', null=True, blank=True)
     prescription = models.ForeignKey('Prescription', verbose_name="Pres Burn ID", null=True, blank=True)
@@ -250,7 +250,7 @@ class BushfireBase(Audit):
     ops_point = models.CharField(verbose_name="OPS Point (grid ref)", max_length=50, null=True, blank=True)
     communications = models.CharField(verbose_name='Communication', max_length=50, null=True, blank=True)
     weather = models.CharField(max_length=50, null=True, blank=True)
-    field_officer = models.ForeignKey(User, verbose_name="Field Officer", related_name='init_field_officer')
+    field_officer = models.ForeignKey(User, verbose_name="Field Officer", null=True, blank=True, related_name='init_field_officer')
     init_authorised_by = models.ForeignKey(User, verbose_name="Authorised By", blank=True, null=True, related_name='init_auth_by')
     init_authorised_date = models.DateTimeField(verbose_name='Authorised Date', default=timezone.now, null=True, blank=True)
 
@@ -264,7 +264,7 @@ class BushfireBase(Audit):
     rating = models.ForeignKey('PriorityRating', verbose_name="Area Priority Rating", null=True, blank=True)
 
     # First Attack
-    first_attack = models.ForeignKey('Agency', verbose_name="First Attack Agency", related_name='first_attack')
+    first_attack = models.ForeignKey('Agency', verbose_name="First Attack Agency", null=True, blank=True, related_name='first_attack')
     hazard_mgt = models.ForeignKey('Agency', verbose_name="Hazard Management Agency", null=True, blank=True, related_name='hazard_mgt')
     initial_control = models.ForeignKey('Agency', verbose_name="Initial Controlling Agency", null=True, blank=True, related_name='initial_control')
     final_control = models.ForeignKey('Agency', verbose_name="Final Controlling Agency", null=True, blank=True, related_name='final_control')
@@ -272,7 +272,7 @@ class BushfireBase(Audit):
 
     # Initial Misc
     #cause = models.ForeignKey(Cause)
-    known_possible = models.PositiveSmallIntegerField(choices=CAUSE_CHOICES, verbose_name="Known/Possible")
+    known_possible = models.PositiveSmallIntegerField(choices=CAUSE_CHOICES, verbose_name="Known/Possible", null=True, blank=True)
     other_cause = models.CharField(verbose_name='Other', max_length=50, null=True, blank=True)
     investigation_req = models.BooleanField(verbose_name="Invest'n Required", default=False)
 
@@ -380,7 +380,7 @@ class Bushfire(BushfireBase):
         unique_together = ('district', 'incident_no', 'season')
 
     def __str__(self):
-        return ', '.join([self.name, self.district.name, self.season, self.incident_no])
+        return ', '.join([self.name, self.district, self.season, self.incident_no])
 
 
 @python_2_unicode_compatible

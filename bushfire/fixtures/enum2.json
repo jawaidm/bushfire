@@ -832,7 +832,7 @@
     "pk": 1,
     "model": "bushfire.activitytype",
     "fields": {
-        "name": "FIRE DETECTED"
+        "name": "FIRE DETECTED*"
     }
 },
 {
@@ -876,7 +876,15 @@
     "fields": {
         "name": "FIRE SAFE"
     }
+},
+{
+    "pk": 8,
+    "model": "bushfire.activitytype",
+    "fields": {
+        "name": "FIRE REPORT COMPILED*"
+    }
 }
+
 
 
 
