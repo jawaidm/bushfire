@@ -63,12 +63,27 @@ table, tr, td {
     border: none;
 }
 
+.navbar-fixed-bottom {
+  background-color: #F6F6F6;
+  background-image: none;
+  background-repeat: no-repeat;
+ }
+
+.btn {
+  vertical-align: top;
+}
+
+body { padding-bottom: 70px; }
+
   </style>
   {% endblock %}
 
   {% block extrastyle %}
   <link rel="stylesheet" href="{% static "css/jquery-ui-1.11.4.min.css" %}">
   <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+
+
+
   {% comment %}
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
   {% endcomment %}
@@ -335,8 +350,18 @@ table, tr, td {
 
 
 
-    <hr><br>
-  <input type="submit" value="Save" />
+
+<div class="navbar navbar-fixed-bottom">
+  <div class="navbar-inner">
+    <div class="container">
+      <p class="pull-right">
+        <input type="submit" value="Save" class="btn btn-primary btn-success" name="_save" />
+        <a href="javascript: history.go(-1)" class="btn btn-danger">Cancel</a>
+      </p>
+    </div>
+  </div>
+</div>
+
 </form>
 
 

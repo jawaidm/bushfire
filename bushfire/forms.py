@@ -365,7 +365,6 @@ class BushfireTestForm(forms.ModelForm):
         fields = ('region', 'district')
 
 
-#class BaseActivityFormSet(BaseFormSet):
 class BaseActivityFormSet(BaseInlineFormSet):
     def clean(self):
         """
@@ -400,9 +399,10 @@ class BaseActivityFormSet(BaseInlineFormSet):
                     if duplicates:
                         form.add_error('activity', 'Duplicate: must be unique')
 
-        # check required activities have been selected
-        if not set(required_activities).issubset(activities) and self.forms:
-            form.add_error('__all__', 'Must select required Activities: {}'.format(', '.join(required_activities)))
+        # check required activities have been selected, only when main form has been authorised
+        if self.data['init_authorised_by']:
+            if not set(required_activities).issubset(activities) and self.forms:
+                form.add_error('__all__', 'Must select required Activities: {}'.format(', '.join(required_activities)))
 
 
 
