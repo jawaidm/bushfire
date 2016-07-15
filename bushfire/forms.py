@@ -390,7 +390,7 @@ class BaseActivityFormSet(BaseInlineFormSet):
                 remove = form.cleaned_data['DELETE'] if form.cleaned_data.has_key('DELETE') else False
 
                 if not remove:
-                    # Check that no two links have the same anchor or URL
+                    # Check that no two records have the same activity
                     if activity:
                         if activity.name in activities:
                             duplicates = True
@@ -405,16 +405,81 @@ class BaseActivityFormSet(BaseInlineFormSet):
                 form.add_error('__all__', 'Must select required Activities: {}'.format(', '.join(required_activities)))
 
 
+class BaseAreaBurntFormSet(BaseInlineFormSet):
+    def clean(self):
+        """
+        Adds validation to check:
+            1. no duplicate (tenure, fuel_type) combination
+        """
+        if any(self.errors):
+            return
+
+        duplicates = False
+        tenures = []
+
+        #import ipdb; ipdb.set_trace()
+        for form in self.forms:
+            if form.cleaned_data:
+                tenure = form.cleaned_data['tenure'] if form.cleaned_data.has_key('tenure') else None
+                fuel_type = form.cleaned_data['fuel_type'] if form.cleaned_data.has_key('fuel_type') else None
+                area = form.cleaned_data['area'] if form.cleaned_data.has_key('area') else None
+                remove = form.cleaned_data['DELETE'] if form.cleaned_data.has_key('DELETE') else False
+
+                if not remove:
+                    # Check that no two records have the same (tenure and fuel_type) combination
+                    if tenure and fuel_type and area:
+                        if set([(tenure.name, fuel_type.name)]).issubset(tenures):
+                            duplicates = True
+                        tenures.append((tenure.name, fuel_type.name))
+
+                    if duplicates:
+                        form.add_error('tenure', 'Duplicate (Tenure - Fuel Type): must be unique')
+
+
+class BaseAttendingOrganisationFormSet(BaseInlineFormSet):
+    def clean(self):
+        """
+        Adds validation to check:
+            1. no duplicate organisation
+        """
+        if any(self.errors):
+            return
+
+        duplicates = False
+        organisations = []
+
+        #import ipdb; ipdb.set_trace()
+        for form in self.forms:
+            if form.cleaned_data:
+                name = form.cleaned_data['name'] if form.cleaned_data.has_key('name') else None
+                other = form.cleaned_data['other'] if form.cleaned_data.has_key('other') else None
+                remove = form.cleaned_data['DELETE'] if form.cleaned_data.has_key('DELETE') else False
+
+                if not remove:
+                    # Check that no two records have the same organisation (name)
+                    if name:
+                        if name in organisations:
+                            duplicates = True
+                        organisations.append(name)
+
+                    if duplicates:
+                        form.add_error('name', 'Duplicate Organisation: must be unique')
+
+                    if 'other' in name.name.lower() and not other:
+                        form.add_error('name', 'Must specify other organisation')
+
+
+
+
 
 ActivityFormSet2            = inlineformset_factory(BushfireTest2, Activity2, extra=1, max_num=7, can_delete=True)
-#ActivityFormSet             = inlineformset_factory(Bushfire, Activity, form=_ActivityForm, extra=1, max_num=7, can_delete=True)
 ActivityFormSet             = inlineformset_factory(Bushfire, Activity, formset=BaseActivityFormSet, extra=1, max_num=7,  min_num=2, can_delete=True)
-#ActivityFormSet             = formset_factory(_ActivityForm, formset=BaseActivityFormSet, extra=1, max_num=7, can_delete=True)
 ResponseFormSet             = inlineformset_factory(Bushfire, Response, extra=1, max_num=13, can_delete=True)
-AreaBurntFormSet            = inlineformset_factory(Bushfire, AreaBurnt, extra=1, can_delete=True)
+AreaBurntFormSet            = inlineformset_factory(Bushfire, AreaBurnt, formset=BaseAreaBurntFormSet, extra=1, can_delete=True)
 GroundForcesFormSet         = inlineformset_factory(Bushfire, GroundForces, extra=1, max_num=3, can_delete=True)
 AerialForcesFormSet         = inlineformset_factory(Bushfire, AerialForces, extra=1, max_num=2, can_delete=True)
-AttendingOrganisationFormSet= inlineformset_factory(Bushfire, AttendingOrganisation, extra=1, max_num=11, can_delete=True)
+#AttendingOrganisationFormSet= inlineformset_factory(Bushfire, AttendingOrganisation, extra=1, max_num=11, can_delete=True)
+AttendingOrganisationFormSet= inlineformset_factory(Bushfire, AttendingOrganisation, formset=BaseAttendingOrganisationFormSet, extra=1, max_num=11, can_delete=True)
 FireBehaviourFormSet        = inlineformset_factory(Bushfire, FireBehaviour, extra=1, can_delete=True)
 LegalFormSet                = inlineformset_factory(Bushfire, Legal, extra=1, max_num=5*12, can_delete=True)
 PrivateDamageFormSet        = inlineformset_factory(Bushfire, PrivateDamage, extra=1, max_num=12, can_delete=True)

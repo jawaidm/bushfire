@@ -7,6 +7,7 @@
             <th>Fuel Type</th>
             <th>Area (ha)</th>
             <th>Point of Origin</th>
+            <th></th>
             {% for fs in area_burnt_formset %}
             <tr>
                <td>
@@ -17,6 +18,15 @@
                <td>{{ fs.fuel_type }}</td>
                <td>{{ fs.area }}</td>
                <td>{{ fs.origin }}</td>
+
+               <td>
+               {% for field in fs %} 
+                    {% if field.errors %}
+                        <font color="red"><li>{{ field.label }}: {{ field.errors|striptags }}</li></font>
+                    {% endif %}
+               {% endfor %}
+               </td>
+
             </tr>
             {% endfor %}
         </tbody>
@@ -48,6 +58,7 @@
             <th></th>
             <th>Name</th>
             <th>Other</th>
+            <th></th>
             {% for fs in attending_org_formset %}
             <tr>
                <td>
@@ -56,6 +67,16 @@
                 </td>
                <td>{{ fs.name }}</td>
                <td>{{ fs.other }}</td>
+
+               <td>
+               {% for field in fs %} 
+                    {% if field.errors %}
+                        <font color="red"><li>{{ field.label }}: {{ field.errors|striptags }}</li></font>
+                    {% endif %}
+               {% endfor %}
+               </td>
+
+
             </tr>
             {% endfor %}
         </tbody>

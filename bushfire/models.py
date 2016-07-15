@@ -822,7 +822,7 @@ class FireBehaviour(models.Model):
 
 @python_2_unicode_compatible
 class AttendingOrganisation(models.Model):
-    name = models.ForeignKey('Organisation', null=True, blank=True)
+    name = models.ForeignKey('Organisation')
     other = models.CharField(max_length=25, null=True, blank=True)
     bushfire = models.ForeignKey(Bushfire, related_name='attending_organisations')
 

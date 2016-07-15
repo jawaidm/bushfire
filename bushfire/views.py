@@ -363,7 +363,8 @@ class BushfireInitUpdateView(UpdateView):
                 other = form.cleaned_data.get('other')
                 remove = form.cleaned_data.get('DELETE')
 
-                if not remove and (name and other):
+                #if not remove and (name and other):
+                if not remove and name:
                     new_fs_object.append(AttendingOrganisation(bushfire=self.object, name=name, other=other))
 
         try:
