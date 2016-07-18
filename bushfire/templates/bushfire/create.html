@@ -102,31 +102,41 @@ body { padding-bottom: 70px; }
     $(function(){
         if ($('#id_fire_not_found').is(':checked')) {
             $('#id_latlong').hide();
-            $('#id_mga_zone').hide();
+            $('#id_mga').hide();
             $('#id_fd_grid').hide();
             $('#id_coord_type').prop('selectedIndex', 0);
         } else {
             var coord_type = $('#id_coord_type :selected').text();
             if (coord_type.indexOf('---') > -1) {
                 $('#id_latlong').hide();
-                $('#id_mga_zone').hide();
+                $('#id_mga').hide();
                 $('#id_fd_grid').hide();
                 $('#id_fire_not_found').prop('checked', true);
                 $('#id_coord_type').prop('selectedIndex', 0);
             } else if (coord_type=='Lat/Long') {
                 $('#id_latlong').show();
-                $('#id_mga_zone').hide();
                 $('#id_fd_grid').hide();
                 $('#id_fire_not_found').prop('checked', false);
+
+                // calc MGA
+                $('#id_mga').show();
+                $('#id_mga').find('input, textarea, button, select').prop('disabled',true);
+                $('#id_latlong').find('input, textarea, button, select').prop('disabled',false);
+
             } else if (coord_type=='MGA') {
-                $('#id_mga_zone').show();
-                $('#id_latlong').hide();
+                $('#id_mga').show();
                 $('#id_fd_grid').hide();
                 $('#id_fire_not_found').prop('checked', false);
+
+                // calc Lat/Long
+                $('#id_latlong').show();
+                $('#id_latlong').find('input, textarea, button, select').prop('disabled',true);
+                $('#id_mga').find('input, textarea, button, select').prop('disabled',false);
+
             } else if (coord_type=='FD Grid') {
                 $('#id_fd_grid').show();
                 $('#id_latlong').hide();
-                $('#id_mga_zone').hide();
+                $('#id_mga').hide();
                 $('#id_fire_not_found').prop('checked', false);
             }
         }
@@ -465,6 +475,20 @@ body { padding-bottom: 70px; }
         {% endif %}
     });
 
+
+/*
+    function convert_origin() {
+        if ($('#id_mga_zone').val() != '' && $('#id_mga_easting').val() != '' && $('#id_mga_northing').val() != '') {
+            $('#id_lat_decimal').val($('#id_mga_zone').val()/2.0);
+        }
+
+        if ($('#id_lat_decimal').val() != '' && $('#id_lat_degrees').val() != '' && $('#id_lat_minutes').val() != '' && $('#id_lon_decimal').val() != '' && $('#id_lon_degrees').val() != '' && $('#id_lon_minutes').val() != '') {
+            $('#id_mga_zone').val($('#id_lat_decimal').val()*2.0);
+        }
+
+    };
+*/
+
     //$('.activity-formset tbody tr').formset({
     $('.activity-formset tbody tr').formset({
         prefix: '{{ activity_formset.prefix }}',
@@ -481,7 +505,7 @@ $('[id$="-date"]').datetimepicker({ format: "Y-m-d H:i" }); //ends with
 $('#id_fire_not_found').click(function() {
     if ($(this).is(':checked')) {
         $('#id_latlong').hide();
-        $('#id_mga_zone').hide();
+        $('#id_mga').hide();
         $('#id_fd_grid').hide();
         $('#id_coord_type').prop('selectedIndex', 0);
     } else {
@@ -489,7 +513,7 @@ $('#id_fire_not_found').click(function() {
         //console.log('Co Ord Type' + coord_type);
         if (coord_type.indexOf('---') > -1) {
             $('#id_latlong').hide();
-            $('#id_mga_zone').hide();
+            $('#id_mga').hide();
             $('#id_fd_grid').hide();
             $('#id_fire_not_found').prop('checked', true);
             $('#id_coord_type').prop('selectedIndex', 0);
@@ -499,10 +523,10 @@ $('#id_fire_not_found').click(function() {
             $('#id_fire_not_found').prop('checked', false);
 
             // calc MGA
-            $('#id_mga_zone').show();
-            $('#id_mga_zone').prop("readonly", true);
+            $('#id_mga').show();
+            $('#id_mga').prop("readonly", true);
         } else if (coord_type=='MGA') {
-            $('#id_mga_zone').show();
+            $('#id_mga').show();
             $('#id_latlong').hide();
             $('#id_fd_grid').hide();
             $('#id_fire_not_found').prop('checked', false);
@@ -513,7 +537,7 @@ $('#id_fire_not_found').click(function() {
         } else if (coord_type=='FD Grid') {
             $('#id_fd_grid').show();
             $('#id_latlong').hide();
-            $('#id_mga_zone').hide();
+            $('#id_mga').hide();
             $('#id_fire_not_found').prop('checked', false);
         }
     }
@@ -524,22 +548,25 @@ $('#id_coord_type').on('change', function() {
     //console.log(' *** Co Ord Type' + coord_type);
     if (coord_type.indexOf('---') > -1) {
         $('#id_latlong').hide();
-        $('#id_mga_zone').hide();
+        $('#id_mga').hide();
         $('#id_fd_grid').hide();
         $('#id_fire_not_found').prop('checked', true);
         $('#id_coord_type').prop('selectedIndex', 0);
     } else if (coord_type=='Lat/Long') {
         $('#id_latlong').show();
-        $('#id_mga_zone').hide();
+        $('#id_mga').hide();
         $('#id_fd_grid').hide();
         $('#id_fire_not_found').prop('checked', false);
 
         // calc MGA
-        $('#id_mga_zone').show();
-        $('#id_mga_zone').find('input, textarea, button, select').prop('disabled',true);
+        $('#id_mga').show();
+        $('#id_mga').find('input, textarea, button, select').prop('disabled',true);
         $('#id_latlong').find('input, textarea, button, select').prop('disabled',false);
+
+        //$('#id_mga_zone').val(111);
+        //convert_origin();
     } else if (coord_type=='MGA') {
-        $('#id_mga_zone').show();
+        $('#id_mga').show();
         $('#id_latlong').hide();
         $('#id_fd_grid').hide();
         $('#id_fire_not_found').prop('checked', false);
@@ -547,11 +574,14 @@ $('#id_coord_type').on('change', function() {
         // calc Lat/Long
         $('#id_latlong').show();
         $('#id_latlong').find('input, textarea, button, select').prop('disabled',true);
-        $('#id_mga_zone').find('input, textarea, button, select').prop('disabled',false);
+        $('#id_mga').find('input, textarea, button, select').prop('disabled',false);
+
+        //$('#id_lat_decimal').val(222);
+        //convert_origin();
     } else if (coord_type=='FD Grid') {
         $('#id_fd_grid').show();
         $('#id_latlong').hide();
-        $('#id_mga_zone').hide();
+        $('#id_mga').hide();
         $('#id_fire_not_found').prop('checked', false);
     }
 });

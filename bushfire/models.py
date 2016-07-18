@@ -119,13 +119,13 @@ class FuelType(models.Model):
 
 
 class _InitialBushfire(Audit):
-    COORD_TYPE_1 = 1
-    COORD_TYPE_2 = 2
-    COORD_TYPE_3 = 3
+    COORD_TYPE_MGAZONE = 1
+    COORD_TYPE_LATLONG = 2
+    COORD_TYPE_FDGRID = 3
     COORD_TYPE_CHOICES = (
-        (COORD_TYPE_1, 'MGA'),
-        (COORD_TYPE_2, 'Lat/Long'),
-        (COORD_TYPE_3, 'FD Grid'),
+        (COORD_TYPE_MGAZONE, 'MGA'),
+        (COORD_TYPE_LATLONG, 'Lat/Long'),
+        (COORD_TYPE_FDGRID, 'FD Grid'),
     )
 
 
@@ -190,14 +190,14 @@ class BushfireBase(Audit):
     authorised_by = models.ForeignKey(User, verbose_name="Authorised By", blank=True, null=True)
     authorised_date = models.DateTimeField(verbose_name='Authorised Date', default=timezone.now, null=True, blank=True)
 
-    # Origin
-    COORD_TYPE_1 = 1
-    COORD_TYPE_2 = 2
-    COORD_TYPE_3 = 3
+    # OriginFDGRID
+    COORD_TYPE_MGAZONE = 1
+    COORD_TYPE_LATLONG = 2
+    COORD_TYPE_FDGRID = 3
     COORD_TYPE_CHOICES = (
-        (COORD_TYPE_1, 'MGA'),
-        (COORD_TYPE_2, 'Lat/Long'),
-        (COORD_TYPE_3, 'FD Grid'),
+        (COORD_TYPE_MGAZONE, 'MGA'),
+        (COORD_TYPE_LATLONG, 'Lat/Long'),
+        (COORD_TYPE_FDGRID, 'FD Grid'),
     )
 
     CAUSE_CHOICES = (
@@ -589,41 +589,6 @@ Point of Origin
 #        return self.direction.name
 
 
-#@python_2_unicode_compatible
-#class InitialOrigin(models.Model):
-#    COORD_TYPE_1 = 1
-#    COORD_TYPE_2 = 2
-#    COORD_TYPE_3 = 3
-#    COORD_TYPE_CHOICES = (
-#        (COORD_TYPE_1, 'MGA'),
-#        (COORD_TYPE_2, 'Lat/Long'),
-#        (COORD_TYPE_3, 'FD Grid'),
-#    )
-#
-#    coord_type = models.PositiveSmallIntegerField(choices=COORD_TYPE_CHOICES, verbose_name="Coordinate Type")
-#    fire_not_found = models.BooleanField(default=False)
-#    # TODO number of dp
-#    lat_decimal = models.DecimalField(verbose_name="Latitude (Decimal)", max_digits=12, decimal_places=1, validators=[MinValueValidator(0)], null=True, blank=True)
-#    lat_degrees = models.DecimalField(verbose_name="Latitude (Degrees)", max_digits=12, decimal_places=1, validators=[MinValueValidator(0)], null=True, blank=True)
-#    lat_minutes = models.DecimalField(verbose_name="Latitude (Minutes)", max_digits=12, decimal_places=1, validators=[MinValueValidator(0)], null=True, blank=True)
-#    lon_decimal = models.DecimalField(verbose_name="Longitude (Decimal)", max_digits=12, decimal_places=1, validators=[MinValueValidator(0)], null=True, blank=True)
-#    lon_degrees = models.DecimalField(verbose_name="Longitude (Degrees)", max_digits=12, decimal_places=1, validators=[MinValueValidator(0)], null=True, blank=True)
-#    lon_minutes = models.DecimalField(verbose_name="Longitude (Minutes)", max_digits=12, decimal_places=1, validators=[MinValueValidator(0)], null=True, blank=True)
-#
-#    mga_zone = models.DecimalField(verbose_name="MGA Zone", max_digits=12, decimal_places=1, validators=[MinValueValidator(0)], null=True, blank=True)
-#    mga_easting = models.DecimalField(verbose_name="MGA Easting", max_digits=12, decimal_places=1, validators=[MinValueValidator(0)], null=True, blank=True)
-#    mga_northing = models.DecimalField(verbose_name="MGA Northing", max_digits=12, decimal_places=1, validators=[MinValueValidator(0)], null=True, blank=True)
-#
-#    fd_letter = models.CharField(verbose_name="FD Letter", max_length=2, null=True, blank=True)
-#    fd_number = models.PositiveSmallIntegerField(verbose_name="FD Number", null=True, blank=True)
-#    fd_tenths = models.CharField(verbose_name="FD Tenths", max_length=2, null=True, blank=True)
-#
-#    initial_bushfire = models.OneToOneField(InitialBushfire, related_name='initial_origin')
-#
-#
-#    def __str__(self):
-#        return self.get_coord_type_display()
-
 @python_2_unicode_compatible
 class Location(models.Model):
     distance = models.DecimalField(
@@ -642,14 +607,15 @@ class Location(models.Model):
 
 @python_2_unicode_compatible
 class Origin(models.Model):
-    COORD_TYPE_1 = 1
-    COORD_TYPE_2 = 2
-    COORD_TYPE_3 = 3
+    COORD_TYPE_MGAZONE = 1
+    COORD_TYPE_LATLONG = 2
+    COORD_TYPE_FDGRID = 3
     COORD_TYPE_CHOICES = (
-        (COORD_TYPE_1, 'MGA'),
-        (COORD_TYPE_2, 'Lat/Long'),
-        (COORD_TYPE_3, 'FD Grid'),
+        (COORD_TYPE_MGAZONE, 'MGA'),
+        (COORD_TYPE_LATLONG, 'Lat/Long'),
+        (COORD_TYPE_FDGRID, 'FD Grid'),
     )
+
 
     coord_type = models.PositiveSmallIntegerField(choices=COORD_TYPE_CHOICES, verbose_name="Coordinate Type")
     fire_not_found = models.BooleanField(default=False)

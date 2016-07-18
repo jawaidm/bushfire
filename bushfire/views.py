@@ -13,7 +13,7 @@ from bushfire.forms import (BushfireForm, BushfireCreateForm, BushfireInitUpdate
         GroundForcesFormSet, AerialForcesFormSet, AttendingOrganisationFormSet, FireBehaviourFormSet,
         LegalFormSet, PrivateDamageFormSet, PublicDamageFormSet, CommentFormSet
     )
-from bushfire.utils import breadcrumbs_li
+from bushfire.utils import breadcrumbs_li, calc_coords
 from django.db import IntegrityError, transaction
 from django.contrib import messages
 from django.forms import ValidationError
@@ -119,6 +119,7 @@ class BushfireCreateView(generic.CreateView):
         self.object = form.save(commit=False)
         self.object.creator_id = 1 #User.objects.all()[0] #request.user
         self.object.modifier_id = 1 #User.objects.all()[0] #request.user
+        calc_coords(self.object)
         self.object.save()
         activities_updated = self.update_activity_fs(activity_formset)
         areas_burnt_updated = self.update_areas_burnt_fs(area_burnt_formset)
@@ -285,7 +286,9 @@ class BushfireInitUpdateView(UpdateView):
         if not self.object.creator:
             self.object.creator_id = 1 #User.objects.all()[0] #request.user
         self.object.modifier_id = 1 #User.objects.all()[0] #request.user
+        calc_coords(self.object)
         self.object.save()
+
         activities_updated = self.update_activity_fs(activity_formset)
         areas_burnt_updated = self.update_areas_burnt_fs(area_burnt_formset)
         attending_org_updated = self.update_attending_org_fs(attending_org_formset)
