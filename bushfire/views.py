@@ -214,9 +214,6 @@ class BushfireCreateView(generic.CreateView):
         activity_formset        = ActivityFormSet(instance=self.object, prefix='activity_fs') # self.object posts the initial data
         area_burnt_formset      = AreaBurntFormSet(instance=self.object, prefix='area_burnt_fs')
         attending_org_formset   = AttendingOrganisationFormSet(instance=self.object, prefix='attending_org_fs')
-#        activity_formset        = ActivityFormSet(instance=self.object, prefix='activity_fs') # self.object posts the initial data
-#        area_burnt_formset      = AreaBurntFormSet(prefix='area_burnt_fs')
-#        attending_org_formset   = AttendingOrganisationFormSet(prefix='attending_org_fs')
         context.update({'form': form,
                         'activity_formset': activity_formset,
                         'area_burnt_formset': area_burnt_formset,
@@ -241,7 +238,6 @@ class BushfireInitUpdateView(UpdateView):
         area_burnt_formset      = AreaBurntFormSet(self.request.POST, prefix='area_burnt_fs')
         attending_org_formset   = AttendingOrganisationFormSet(self.request.POST, prefix='attending_org_fs')
 
-        #import ipdb; ipdb.set_trace()
         if form.is_valid() and activity_formset.is_valid() and area_burnt_formset.is_valid() and attending_org_formset.is_valid():
             #self.object = self.get_object()
             return self.form_valid(request,

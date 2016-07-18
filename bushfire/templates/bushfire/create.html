@@ -140,11 +140,13 @@ body { padding-bottom: 70px; }
 {% block content %}
 
 {% if form.errors %}
+    <p>Form Errors</p>
     <div class="alert alert-error">
         <button type="button" class="close" data-dismiss="alert">×</button>
         {% for field in form %} 
             {% if field.errors %}
             <font color="red"><li>{{ field.label }}: {{ field.errors|striptags }}</li></font>
+            {{ field.meta  }}
             {% endif %}
         {% endfor %}
 
@@ -157,7 +159,8 @@ body { padding-bottom: 70px; }
     </div>
 {% endif %}
 
-{% if activity_formset.errors %}
+{% if activity_formset.total_error_count > 0 %}
+    <p>Activity Errors: {{ activity_formset.total_error_count }}</p>
     <div class="alert alert-error">
         <button type="button" class="close" data-dismiss="alert">×</button>
         {% for fs in activity_formset %} 
@@ -174,10 +177,28 @@ body { padding-bottom: 70px; }
     </div>
 {% endif %}
 
-{% if area_burnt_formset.errors %}
+{% if area_burnt_formset.total_error_count > 0 %}
+    <p>Area Burnt Errors: {{ area_burnt_formset.total_error_count }}</p>
     <div class="alert alert-error">
         <button type="button" class="close" data-dismiss="alert">×</button>
         {% for fs in area_burnt_formset %} 
+            {% for field in fs %} 
+                {% if field.errors %}
+                <font color="red"><li>{{ field.label }}: {{ field.errors|striptags }}</li></font>
+                {% endif %}
+            {% endfor %}
+            {% if fs.non_field_errors %}
+                {{ fs.non_field_errors  }}
+            {% endif %}
+        {% endfor %}
+    </div>
+{% endif %}
+
+{% if attending_org_formset.total_error_count > 0 %}
+    <p>Attending Organisation Errors: {{ attending_org_formset.total_error_count }}</p>
+    <div class="alert alert-error">
+        <button type="button" class="close" data-dismiss="alert">×</button>
+        {% for fs in attending_org_formset %} 
             {% for field in fs %} 
                 {% if field.errors %}
                 <font color="red"><li>{{ field.label }}: {{ field.errors|striptags }}</li></font>
@@ -330,22 +351,22 @@ body { padding-bottom: 70px; }
 
   <ul id="report-tabs" class="nav nav-tabs">
       <li id="origin-tab" class="active">
-          <a data-toggle="tab" href="#origin">
+          <a data-toggle="tab" href="#origin"><strong>
               <i class="icon-tag"></i>
               Point of Origin
-          </a>
+          </strong></a>
       </li>
       <li id="detail-tab">
-          <a data-toggle="tab" href="#detail">
+          <a data-toggle="tab" href="#detail"><strong>
               <i class="icon-tag"></i>
               Details
-          </a>
+          </strong></a>
       </li>
       <li id="comments-tab">
-          <a data-toggle="tab" href="#comments">
+          <a data-toggle="tab" href="#comments"><strong>
               <i class="icon-tag"></i>
               Comments
-          </a>
+          </strong></a>
       </li>
 
   </ul>
@@ -383,6 +404,66 @@ body { padding-bottom: 70px; }
 
 <script>
 
+    $(function(){
+        /**
+        Highlight tabs RED if error field is located in that tab
+        */
+        var origin = ['mga_zone', 'mga_easting', 'mga_northing', 'lat_decimal', 'lat_degrees', 'lat_minutes', 'lon_decimal', 'lon_degrees', 'lon_minutes', 'fd_letter', 'fd_number', 'fd_tenths'];
+        var detail = ['first_attack', 'other_agency', 'cause', 'known_possible', 'other_cause'];
+        var comments = ['field_officer'];
+        var tab_origin_error = false;
+        var tab_detail_error = false;
+        var tab_comments_error = false;
+
+        {% for field in form %} 
+            {% if field.errors %}
+                if (origin.indexOf("{{ field.name }}") > -1) {
+                    tab_origin_error = true;
+                }
+
+                if (detail.indexOf("{{ field.name }}") > -1) {
+                    tab_detail_error = true;
+                    console.log("***** " + "{{ field.name }} : {{ field.label }}: {{ field.errors|striptags }}");
+                }
+
+                if (comments.indexOf("{{ field.name }}") > -1) {
+                    tab_comments_error = true;
+                }
+
+                //console.log("MYTEST ***** " + "{{ field.name }} : {{ field.label }}: {{ field.errors|striptags }}");
+            {% endif %}
+        {% endfor %}
+
+        if (tab_origin_error) {
+            $( "#origin-tab" ).find( "a" ).css( "color", "red" );
+        } else {
+            $( "#origin-tab" ).find( "a" ).css( "color", "" );
+        }
+
+        if (tab_detail_error) {
+            $( "#detail-tab" ).find( "a" ).css( "color", "red" );
+        } else {
+            $( "#detail-tab" ).find( "a" ).css( "color", "" );
+        }
+
+        if (tab_comments_error) {
+            $( "#comments-tab" ).find( "a" ).css( "color", "red" );
+        } else {
+            $( "#comments-tab" ).find( "a" ).css( "color", "" );
+        }
+
+        {% if area_burnt_formset.total_error_count > 0 or attending_org_formset.total_error_count > 0 %}
+            $( "#detail-tab" ).find( "a" ).css( "color", "red" );
+            //console.log('RED area_burnt' + {{ area_burnt_formset.total_error_count }})
+            //console.log('RED attending_org' + {{ area_burnt_formset.total_error_count }})
+        {% else %}
+            if (! tab_detail_error) {
+                $( "#detail-tab" ).find( "a" ).css( "color", "" );
+                //console.log('GREEN area_burnt' + {{ area_burnt_formset.total_error_count }})
+                //console.log('GREEN attending_org' + {{ area_burnt_formset.total_error_count }})
+            }
+        {% endif %}
+    });
 
     //$('.activity-formset tbody tr').formset({
     $('.activity-formset tbody tr').formset({

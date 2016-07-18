@@ -327,10 +327,10 @@ class BushfireInitUpdateForm(forms.ModelForm):
                     if not other_field:
                         self.add_error(req_dep_fields[field], 'This field is required.')
 
-            coord_type = [i[1] for i in Bushfire.COORD_TYPE_CHOICES if i[0]==self.cleaned_data['coord_type']][0]
+            coord_type = [i[1] for i in Bushfire.COORD_TYPE_CHOICES if i[0]==self.cleaned_data['coord_type']]
             if coord_type:
                 #import ipdb; ipdb.set_trace()
-                for field in req_coord_fields[coord_type]:
+                for field in req_coord_fields[coord_type[0]]:
                     if self.cleaned_data.has_key(field) and not self.cleaned_data[field]:
                         self.add_error(field, 'This field is required.')
 
