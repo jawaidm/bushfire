@@ -1,8 +1,7 @@
 <h3>Tenure and Vegetation Affected</h3>
-<div id="id_areas_burnt" class="row formset areas-burnt-formset">
+<div id="id_areas_burnt" class="row formset area-burnt-formset">
     <table border="0" cellpadding="0" cellspacing="0">
         <tbody>
-            <th></th>
             <th>Tenure</th>
             <th>Fuel Type</th>
             <th>Area (ha)</th>
@@ -10,21 +9,19 @@
             <th></th>
             {% for fs in area_burnt_formset %}
             <tr>
-               <td>
-                    {% if fs.instance.pk %}{{ fs.DELETE }}{% endif %}
-                    {{ fs.id }}
-                </td>
                <td>{{ fs.tenure }}</td>
                <td>{{ fs.fuel_type }}</td>
                <td>{{ fs.area }}</td>
                <td>{{ fs.origin }}</td>
-
                <td>
-               {% for field in fs %} 
-                    {% if field.errors %}
-                        <font color="red"><li>{{ field.label }}: {{ field.errors|striptags }}</li></font>
-                    {% endif %}
-               {% endfor %}
+                    {% if fs.instance.pk %}{{ fs.DELETE }}{% endif %}
+                    {{ fs.id }}
+
+                    {% for field in fs %} 
+                        {% if field.errors %}
+                            <font color="red"><li>{{ field.label }}: {{ field.errors|striptags }}</li></font>
+                        {% endif %}
+                    {% endfor %}
                </td>
 
             </tr>
@@ -55,27 +52,23 @@
 <div id="id_attending_org" class="row formset attending-org-formset">
     <table border="0" cellpadding="0" cellspacing="0">
         <tbody>
-            <th></th>
             <th>Name</th>
             <th>Other</th>
             <th></th>
             {% for fs in attending_org_formset %}
             <tr>
+               <td>{{ fs.name }}</td>
+               <td>{{ fs.other }}</td>
                <td>
                     {% if fs.instance.pk %}{{ fs.DELETE }}{% endif %}
                     {{ fs.id }}
-                </td>
-               <td>{{ fs.name }}</td>
-               <td>{{ fs.other }}</td>
 
-               <td>
-               {% for field in fs %} 
-                    {% if field.errors %}
-                        <font color="red"><li>{{ field.label }}: {{ field.errors|striptags }}</li></font>
-                    {% endif %}
-               {% endfor %}
+                    {% for field in fs %} 
+                        {% if field.errors %}
+                            <font color="red"><li>{{ field.label }}: {{ field.errors|striptags }}</li></font>
+                        {% endif %}
+                    {% endfor %}
                </td>
-
 
             </tr>
             {% endfor %}
@@ -117,11 +110,12 @@
 
 <script>
 
-    $('.areas-burnt-formset tbody tr').formset({
-        prefix: '{{ areas_burnt_formset.prefix }}',
+    $('.area-burnt-formset tbody tr').formset({
+        prefix: '{{ area_burnt_formset.prefix }}',
         formCssClass: 'area_burnt_fs',
         addText: '<i class="icon-plus"></i> add another area burnt',
         deleteText: '<i class="icon-remove"></i>',
+        deleteCssClass: 'delete-row' + '-' + '{{ area_burnt_formset.prefix  }}',
     });
 
     $('.attending-org-formset tbody tr').formset({
@@ -129,6 +123,7 @@
         formCssClass: 'attending_org_fs',
         addText: '<i class="icon-plus"></i> add another attending organisation',
         deleteText: '<i class="icon-remove"></i>',
+        deleteCssClass: 'delete-row' + '-' + '{{ attending_org_formset.prefix  }}',
     });
 
     // $('[id^=""]').hide() // starts with 

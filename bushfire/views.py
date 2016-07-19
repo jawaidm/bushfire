@@ -829,7 +829,7 @@ class BushfireUpdateView(UpdateView):
         private_damage_formset  = PrivateDamageFormSet(instance=self.object, prefix='private_damage_fs')
         public_damage_formset   = PublicDamageFormSet(instance=self.object, prefix='public_damage_fs')
         comment_formset         = CommentFormSet(instance=self.object, prefix='comment_fs')
-        import ipdb; ipdb.set_trace()
+        #import ipdb; ipdb.set_trace()
         context.update({'form': form,
                         'activity_formset': activity_formset,
                         'response_formset': response_formset,
@@ -904,7 +904,7 @@ class BushfireCreateTest2View(generic.CreateView):
             form,
             activity_formset,
         ):
-        import ipdb; ipdb.set_trace()
+        #import ipdb; ipdb.set_trace()
         self.object = form.save()
         activities_updated = self.update_activity_fs(activity_formset)
 

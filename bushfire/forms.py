@@ -404,6 +404,10 @@ class BaseActivityFormSet(BaseInlineFormSet):
             if not set(required_activities).issubset(activities) and self.forms:
                 form.add_error('__all__', 'Must select required Activities: {}'.format(', '.join(required_activities)))
 
+#    class Meta:
+#        model = Activity
+#        exclude = ()
+
 
 class BaseAreaBurntFormSet(BaseInlineFormSet):
     def clean(self):
@@ -472,19 +476,33 @@ class BaseAttendingOrganisationFormSet(BaseInlineFormSet):
 
 
 
-ActivityFormSet2            = inlineformset_factory(BushfireTest2, Activity2, extra=1, max_num=7, can_delete=True)
-ActivityFormSet             = inlineformset_factory(Bushfire, Activity, formset=BaseActivityFormSet, extra=1, max_num=7,  min_num=2, can_delete=True)
-ResponseFormSet             = inlineformset_factory(Bushfire, Response, extra=1, max_num=13, can_delete=True)
-AreaBurntFormSet            = inlineformset_factory(Bushfire, AreaBurnt, formset=BaseAreaBurntFormSet, extra=1, can_delete=True)
-GroundForcesFormSet         = inlineformset_factory(Bushfire, GroundForces, extra=1, max_num=3, can_delete=True)
-AerialForcesFormSet         = inlineformset_factory(Bushfire, AerialForces, extra=1, max_num=2, can_delete=True)
-#AttendingOrganisationFormSet= inlineformset_factory(Bushfire, AttendingOrganisation, extra=1, max_num=11, can_delete=True)
-AttendingOrganisationFormSet= inlineformset_factory(Bushfire, AttendingOrganisation, formset=BaseAttendingOrganisationFormSet, extra=1, max_num=11, can_delete=True)
-FireBehaviourFormSet        = inlineformset_factory(Bushfire, FireBehaviour, extra=1, can_delete=True)
-LegalFormSet                = inlineformset_factory(Bushfire, Legal, extra=1, max_num=5*12, can_delete=True)
-PrivateDamageFormSet        = inlineformset_factory(Bushfire, PrivateDamage, extra=1, max_num=12, can_delete=True)
-PublicDamageFormSet         = inlineformset_factory(Bushfire, PublicDamage, extra=1, can_delete=True)
-CommentFormSet              = inlineformset_factory(Bushfire, Comment, extra=1, can_delete=True)
+#ActivityFormSet2            = inlineformset_factory(BushfireTest2, Activity2, extra=1, max_num=7, can_delete=True, exclude=())
+#ActivityFormSet             = inlineformset_factory(Bushfire, Activity, formset=BaseActivityFormSet, extra=1, max_num=7, min_num=2, can_delete=True, exclude=())
+#ResponseFormSet             = inlineformset_factory(Bushfire, Response, extra=0, max_num=13, can_delete=True, exclude=())
+#AreaBurntFormSet            = inlineformset_factory(Bushfire, AreaBurnt, formset=BaseAreaBurntFormSet, extra=1, can_delete=True, exclude=())
+#GroundForcesFormSet         = inlineformset_factory(Bushfire, GroundForces, extra=1, max_num=3, can_delete=True, exclude=())
+#AerialForcesFormSet         = inlineformset_factory(Bushfire, AerialForces, extra=1, max_num=2, can_delete=True, exclude=())
+##AttendingOrganisationFormSet= inlineformset_factory(Bushfire, AttendingOrganisation, extra=1, max_num=11, can_delete=True)
+#AttendingOrganisationFormSet= inlineformset_factory(Bushfire, AttendingOrganisation, formset=BaseAttendingOrganisationFormSet, extra=1, max_num=11, can_delete=True, exclude=())
+#FireBehaviourFormSet        = inlineformset_factory(Bushfire, FireBehaviour, extra=1, can_delete=True, exclude=())
+#LegalFormSet                = inlineformset_factory(Bushfire, Legal, extra=1, max_num=5*12, can_delete=True, exclude=())
+#PrivateDamageFormSet        = inlineformset_factory(Bushfire, PrivateDamage, extra=1, max_num=12, can_delete=True, exclude=())
+#PublicDamageFormSet         = inlineformset_factory(Bushfire, PublicDamage, extra=1, can_delete=True, exclude=())
+#CommentFormSet              = inlineformset_factory(Bushfire, Comment, extra=1, can_delete=True, exclude=())
+
+ActivityFormSet2            = inlineformset_factory(BushfireTest2, Activity2, extra=1, max_num=7, can_delete=True, exclude=())
+ActivityFormSet             = inlineformset_factory(Bushfire, Activity, formset=BaseActivityFormSet, extra=0, max_num=7, min_num=2, can_delete=True, validate_min=True, exclude=())
+ResponseFormSet             = inlineformset_factory(Bushfire, Response, extra=0, max_num=13, min_num=1, exclude=())
+AreaBurntFormSet            = inlineformset_factory(Bushfire, AreaBurnt, formset=BaseAreaBurntFormSet, extra=0, min_num=1, validate_min=True, exclude=())
+GroundForcesFormSet         = inlineformset_factory(Bushfire, GroundForces, extra=0, max_num=3, min_num=1, exclude=())
+AerialForcesFormSet         = inlineformset_factory(Bushfire, AerialForces, extra=0, max_num=2, min_num=1, exclude=())
+#AttendingOrganisationFormSet= inlineformset_factory(Bushfire, AttendingOrganisation, extra=1, max_num=11, validate_min=True)
+AttendingOrganisationFormSet= inlineformset_factory(Bushfire, AttendingOrganisation, formset=BaseAttendingOrganisationFormSet, extra=0, max_num=11, min_num=1, validate_min=True, exclude=())
+FireBehaviourFormSet        = inlineformset_factory(Bushfire, FireBehaviour, extra=0, min_num=1, validate_min=True, exclude=())
+LegalFormSet                = inlineformset_factory(Bushfire, Legal, extra=0, max_num=5*12, min_num=1, exclude=())
+PrivateDamageFormSet        = inlineformset_factory(Bushfire, PrivateDamage, extra=0, max_num=12, min_num=1, exclude=())
+PublicDamageFormSet         = inlineformset_factory(Bushfire, PublicDamage, extra=0, min_num=1, exclude=())
+CommentFormSet              = inlineformset_factory(Bushfire, Comment, extra=0, min_num=1, exclude=())
 
 
 

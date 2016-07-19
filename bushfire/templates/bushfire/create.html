@@ -4,76 +4,76 @@
 {% block extrahead %}
   {{ block.super }}
   <style>
-  .filter-pad {
-    margin-top: 5px;
-    margin-bottom: -17px !important;
-    margin-left: 10px;
-  }
-  .adjust-legend{
-    margin-bottom:-40px;
-  }
+    .filter-pad {
+        margin-top: 5px;
+        margin-bottom: -17px !important;
+        margin-left: 10px;
+    }
+    .adjust-legend{
+        margin-bottom:-40px;
+    }
 
-  .ui-datepicker {
-      width: 216px;
-      height: auto;
-      margin: 5px auto 0;
-      font: 9pt Arial, sans-serif;
-      -webkit-box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, .5);
-      -moz-box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, .5);
-      box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, .5);
-      background-color: #FFF;
-  }
+    .ui-datepicker {
+        width: 216px;
+        height: auto;
+        margin: 5px auto 0;
+        font: 9pt Arial, sans-serif;
+        -webkit-box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, .5);
+        -moz-box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, .5);
+        box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, .5);
+        background-color: #FFF;
+    }
 
-  .myCollapse {
-        display: none;
-  }
-  .myCollapse.in {
-        display: table-row;
-  }
+    .myCollapse {
+            display: none;
+    }
+    .myCollapse.in {
+            display: table-row;
+    }
 
-  #content {
-      float:left;
-      text-align:left;
-      width:90%;
-  }
+    #content {
+        float:left;
+        text-align:left;
+        width:90%;
+    }
 
-  .formset {
-      text-indent: -1em;
-      padding-left: 1em;
-  }
+    .formset {
+        text-indent: -1em;
+        padding-left: 1em;
+    }
 
-  .nonRequiredField {
-      font-weight: normal !important;
-  }
+    .nonRequiredField {
+        font-weight: normal !important;
+    }
 
-  .requiredField {
-      font-weight: strong !important;
-  }
+    .requiredField {
+        font-weight: strong !important;
+    }
 
-  hr{
-    padding: 0px;
-    margin: 0px;
-  }
+    hr{
+        padding: 0px;
+        margin: 0px;
+    }
 
-th, td {
-    padding: 5px 15px;
-}
+    th, td {
+        padding: 5px 15px;
+    }
 
-table, tr, td {
-    border: none;
-}
+    table, tr, td {
+        border: none;
+    }
 
-.navbar-fixed-bottom {
-  background-color: #F6F6F6;
-  background-image: none;
-  background-repeat: no-repeat;
- }
+    .navbar-fixed-bottom {
+    background-color: #F6F6F6;
+    background-image: none;
+    background-repeat: no-repeat;
+    }
 
-.btn {
-  vertical-align: top;
-}
+    .btn {
+    vertical-align: top;
+    }
 
-body { padding-bottom: 70px; }
+    body { padding-bottom: 70px; }
 
   </style>
   {% endblock %}
@@ -328,25 +328,23 @@ body { padding-bottom: 70px; }
 <div id="id_activities" class="row formset activity-formset">
     <table border="0" cellpadding="0" cellspacing="0">
         <tbody>
-            <th></th>
             <th>Activity</th>
             <th>Date</th>
             <th></th>
+            <th></th>
             {% for fs in activity_formset %}
             <tr>
+               <td>{{ fs.activity }}</td>
+               <td>{{ fs.date }}</td>
                <td>
                     {% if fs.instance.pk %}{{ fs.DELETE }}{% endif %}
                     {{ fs.id }}
-                </td>
-               <td>{{ fs.activity }}</td>
-               <td>{{ fs.date }}</td>
 
-               <td>
-               {% for field in fs %} 
-                    {% if field.errors %}
-                        <font color="red"><li>{{ field.label }}: {{ field.errors|striptags }}</li></font>
-                    {% endif %}
-               {% endfor %}
+                    {% for field in fs %} 
+                        {% if field.errors %}
+                            <font color="red"><li>{{ field.label }}: {{ field.errors|striptags }}</li></font>
+                        {% endif %}
+                    {% endfor %}
 
                </td>
 
@@ -494,8 +492,8 @@ body { padding-bottom: 70px; }
         prefix: '{{ activity_formset.prefix }}',
         formCssClass: 'activity_fs',
         addText: '<i class="icon-plus"></i> add another activity',
-        deleteText: '<i class="icon-remove"></i>'
-
+        deleteText: '<i class="icon-remove"></i>',
+        deleteCssClass: 'delete-row' + '-' + '{{ activity_formset.prefix }}',
     });
 
 // $('[id^=""]').hide() // starts with 
