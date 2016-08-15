@@ -234,7 +234,7 @@ class BushfireForm(forms.ModelForm):
 #                  'fuel','ros', 'flame_height', 'assistance_required', 'fire_contained', 'containment_time',
 #                  'ops_point', 'communications', 'weather', 'field_officer', 'init_authorised_by', 'init_authorised_date',
 #                 )
-        exclude = ()
+        exclude = ('potential_fire_level', 'init_authorised_by', 'init_authorised_date', 'known_possible',)
 
 
 class BushfireCreateForm(forms.ModelForm):
@@ -400,7 +400,7 @@ class BaseActivityFormSet(BaseInlineFormSet):
                         form.add_error('activity', 'Duplicate: must be unique')
 
         # check required activities have been selected, only when main form has been authorised
-        if self.data['init_authorised_by']:
+        if self.data.has_key('init_authorised_by') and self.data['init_authorised_by']:
             if not set(required_activities).issubset(activities) and self.forms:
                 form.add_error('__all__', 'Must select required Activities: {}'.format(', '.join(required_activities)))
 

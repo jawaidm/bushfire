@@ -380,7 +380,7 @@ class Bushfire(BushfireBase):
         unique_together = ('district', 'incident_no', 'season')
 
     def __str__(self):
-        return ', '.join([self.name, self.district, self.season, self.incident_no])
+        return ', '.join([self.name, self.district.name, self.season, self.incident_no])
 
 
 @python_2_unicode_compatible

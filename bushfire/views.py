@@ -505,7 +505,10 @@ class BushfireUpdateView(UpdateView):
             public_damage_formset,
             comment_formset):
         import ipdb; ipdb.set_trace()
-        self.object = form.save()
+
+        self.object = form.save(commit=False)
+        self.object.modifier_id = 1 #User.objects.all()[0] #request.user
+        self.object.save()
 
         activities_updated = self.update_activity_fs(activity_formset)
         responses_updated = self.update_response_fs(response_formset)
@@ -685,7 +688,8 @@ class BushfireUpdateView(UpdateView):
                 other = form.cleaned_data.get('other')
                 remove = form.cleaned_data.get('DELETE')
 
-                if not remove and (name and other):
+                #if not remove and (name and other):
+                if not remove and name:
                     new_fs_object.append(AttendingOrganisation(bushfire=self.object, name=name, other=other))
 
         try:
