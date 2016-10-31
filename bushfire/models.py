@@ -11,11 +11,6 @@ from bushfire.base import Audit
 from django.core.exceptions import (ValidationError)
 
 import sys
-#sys.path.append('/root/project1')
-#from appx.models import Foox
-#sys.path.append('/home/jawaidm/projects/pbs')
-#from pbs.prescription.models import (Prescription, Region, District, Tenure, FuelType)
-
 
 FIRE_LEVEL_CHOICES = (
     (1, 1),
@@ -71,7 +66,6 @@ class District(models.Model):
     def __str__(self):
         return self.name
 
-
 class BushfireTest(models.Model):
     region = models.ForeignKey(Region)
     district = ChainedForeignKey(
@@ -118,62 +112,7 @@ class FuelType(models.Model):
         return self.name
 
 
-class _InitialBushfire(Audit):
-    COORD_TYPE_MGAZONE = 1
-    COORD_TYPE_LATLONG = 2
-    COORD_TYPE_FDGRID = 3
-    COORD_TYPE_CHOICES = (
-        (COORD_TYPE_MGAZONE, 'MGA'),
-        (COORD_TYPE_LATLONG, 'Lat/Long'),
-        (COORD_TYPE_FDGRID, 'FD Grid'),
-    )
-
-
-    # Main Area
-    region = models.ForeignKey(Region)
-#    district = models.ForeignKey(District)
-    district = ChainedForeignKey(
-        District, chained_field="region", chained_model_field="region",
-        show_all=False, auto_choose=True)
-
-    name = models.CharField(max_length=100, verbose_name="Name/Description")
-    incident_no = models.CharField(verbose_name="Incident No.", max_length=10)
-    season = models.CharField(max_length=9)
-    dfes_incident_no = models.CharField(verbose_name="DFES Incident No.", max_length=10)
-    job_code = models.CharField(verbose_name="Job Code", max_length=10, null=True, blank=True)
-    potential_fire_level = models.PositiveSmallIntegerField(choices=FIRE_LEVEL_CHOICES)
-
-    #authorised_by = models.ForeignKey('Authorisation', verbose_name="Authorising Officer", blank=True, null=True)
-    #reporting = models.ForeignKey('Reporter', verbose_name="Reporting and  Cause")
-
-
-    # TABS
-
-    # Point of Origin
-    #   location = models.ForeignKey('Location')
-    #   origin = models.ForeignKey('Origin')
-    #   TODO number of dp
-    coord_type = models.PositiveSmallIntegerField(choices=COORD_TYPE_CHOICES, verbose_name="Coordinates Type", null=True, blank=True)
-    lat_decimal = models.DecimalField(verbose_name="Latitude (Decimal)", max_digits=12, decimal_places=1, validators=[MinValueValidator(0)], null=True, blank=True)
-    lat_degrees = models.DecimalField(verbose_name="Latitude (Degrees)", max_digits=12, decimal_places=1, validators=[MinValueValidator(0)], null=True, blank=True)
-    lat_minutes = models.DecimalField(verbose_name="Latitude (Minutes)", max_digits=12, decimal_places=1, validators=[MinValueValidator(0)], null=True, blank=True)
-    lon_decimal = models.DecimalField(verbose_name="Longitude (Decimal)", max_digits=12, decimal_places=1, validators=[MinValueValidator(0)], null=True, blank=True)
-    lon_degrees = models.DecimalField(verbose_name="Longitude (Degrees)", max_digits=12, decimal_places=1, validators=[MinValueValidator(0)], null=True, blank=True)
-    lon_minutes = models.DecimalField(verbose_name="Longitude (Minutes)", max_digits=12, decimal_places=1, validators=[MinValueValidator(0)], null=True, blank=True)
-
-    mga_zone = models.DecimalField(verbose_name="MGA Zone", max_digits=12, decimal_places=1, validators=[MinValueValidator(0)], null=True, blank=True)
-    mga_easting = models.DecimalField(verbose_name="MGA Easting", max_digits=12, decimal_places=1, validators=[MinValueValidator(0)], null=True, blank=True)
-    mga_northing = models.DecimalField(verbose_name="MGA Northing", max_digits=12, decimal_places=1, validators=[MinValueValidator(0)], null=True, blank=True)
-
-    fd_letter = models.CharField(verbose_name="FD Letter", max_length=2, null=True, blank=True)
-    fd_number = models.PositiveSmallIntegerField(verbose_name="FD Number", null=True, blank=True)
-    fd_tenths = models.CharField(verbose_name="FD Tenths", max_length=2, null=True, blank=True)
-
-    class Meta:
-        abstract = True
-
-
-class BushfireBase(Audit):
+class Bushfire(Audit):
     region = models.ForeignKey(Region)
 #    district = models.ForeignKey(District)
     district = ChainedForeignKey(
@@ -359,49 +298,11 @@ class BushfireBase(Audit):
         return self.username
     User.__unicode__ = user_unicode_patch
 
-    def __str__(self):
-        return self.name
-
-    class Meta:
-        abstract = True
-
-
-#@python_2_unicode_compatible
-#class InitialBushfire(BushfireBase):
-#    pass
-#    #name = models.CharField(max_length=100, verbose_name="Name/Description")
-#
-#    def __str__(self):
-#        return self.name
-
-
-@python_2_unicode_compatible
-class Bushfire(BushfireBase):
-    pass
-    #name = models.CharField(max_length=100, verbose_name="Name/Description")
-
     class Meta:
         unique_together = ('district', 'incident_no', 'season')
 
     def __str__(self):
         return ', '.join([self.name, self.district.name, self.season, self.incident_no])
-
-
-@python_2_unicode_compatible
-class Location2(models.Model):
-    distance = models.DecimalField(
-        verbose_name="Distance (km)", max_digits=6, decimal_places=1,
-        validators=[MinValueValidator(0)])
-    direction = models.ForeignKey('Direction', verbose_name="Direction")
-    place = models.CharField(max_length=25)
-    lot_no = models.CharField(verbose_name="Lot Number", max_length=10)
-    street = models.CharField(max_length=25)
-    town = models.CharField(max_length=25)
-    #bushfire = models.OneToOneField(Bushfire, related_name='location')
-
-    def __str__(self):
-        return self.direction.name
-
 
 
 @python_2_unicode_compatible
@@ -550,16 +451,6 @@ class PrivateDamageType(models.Model):
     def __str__(self):
         return self.name
 
-#@python_2_unicode_compatible
-#class InitialActivityType(models.Model):
-#    name = models.CharField(max_length=25, verbose_name="Activity Type")
-#
-#    class Meta:
-#        ordering = ['name']
-#
-#    def __str__(self):
-#        return self.name
-
 
 @python_2_unicode_compatible
 class ActivityType(models.Model):
@@ -577,38 +468,6 @@ class ActivityType(models.Model):
 """
 Point of Origin
 """
-#@python_2_unicode_compatible
-#class InitialLocation(models.Model):
-#    distance = models.DecimalField(
-#        verbose_name="Distance (km)", max_digits=6, decimal_places=1,
-#        validators=[MinValueValidator(0)])
-#    direction = models.OneToOneField(Direction, verbose_name="Direction")
-#    place = models.CharField(max_length=25)
-#    lot_no = models.CharField(verbose_name="Lot Number", max_length=10)
-#    street = models.CharField(max_length=25)
-#    town = models.CharField(max_length=25)
-#    initial_bushfire = models.OneToOneField(InitialBushfire, related_name='initial_location')
-#
-#    def __str__(self):
-#        return self.direction.name
-
-
-@python_2_unicode_compatible
-class Location(models.Model):
-    distance = models.DecimalField(
-        verbose_name="Distance (km)", max_digits=6, decimal_places=1,
-        validators=[MinValueValidator(0)])
-    direction = models.ForeignKey(Direction, verbose_name="Direction")
-    place = models.CharField(max_length=25)
-    lot_no = models.CharField(verbose_name="Lot Number", max_length=10)
-    street = models.CharField(max_length=25)
-    town = models.CharField(max_length=25)
-    bushfire = models.OneToOneField(Bushfire, related_name='location')
-
-    def __str__(self):
-        return self.direction.name
-
-
 @python_2_unicode_compatible
 class Origin(models.Model):
     COORD_TYPE_MGAZONE = 1
@@ -619,7 +478,6 @@ class Origin(models.Model):
         (COORD_TYPE_LATLONG, 'Lat/Long'),
         (COORD_TYPE_FDGRID, 'FD Grid'),
     )
-
 
     coord_type = models.PositiveSmallIntegerField(choices=COORD_TYPE_CHOICES, verbose_name="Coordinate Type")
     fire_not_found = models.BooleanField(default=False)
@@ -674,15 +532,6 @@ class Response(models.Model):
 
     class Meta:
         unique_together = ('bushfire', 'response',)
-
-
-#@python_2_unicode_compatible
-#class FirstAttackAgency(models.Model):
-#    bushfire = models.ForeignKey(Bushfire, related_name='first_attack_agencies')
-#    agency = models.PositiveSmallIntegerField(choices=Agency)
-#
-#    def __str__(self):
-#        return self.agency
 
 
 @python_2_unicode_compatible
@@ -866,41 +715,6 @@ class Comment(Audit):
 """
 Details
 """
-#@python_2_unicode_compatible
-#class InitialDetail(models.Model):
-#    CAUSE_CHOICES = (
-#        (1, 'Known'),
-#        (2, 'Possible'),
-#    )
-#
-#    tenure = models.ForeignKey(Tenure)
-#    fuel_type = models.ForeignKey(FuelType)
-#    area = models.DecimalField(verbose_name="Area (ha)", max_digits=12, decimal_places=1, validators=[MinValueValidator(0)])
-#
-#    first_attack = models.ForeignKey(Agency)
-#    other_agency = models.CharField(verbose_name='Other', max_length=25, null=True, blank=True)
-#
-#    # TODO form must include AttendingOrganisation list (choices is common, but info is different)
-#    dec = models.BooleanField(verbose_name="DEC", default=False)
-#    lga_bfb = models.BooleanField(verbose_name="LGA BFB", default=False)
-#    fesa = models.BooleanField(verbose_name="FESA", default=False)
-#    ses = models.BooleanField(verbose_name="SES", default=False)
-#    police = models.BooleanField(verbose_name="POLICE", default=False)
-#    other_force = models.CharField(verbose_name='Other', max_length=25, null=True, blank=True)
-#
-#    cause = models.ForeignKey(Cause)
-#    known_possible = models.PositiveSmallIntegerField(choices=CAUSE_CHOICES, verbose_name="Known/Possible")
-#    other_cause = models.CharField(verbose_name='Other', max_length=25, null=True, blank=True)
-#    investigation_req = models.BooleanField(verbose_name="Invest'n Required", default=False)
-#    initial_bushfire = models.OneToOneField(InitialBushfire, related_name='initial_detail')
-#
-#    def clean_first_attack(self):
-#        if self.first_attack == 'Other' and not self.other:
-#            raise ValidationError("You must enter 'Other' First Attack Agency")
-#
-#    def __str__(self):
-#        return self.tenure.name
-
 @python_2_unicode_compatible
 class Detail(models.Model):
     CAUSE_CHOICES = (
@@ -980,23 +794,6 @@ class Initial(Audit):
 """
 Main Area
 """
-#@python_2_unicode_compatible
-#class InitialActivity(models.Model):
-#    #activity = models.PositiveSmallIntegerField(choices=ACTIVITY_CHOICES)
-#    activity = models.ForeignKey(InitialActivityType)
-#    date = models.DateTimeField(default=timezone.now)
-#    bushfire = models.ForeignKey(InitialBushfire, related_name='initial_activities')
-#
-#    class Meta:
-#        ordering = ['activity']
-#
-#    def __str__(self):
-#        return self.activity.name
-#
-#    class Meta:
-#        unique_together = ('bushfire', 'activity',)
-
-
 @python_2_unicode_compatible
 class Activity(models.Model):
     #activity = models.PositiveSmallIntegerField(choices=ACTIVITY_CHOICES)
@@ -1044,28 +841,6 @@ class Reporter(models.Model):
 
     def __str__(self):
         return self.offence_no
-
-
-#@python_2_unicode_compatible
-#class InitialAuthorisation(Audit):
-#    name = models.ForeignKey(User)
-#    date = models.DateTimeField(default=timezone.now)
-#    initial_bushfire = models.OneToOneField(InitialBushfire, related_name='initial_authorisation')
-#
-#    def __str__(self):
-#        #import ipdb; ipdb.set_trace()
-#        return '{} {}'.format(self.name.get_full_name(), self.date)
-
-
-#@python_2_unicode_compatible
-#class Authorisation(Audit):
-#    name = models.ForeignKey(User)
-#    date = models.DateTimeField(default=timezone.now)
-#    bushfire = models.OneToOneField(Bushfire, related_name='authorisation')
-#
-#    def __str__(self):
-#        #import ipdb; ipdb.set_trace()
-#        return '{} {}'.format(self.name.get_full_name(), self.date)
 
 
 

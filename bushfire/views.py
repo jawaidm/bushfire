@@ -45,20 +45,6 @@ class BushfireView(generic.ListView):
 #        return context
 
 
-class BushfireDetailView(generic.DetailView):
-    model = Bushfire
-    template_name = 'bushfire/detail.html'
-
-    def get_context_data(self, **kwargs):
-        context = super(BushfireDetailView, self).get_context_data(**kwargs)
-
-        id = self.kwargs['pk']
-        bushfire = Bushfire.objects.get(id=id)
-
-        context.update({'bushfire': bushfire})
-        return context
-
-
 class BushfireCreateView(generic.CreateView):
     model = Bushfire
     form_class = BushfireCreateForm
@@ -265,7 +251,7 @@ class BushfireInitUpdateView(UpdateView):
 class BushfireUpdateView(UpdateView):
     model = Bushfire
     form_class = BushfireForm
-    template_name = 'bushfire/detail2.html'
+    template_name = 'bushfire/detail.html'
     success_url = 'success'
 
 #    def get_form_kwargs(self):
@@ -293,7 +279,7 @@ class BushfireUpdateView(UpdateView):
         public_damage_formset   = PublicDamageFormSet(self.request.POST, prefix='public_damage_fs')
         comment_formset         = CommentFormSet(self.request.POST, prefix='comment_fs')
 
-        import ipdb; ipdb.set_trace()
+        #import ipdb; ipdb.set_trace()
         if form.is_valid() and activity_formset.is_valid() and area_burnt_formset.is_valid() and attending_org_formset.is_valid() and \
             fire_behaviour_formset.is_valid():
             return self.form_valid(request,
@@ -339,23 +325,6 @@ class BushfireUpdateView(UpdateView):
             private_damage_formset,
             public_damage_formset,
             comment_formset):
-#        import ipdb; ipdb.set_trace()
-#        return self.render_to_response(
-#            self.get_context_data(
-#                form=form,
-#                activity_formset=activity_formset,
-#                response_formset=response_formset,
-#                area_burnt_formset=area_burnt_formset,
-#                groundforces_formset=groundforces_formset,
-#                aerialforces_formset=aerialforces_formset,
-#                attending_org_formset=attending_org_formset,
-#                fire_behaviour_formset=fire_behaviour_formset,
-#                legal_formset=legal_formset,
-#                private_damage_formset=private_damage_formset,
-#                public_damage_formset=public_damage_formset,
-#                comment_formset=comment_formset,
-#            )
-#        )
 
         context = {
             'form': form,
@@ -387,7 +356,7 @@ class BushfireUpdateView(UpdateView):
             private_damage_formset,
             public_damage_formset,
             comment_formset):
-        import ipdb; ipdb.set_trace()
+        #import ipdb; ipdb.set_trace()
 
         self.object = form.save(commit=False)
         self.object.modifier_id = 1 #User.objects.all()[0] #request.user
