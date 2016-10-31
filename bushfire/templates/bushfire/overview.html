@@ -131,20 +131,30 @@
             <th>Activity</th>
             <th>Date</th>
             <th></th>
-            {% for form in activity_formset.forms %}
+            <th></th>
+            {% for fs in activity_formset %}
             <tr>
-               <td>{{ form.activity }}</td>
-               <td>{{ form.date }}</td>
+               <td>{{ fs.activity }}</td>
+               <td>{{ fs.date }}</td>
                <td>
-                    {% if form.instance.pk %}{{ form.DELETE }}{% endif %}
-                    {{ form.id }}
-                </td>
+                    {% if fs.instance.pk %}{{ fs.DELETE }}{% endif %}
+                    {{ fs.id }}
+
+                    {% for field in fs %} 
+                        {% if field.errors %}
+                            <font color="red"><li>{{ field.label }}: {{ field.errors|striptags }}</li></font>
+                        {% endif %}
+                    {% endfor %}
+
+               </td>
+
             </tr>
             {% endfor %}
         </tbody>
     </table>
     {{ activity_formset.management_form }}
 </div>
+
 <hr>
 
 <script>

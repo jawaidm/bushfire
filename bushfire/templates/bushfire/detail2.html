@@ -149,12 +149,103 @@
 
 {% block content %}
 
+{% comment %}
 {% if form.errors %}
     <div class="alert alert-error">
         <button type="button" class="close" data-dismiss="alert">×</button>
         {% for field in form %} 
             {% if field.errors %}
             <font color="red"><li>{{ field.label }}: {{ field.errors|striptags }}</li></font>
+            {% endif %}
+        {% endfor %}
+    </div>
+{% endif %}
+{% endcomment %}
+
+{% if form.errors %}
+    <p>Form Errors</p>
+    <div class="alert alert-error">
+        <button type="button" class="close" data-dismiss="alert">×</button>
+        {% for field in form %} 
+            {% if field.errors %}
+            <font color="red"><li>{{ field.label }}: {{ field.errors|striptags }}</li></font>
+            {{ field.meta  }}
+            {% endif %}
+        {% endfor %}
+
+        {% if form.non_field_errors %}
+            {{ form.non_field_errors  }}
+        {% else %}
+            <p>**********</p>
+        {% endif %}
+
+    </div>
+{% endif %}
+
+{% if activity_formset.total_error_count > 0 %}
+    <p>Activity Errors: {{ activity_formset.total_error_count }}</p>
+    <div class="alert alert-error">
+        <button type="button" class="close" data-dismiss="alert">×</button>
+        {% for fs in activity_formset %} 
+            {% for field in fs %} 
+                {% if field.errors %}
+                <font color="red"><li>{{ field.label }}: {{ field.errors|striptags }}</li></font>
+                {% endif %}
+            {% endfor %}
+            {% if fs.non_field_errors %}
+                {{ fs.non_field_errors  }}
+            {% endif %}
+        {% endfor %}
+
+    </div>
+{% endif %}
+
+{% if area_burnt_formset.total_error_count > 0 %}
+    <p>Area Burnt Errors: {{ area_burnt_formset.total_error_count }}</p>
+    <div class="alert alert-error">
+        <button type="button" class="close" data-dismiss="alert">×</button>
+        {% for fs in area_burnt_formset %} 
+            {% for field in fs %} 
+                {% if field.errors %}
+                <font color="red"><li>{{ field.label }}: {{ field.errors|striptags }}</li></font>
+                {% endif %}
+            {% endfor %}
+            {% if fs.non_field_errors %}
+                {{ fs.non_field_errors  }}
+            {% endif %}
+        {% endfor %}
+    </div>
+{% endif %}
+
+{% if attending_org_formset.total_error_count > 0 %}
+    <p>Attending Organisation Errors: {{ attending_org_formset.total_error_count }}</p>
+    <div class="alert alert-error">
+        <button type="button" class="close" data-dismiss="alert">×</button>
+        {% for fs in attending_org_formset %} 
+            {% for field in fs %} 
+                {% if field.errors %}
+                <font color="red"><li>{{ field.label }}: {{ field.errors|striptags }}</li></font>
+                {% endif %}
+            {% endfor %}
+            {% if fs.non_field_errors %}
+                {{ fs.non_field_errors  }}
+            {% endif %}
+        {% endfor %}
+    </div>
+{% endif %}
+
+{% if fire_behaviour_formset.total_error_count > 0 %}
+    <p>Fire behaviour Errors: {{ fire_behaviour_formset.total_error_count }}</p>
+    <div class="alert alert-error">
+        <button type="button" class="close" data-dismiss="alert">×</button>
+        {% for fs in fire_behaviour_formset %} 
+            {% for field in fs %} 
+                {% if field.errors %}
+                <font color="red"><li>{{ field.label }}: {{ field.errors|striptags }}</li></font>
+                {% endif %}
+            {% endfor %}
+            {% if fs.non_field_errors %}
+                {{ fs.non_field_errors  }}
             {% endif %}
         {% endfor %}
     </div>
@@ -182,7 +273,7 @@
       <li id="initial-tab">
           <a data-toggle="tab" href="#initial">
               <i class="icon-tag"></i>
-              Detail
+              Detail (NA in Final)
           </a>
       </li>
       <li id="effect-tab">
@@ -257,7 +348,17 @@
 
   </div>
 
-    <input type="submit" value="Save" />
+<div class="navbar navbar-fixed-bottom">
+  <div class="navbar-inner">
+    <div class="container">
+      <p class="pull-right">
+        <input type="submit" value="Save" class="btn btn-primary btn-success" name="_save" />
+        <a href="javascript: history.go(-1)" class="btn btn-danger">Cancel</a>
+      </p>
+    </div>
+  </div>
+</div>
+
   </form>
 
 

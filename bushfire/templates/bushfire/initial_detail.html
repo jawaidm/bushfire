@@ -40,9 +40,9 @@
         </div>
     </div>
     <div class="col-sm-4" >
-        <div id="div_id_other_agency" class="form-group"> 
-            <label for="id_other_agency" class="control-label requiredField">Other Agency*</label>
-            <div class="controls ">{{form.other_agency}}</div>
+        <div id="div_id_other_first_attack" class="form-group"> 
+            <label for="id_other_first_attack" class="control-label requiredField">Other Agency*</label>
+            <div class="controls ">{{form.other_first_attack}}</div>
         </div>
     </div>
 
@@ -126,18 +126,22 @@
         deleteCssClass: 'delete-row' + '-' + '{{ attending_org_formset.prefix  }}',
     });
 
-    // $('[id^=""]').hide() // starts with 
-    //$('[id$="-date"]').datepicker({ dateFormat: "yy-mm-dd" }).val(); //ends with
-    //$('#id_init_authorised_date').datepicker({ dateFormat: "yy-mm-dd" }).val(); //ends with
-    $('#div_id_other_agency').hide();
     $(function(){
+        var coord_type = $('#id_first_attack :selected').text();
+        // This first part is needed for first page load
+        if (coord_type.indexOf('OTHER') > -1) {
+            $('#div_id_other_first_attack').show();
+        } else {
+            $('#div_id_other_first_attack').hide();
+        }
+
         $('#id_first_attack').on('change', function() {
             var coord_type = $('#id_first_attack :selected').text();
             //console.log('Co Ord Type' + coord_type);
             if (coord_type.indexOf('OTHER') > -1) {
-                $('#div_id_other_agency').show();
+                $('#div_id_other_first_attack').show();
             } else {
-                $('#div_id_other_agency').hide();
+                $('#div_id_other_first_attack').hide();
             }
         });
     });

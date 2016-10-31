@@ -56,25 +56,55 @@
             <div class="controls ">{{form.first_attack}}</div>
         </div>
     </div>
+    <div class="col-sm-4" >
+        <div id="div_id_other_first_attack" class="form-group"> 
+            <label for="id_other_first_attack" class="control-label requiredField">Other First Attack Agency*</label>
+            <div class="controls ">{{form.other_first_attack}}</div>
+        </div>
+    </div>
+</div>
 
+<div class="row">
     <div class="col-sm-4" > 
         <div id="div_hazard_mgt" class="form-group"> 
             <label for="id_hazard_mgt" class="control-label nonRequiredField">Hazard Management Agency</label>
             <div class="controls ">{{form.hazard_mgt}}</div>
         </div>
     </div>
+    <div class="col-sm-4" >
+        <div id="div_id_other_hazard_mgt" class="form-group"> 
+            <label for="id_other_hazard_mgt" class="control-label requiredField">Other Hazard Management Agency*</label>
+            <div class="controls ">{{form.other_hazard_mgt}}</div>
+        </div>
+    </div>
+</div>
 
+<div class="row">
     <div class="col-sm-4" > 
         <div id="div_id_initial_control" class="form-group"> 
             <label for="id_initial_control" class="control-label nonRequiredField">Initial controlling Agency</label>
             <div class="controls ">{{form.initial_control}}</div>
         </div>
     </div>
+    <div class="col-sm-4" >
+        <div id="div_id_other_initial_control" class="form-group"> 
+            <label for="id_other_initial_control" class="control-label requiredField">Other Initial Control Agency*</label>
+            <div class="controls ">{{form.other_initial_ctrl}}</div>
+        </div>
+    </div>
+</div>
 
+<div class="row">
     <div class="col-sm-4" > 
         <div id="div_id_final_control" class="form-group"> 
             <label for="id_final_control" class="control-label nonRequiredField">Final Controlling Agency</label>
             <div class="controls ">{{form.final_control}}</div>
+        </div>
+    </div>
+    <div class="col-sm-4" >
+        <div id="div_id_other_final_control" class="form-group"> 
+            <label for="id_other_final_control" class="control-label requiredField">Other Final Control Agency*</label>
+            <div class="controls ">{{form.other_final_ctrl}}</div>
         </div>
     </div>
 </div>
@@ -119,5 +149,80 @@
         deleteText: '<i class="icon-remove"></i>',
         deleteCssClass: 'delete-row' + '-' + '{{ response_formset.prefix  }}',
     });
+
+    $(function(){
+        var coord_type = $('#id_first_attack :selected').text();
+        // This first part is needed for first page load
+        if (coord_type.indexOf('OTHER') > -1) {
+            $('#div_id_other_first_attack').show();
+        } else {
+            $('#div_id_other_first_attack').hide();
+        }
+
+        $('#id_first_attack').on('change', function() {
+            var coord_type = $('#id_first_attack :selected').text();
+            //console.log('Co Ord Type' + coord_type);
+            if (coord_type.indexOf('OTHER') > -1) {
+                $('#div_id_other_first_attack').show();
+            } else {
+                $('#div_id_other_first_attack').hide();
+            }
+        });
+    });
+
+    $(function(){
+        var coord_type = $('#id_hazard_mgt :selected').text();
+        if (coord_type.indexOf('OTHER') > -1) {
+            $('#div_id_other_hazard_mgt').show();
+        } else {
+            $('#div_id_other_hazard_mgt').hide();
+        }
+
+        $('#id_hazard_mgt').on('change', function() {
+            var coord_type = $('#id_hazard_mgt :selected').text();
+            if (coord_type.indexOf('OTHER') > -1) {
+                $('#div_id_other_hazard_mgt').show();
+            } else {
+                $('#div_id_other_hazard_mgt').hide();
+            }
+        });
+    });
+
+    $(function(){
+        var coord_type = $('#id_initial_control :selected').text();
+        if (coord_type.indexOf('OTHER') > -1) {
+            $('#div_id_other_initial_control').show();
+        } else {
+            $('#div_id_other_initial_control').hide();
+        }
+
+        $('#id_initial_control').on('change', function() {
+            var coord_type = $('#id_initial_control :selected').text();
+            if (coord_type.indexOf('OTHER') > -1) {
+                $('#div_id_other_initial_control').show();
+            } else {
+                $('#div_id_other_initial_control').hide();
+            }
+        });
+    });
+
+    $(function(){
+        var coord_type = $('#id_final_control :selected').text();
+        if (coord_type.indexOf('OTHER') > -1) {
+            $('#div_id_other_final_control').show();
+        } else {
+            $('#div_id_other_final_control').hide();
+        }
+
+        $('#id_final_control').on('change', function() {
+            var coord_type = $('#id_final_control :selected').text();
+            if (coord_type.indexOf('OTHER') > -1) {
+                $('#div_id_other_final_control').show();
+            } else {
+                $('#div_id_other_final_control').hide();
+            }
+        });
+    });
+
 
 </script>

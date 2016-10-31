@@ -265,15 +265,19 @@ class BushfireBase(Audit):
 
     # First Attack
     first_attack = models.ForeignKey('Agency', verbose_name="First Attack Agency", null=True, blank=True, related_name='first_attack')
+    other_first_attack = models.CharField(verbose_name="Other First Attack Agency", max_length=50, null=True, blank=True)
     hazard_mgt = models.ForeignKey('Agency', verbose_name="Hazard Management Agency", null=True, blank=True, related_name='hazard_mgt')
+    other_hazard_mgt = models.CharField(verbose_name="Other Hazard Mgt Agency", max_length=50, null=True, blank=True)
     initial_control = models.ForeignKey('Agency', verbose_name="Initial Controlling Agency", null=True, blank=True, related_name='initial_control')
+    other_initial_ctrl = models.CharField(verbose_name="Other Initial Control Agency", max_length=50, null=True, blank=True)
     final_control = models.ForeignKey('Agency', verbose_name="Final Controlling Agency", null=True, blank=True, related_name='final_control')
-    other_agency = models.CharField(verbose_name="Other Agency", max_length=50, null=True, blank=True)
+    other_final_ctrl = models.CharField(verbose_name="Other Final Control Agency", max_length=50, null=True, blank=True)
+    #other_agency = models.CharField(verbose_name="Other Agency", max_length=50, null=True, blank=True)
 
     # Initial Misc
     #cause = models.ForeignKey(Cause)
     known_possible = models.PositiveSmallIntegerField(choices=CAUSE_CHOICES, verbose_name="Known/Possible", null=True, blank=True)
-    other_cause = models.CharField(verbose_name='Other', max_length=50, null=True, blank=True)
+    other_cause = models.CharField(verbose_name='Other Cause', max_length=50, null=True, blank=True)
     investigation_req = models.BooleanField(verbose_name="Invest'n Required", default=False)
 
     #reporting = models.ForeignKey('Reporter', verbose_name="Reporting and  Cause")
