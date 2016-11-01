@@ -91,7 +91,6 @@ class BushfireForm(forms.ModelForm):
             #    raise ValidationError('Cannot Authorise, must input required fields: {}'.format(', '.join([i.replace('_', ' ').title() for i in missing_fields])))
 
 
-
 class BushfireCreateForm(forms.ModelForm):
     class Meta:
         model = Bushfire
@@ -119,6 +118,7 @@ class BushfireCreateForm(forms.ModelForm):
             raise ValidationError('There is already a Bushfire with this District, Season and Incident No. {} - {} - {}'.format(district, season, incident_no))
         else:
             return self.cleaned_data
+
 
 class BushfireInitUpdateForm(forms.ModelForm):
     class Meta:
@@ -338,7 +338,6 @@ class BaseFireBehaviourFormSet(BaseInlineFormSet):
                         form.add_error('fdi', 'This field is required')
 
 
-ActivityFormSet2            = inlineformset_factory(BushfireTest2, Activity2, extra=1, max_num=7, can_delete=True, exclude=())
 ActivityFormSet             = inlineformset_factory(Bushfire, Activity, formset=BaseActivityFormSet, extra=0, max_num=7, min_num=2, can_delete=True, validate_min=True, exclude=())
 ResponseFormSet             = inlineformset_factory(Bushfire, Response, extra=0, max_num=13, min_num=1, exclude=())
 AreaBurntFormSet            = inlineformset_factory(Bushfire, AreaBurnt, formset=BaseAreaBurntFormSet, extra=0, min_num=1, validate_min=True, exclude=())
@@ -357,6 +356,7 @@ NEXT - For Testing ONLY
 """
 
 from bushfire.models import (BushfireTest2, Activity2)
+ActivityFormSet2            = inlineformset_factory(BushfireTest2, Activity2, extra=1, max_num=7, can_delete=True, exclude=())
 class BushfireCreateForm2(forms.ModelForm):
     class Meta:
         model = BushfireTest2
